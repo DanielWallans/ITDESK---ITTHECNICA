@@ -1,15 +1,13 @@
 {
-  "name": "suporte-remoto-root",
+  "name": "itone-itthecnica",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Plataforma de Gestão de Suporte Técnico & Atendimento Remoto",
+  "description": "IT ONE — Plataforma de Gestão de Suporte Técnico & Atendimento Remoto | IT THECNICA",
   "scripts": {
     "dev": "cd apps/web && npm run dev",
     "start": "cd apps/web && npm run dev",
-    "build": "cd apps/web && npm run build",
-    "web": "cd apps/web && npm run dev",
-    "api": "powershell -Command \"$env:JAVA_HOME='C:\\Java\\jdk-21'; $env:PATH='C:\\Java\\jdk-21\\bin;'+$env:PATH; cd apps/api; mvn spring-boot:run\""
+    "build": "cd apps/web && npm run build"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.118.0",
