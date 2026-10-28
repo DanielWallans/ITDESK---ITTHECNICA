@@ -85,3 +85,4 @@ export function playNotificationChime() {
     // Ignora caso o navegador bloqueie antes da primeira interação
   }
 }
+
