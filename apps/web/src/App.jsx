@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Sidebar from './components/Sidebar';
 import TicketsTable from './components/TicketsTable';
 import TicketDetailModal from './components/TicketDetailModal';
@@ -13,11 +13,14 @@ import CommandPaletteModal from './components/CommandPaletteModal';
 import AdminAuthView from './components/AdminAuthView';
 import CustomerPortalView from './components/CustomerPortalView';
 import { api } from './services/api';
+import { playNotificationChime } from './utils/sound';
 import { 
   Plus, 
   Bell, 
   ChevronRight, 
-  X
+  X,
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 
 export default function App() {
@@ -51,13 +54,31 @@ export default function App() {
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [ticketsInitialFilter, setTicketsInitialFilter] = useState('ALL');
   const [dashboardSummary, setDashboardSummary] = useState(null);
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    return localStorage.getItem('itone_sound_enabled') !== 'false';
+  });
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [liveToast, setLiveToast] = useState(null);
+
+  const initialLoadDoneRef = useRef(false);
+  const knownTicketIdsRef = useRef(new Set());
+  const knownReportedPaymentsRef = useRef(new Set());
+  const soundEnabledRef = useRef(soundEnabled);
+
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+    localStorage.setItem('itone_sound_enabled', String(soundEnabled));
+  }, [soundEnabled]);
 
   useEffect(() => {
     if (adminUser && !isCustomerLandingRoute) {
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission().catch(() => {});
+      }
       loadData();
       const interval = setInterval(() => {
         loadData();
-      }, 5000);
+      }, 4000);
       return () => clearInterval(interval);
     }
   }, [adminUser, isCustomerLandingRoute]);
@@ -74,13 +95,62 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const triggerAdminAlert = (title, subtitle, ticketObj = null) => {
+    if (soundEnabledRef.current) {
+      playNotificationChime();
+    }
+    setUnreadCount((prev) => prev + 1);
+    setLiveToast({ title, subtitle, ticket: ticketObj, id: Date.now() });
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(title, { body: subtitle });
+      } catch {
+        // Ignora erro de notificação nativa
+      }
+    }
+  };
+
   const loadData = async () => {
     const [ticketsData, sessionData, summaryData] = await Promise.all([
       api.getTickets(),
       api.getActiveSession(),
       api.getDashboardSummary()
     ]);
-    setTickets(ticketsData);
+
+    const list = Array.isArray(ticketsData) ? ticketsData : [];
+
+    if (!initialLoadDoneRef.current) {
+      list.forEach((t) => {
+        knownTicketIdsRef.current.add(t.id);
+        if (t.paymentStatus === 'REPORTED' || t.paymentReceiptUrl) {
+          knownReportedPaymentsRef.current.add(t.id);
+        }
+      });
+      initialLoadDoneRef.current = true;
+    } else {
+      list.forEach((t) => {
+        if (!knownTicketIdsRef.current.has(t.id)) {
+          knownTicketIdsRef.current.add(t.id);
+          triggerAdminAlert(
+            `Novo Chamado • ${t.code}`,
+            `${t.customerName}: ${t.title}`,
+            t
+          );
+        } else if (
+          (t.paymentStatus === 'REPORTED' || t.paymentReceiptUrl) &&
+          !knownReportedPaymentsRef.current.has(t.id)
+        ) {
+          knownReportedPaymentsRef.current.add(t.id);
+          triggerAdminAlert(
+            `Comprovante Pix Recebido • ${t.code}`,
+            `${t.customerName} enviou comprovante / informou pagamento Pix`,
+            t
+          );
+        }
+      });
+    }
+
+    setTickets(list);
     setActiveSession(sessionData);
     setDashboardSummary(summaryData);
   };
@@ -263,10 +333,35 @@ export default function App() {
             <div style={{ position: 'relative' }}>
               <button 
                 className="f-btn-icon" 
-                title="Notificações"
-                onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
+                title="Notificações & Alerta Sonoro"
+                onClick={() => {
+                  setIsNotificationsOpen(!isNotificationsOpen);
+                  setUnreadCount(0);
+                }}
+                style={{
+                  position: 'relative',
+                  borderColor: unreadCount > 0 ? 'var(--orange)' : undefined,
+                  color: unreadCount > 0 ? 'var(--orange)' : undefined
+                }}
               >
                 <Bell size={15} />
+                {unreadCount > 0 && (
+                  <span style={{
+                    position: 'absolute',
+                    top: '-5px',
+                    right: '-5px',
+                    backgroundColor: 'var(--orange)',
+                    color: '#000000',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '9.5px',
+                    fontWeight: 800,
+                    padding: '1px 5px',
+                    borderRadius: '2px',
+                    lineHeight: 1.2
+                  }}>
+                    {unreadCount}
+                  </span>
+                )}
               </button>
 
               {/* Popover de Notificações */}
@@ -275,7 +370,7 @@ export default function App() {
                   position: 'absolute',
                   top: '44px',
                   right: 0,
-                  width: '320px',
+                  width: '340px',
                   backgroundColor: '#050505',
                   border: '1px solid #262626',
                   borderTop: '2px solid var(--orange)',
@@ -299,10 +394,43 @@ export default function App() {
                     </button>
                   </div>
 
+                  {/* Controles de Alerta Sonoro ("Plim") */}
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: '8px',
+                    paddingBottom: '10px',
+                    borderBottom: '1px solid #161616'
+                  }}>
+                    <button
+                      onClick={() => setSoundEnabled(!soundEnabled)}
+                      className="f-btn-secondary"
+                      style={{
+                        padding: '5px 10px',
+                        fontSize: '11px',
+                        borderColor: soundEnabled ? 'var(--orange)' : '#262626',
+                        color: soundEnabled ? 'var(--orange)' : 'var(--text-secondary)'
+                      }}
+                    >
+                      {soundEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
+                      <span>{soundEnabled ? 'Som Ativo' : 'Som Mudo'}</span>
+                    </button>
+
+                    <button
+                      onClick={() => playNotificationChime()}
+                      className="f-btn-secondary"
+                      style={{ padding: '5px 10px', fontSize: '11px' }}
+                      title="Ouvir o toque de novo chamado"
+                    >
+                      Testar Toque ♪
+                    </button>
+                  </div>
+
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
                     {tickets.length === 0 && !activeSession ? (
                       <div style={{ padding: '12px 0', color: 'var(--text-secondary)' }}>
-                        Nenhuma notificação pendente.
+                        Nenhuma notificação pendente. Assim que um cliente abrir um chamado em <code>/atendimento</code>, o alerta sonoro tocará automaticamente.
                       </div>
                     ) : (
                       <>
@@ -312,9 +440,22 @@ export default function App() {
                             <p style={{ color: 'var(--text-secondary)', fontSize: '11px', marginTop: '2px' }}>{activeSession.ticketCode} em execução no momento</p>
                           </div>
                         )}
-                        {tickets.slice(0, 3).map(t => (
-                          <div key={t.id} style={{ padding: '8px 0 8px 10px', borderLeft: '2px solid #262626' }}>
-                            <p style={{ fontWeight: 600, color: 'var(--text-white)' }}>{t.code} • {t.customerName}</p>
+                        {tickets.slice(0, 4).map(t => (
+                          <div
+                            key={t.id}
+                            onClick={() => {
+                              setSelectedTicket(t);
+                              setIsNotificationsOpen(false);
+                            }}
+                            style={{
+                              padding: '8px 0 8px 10px',
+                              borderLeft: t.status === 'NEW' ? '2px solid var(--orange)' : '2px solid #262626',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <p style={{ fontWeight: 700, color: 'var(--text-white)' }}>
+                              <span style={{ color: 'var(--orange)', fontFamily: 'var(--font-mono)' }}>{t.code}</span> • {t.customerName}
+                            </p>
                             <p style={{ color: 'var(--text-secondary)', fontSize: '11px', marginTop: '2px' }}>{t.title}</p>
                           </div>
                         ))}
@@ -432,6 +573,57 @@ export default function App() {
         onSelectTicket={(t) => setSelectedTicket(t)}
         onNavigateTab={handleNavigateTab}
       />
+
+      {/* Alerta Flutuante em Tempo Real quando chega Novo Chamado / Comprovante */}
+      {liveToast && (
+        <div
+          style={{
+            position: 'fixed',
+            bottom: '24px',
+            right: '24px',
+            width: '340px',
+            backgroundColor: '#050505',
+            border: '1px solid #262626',
+            borderTop: '2px solid var(--orange)',
+            borderRadius: '2px',
+            padding: '16px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.9)',
+            zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '10px'
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              ● {liveToast.title}
+            </span>
+            <button
+              onClick={() => setLiveToast(null)}
+              style={{ background: 'none', border: 'none', color: 'var(--text-tertiary)', cursor: 'pointer' }}
+            >
+              <X size={14} />
+            </button>
+          </div>
+          <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-white)', lineHeight: 1.4 }}>
+            {liveToast.subtitle}
+          </p>
+          {liveToast.ticket && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px', marginTop: '4px' }}>
+              <button
+                onClick={() => {
+                  setSelectedTicket(liveToast.ticket);
+                  setLiveToast(null);
+                }}
+                className="f-btn-primary"
+                style={{ padding: '6px 12px', fontSize: '11px' }}
+              >
+                Abrir Chamado
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
