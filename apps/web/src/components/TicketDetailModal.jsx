@@ -49,6 +49,30 @@ export default function TicketDetailModal({
     loadMessages();
   };
 
+  const handleQuickReply = async (text) => {
+    await api.addMessage(ticket.id, text, false, adminUser?.id || null);
+    loadMessages();
+  };
+
+  const QUICK_REPLIES = [
+    {
+      label: 'Fora de casa • Já retorno',
+      text: `Olá ${ticket.customerName}, acabei de receber a notificação do seu chamado no celular! Estou fora da base no momento e já retorno em instantes para te atender.`
+    },
+    {
+      label: 'Atendo em 15 min',
+      text: `Olá ${ticket.customerName}, recebi seu chamado! Em aproximadamente 15 minutos já estarei no computador para iniciar seu acesso remoto pelo AnyDesk.`
+    },
+    {
+      label: 'Conectando no AnyDesk',
+      text: `Estou iniciando a conexão no seu AnyDesk agora. Pode clicar em "Aceitar" na janela que apareceu na sua tela, por favor.`
+    },
+    {
+      label: 'Serviço Concluído • Pix liberado',
+      text: `Pronto, atendimento concluído com sucesso! O QR Code e o Copia e Cola Pix já estão liberados aí na sua tela.`
+    }
+  ];
+
   const handleFinalizeTicket = async () => {
     setSavingResolution(true);
     await onStatusChange(ticket.id, 'RESOLVED', resolutionText.trim() || 'Atendimento remoto concluído com sucesso.');
@@ -98,9 +122,9 @@ export default function TicketDetailModal({
         </div>
 
         {/* Corpo do Modal em 2 Colunas */}
-        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+        <div className="adm-ticket-modal-body" style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           {/* Painel Esquerdo: Metadados, Checklist, Resumo de Resolução & Avaliação */}
-          <div style={{
+          <div className="adm-ticket-modal-sidebar" style={{
             width: '320px',
             backgroundColor: 'var(--bg-inner)',
             borderRight: '1px solid var(--border-light)',
@@ -398,6 +422,32 @@ export default function TicketDetailModal({
                 gap: '8px'
               }}
             >
+              {/* Respostas Rápidas 1-Toque (Modo Celular / Fora de Casa) */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', paddingBottom: '4px' }}>
+                <span style={{ fontSize: '10px', fontWeight: 800, color: '#ff6b00', textTransform: 'uppercase', letterSpacing: '0.08em', marginRight: '4px' }}>
+                  1-Toque (Celular):
+                </span>
+                {QUICK_REPLIES.map((qr, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => handleQuickReply(qr.text)}
+                    style={{
+                      padding: '4px 9px',
+                      backgroundColor: '#000000',
+                      border: '1px solid #262626',
+                      borderRadius: '2px',
+                      color: '#d4d4d8',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {qr.label}
+                  </button>
+                ))}
+              </div>
+
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11.5px', color: isInternalNote ? 'var(--orange)' : 'var(--text-secondary)' }}>
                 <input
                   type="checkbox"

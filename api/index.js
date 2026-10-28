@@ -1,7 +1,51 @@
 import pg from 'pg';
 import crypto from 'crypto';
+import webpush from 'web-push';
 
 const { Pool } = pg;
+
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || 'BDAH9v7vNy72F160kTuKcCYR_U9lsXwpCEWYY8HcsPu7jqT26xgBCZ0XrRtslyVXyz8pd-__CaxnMtsLo4OLTcg';
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 'NvEEEc9kRTjpXTBwp_Sn4RyPZeZmXsodrhfknyUxP5E';
+
+try {
+  webpush.setVapidDetails(
+    'mailto:itthecnica@hotmail.com',
+    VAPID_PUBLIC_KEY,
+    VAPID_PRIVATE_KEY
+  );
+} catch {
+  // Ignora erro de configuração inicial
+}
+
+async function sendPushToAllAdmins(payloadObj) {
+  try {
+    const { rows } = await pool.query(`SELECT id, endpoint, p256dh, auth FROM push_subscriptions`);
+    if (!rows || rows.length === 0) return { sent: 0 };
+    const payload = JSON.stringify(payloadObj);
+    let sent = 0;
+    await Promise.all(
+      rows.map(async (sub) => {
+        try {
+          await webpush.sendNotification(
+            {
+              endpoint: sub.endpoint,
+              keys: { p256dh: sub.p256dh, auth: sub.auth }
+            },
+            payload
+          );
+          sent++;
+        } catch (err) {
+          if (err.statusCode === 404 || err.statusCode === 410) {
+            await pool.query(`DELETE FROM push_subscriptions WHERE id = $1`, [sub.id]).catch(() => {});
+          }
+        }
+      })
+    );
+    return { sent };
+  } catch {
+    return { sent: 0 };
+  }
+}
 
 // Conexão direta com o Pooler IPv4 do Supabase em Transaction Mode (Porta 6543 — ideal para Serverless/Vercel)
 const pool = new Pool({
@@ -784,7 +828,16 @@ export default async function handler(req, res) {
 
       const newId = insertRes.rows[0].id;
       const fullRes = await pool.query(`${TICKETS_SELECT_SQL} WHERE t.id = $1`, [newId]);
-      return sendJson(res, 201, { success: true, data: mapTicketRow(fullRes.rows[0]) });
+      const createdTicket = mapTicketRow(fullRes.rows[0]);
+
+      await sendPushToAllAdmins({
+        title: `Novo Chamado • ${createdTicket.code}`,
+        body: `${createdTicket.customerName}: ${createdTicket.title}`,
+        url: '/?tab=tickets',
+        tag: `ticket-${createdTicket.id}`
+      });
+
+      return sendJson(res, 201, { success: true, data: createdTicket });
     }
 
     const deleteTicketMatch = pathname.match(/^\/api\/v1\/tickets\/(\d+)$/);
@@ -933,6 +986,15 @@ export default async function handler(req, res) {
       const fullRes = await pool.query(`${TICKETS_SELECT_SQL} WHERE t.id = $1`, [ticketId]);
       const ticket = mapTicketRow(fullRes.rows[0]);
 
+      if (newStatus === 'REPORTED') {
+        await sendPushToAllAdmins({
+          title: `Comprovante Pix • ${ticket.code}`,
+          body: `${ticket.customerName} enviou comprovante / informou pagamento Pix`,
+          url: '/?tab=billing',
+          tag: `payment-${ticket.id}`
+        });
+      }
+
       // Ao confirmar, registra a receita no financeiro (uma única vez por chamado)
       if (newStatus === 'PAID' && prev.rows[0].payment_status !== 'PAID' && ticket.estimatedPrice > 0) {
         await pool.query(
@@ -1078,6 +1140,16 @@ export default async function handler(req, res) {
         );
         await pool.query(`UPDATE tickets SET updated_at = CURRENT_TIMESTAMP WHERE id = $1`, [ticketId]);
         const row = insertRes.rows[0];
+
+        if (authorRole === 'CUSTOMER') {
+          await sendPushToAllAdmins({
+            title: `Mensagem de ${authorName}`,
+            body: String(body.message || '').slice(0, 120),
+            url: '/?tab=tickets',
+            tag: `msg-${ticketId}`
+          });
+        }
+
         return sendJson(res, 201, {
           success: true,
           data: {
@@ -1255,6 +1327,57 @@ export default async function handler(req, res) {
           recentTickets: tickets.slice(0, 6)
         }
       });
+    }
+
+    // 11. Web Push Notifications (Safari iOS 16.4+ / Android / Desktop PWA)
+    if (method === 'GET' && pathname === '/api/v1/push/public-key') {
+      const countRes = await pool.query(`SELECT COUNT(*)::int AS cnt FROM push_subscriptions`).catch(() => ({ rows: [{ cnt: 0 }] }));
+      return sendJson(res, 200, {
+        success: true,
+        data: {
+          publicKey: VAPID_PUBLIC_KEY,
+          subscribedCount: countRes.rows[0]?.cnt || 0
+        }
+      });
+    }
+
+    if (method === 'POST' && pathname === '/api/v1/push/subscribe') {
+      const body = await parseBody(req);
+      const sub = body.subscription || body;
+      const endpoint = sub?.endpoint;
+      const p256dh = sub?.keys?.p256dh;
+      const auth = sub?.keys?.auth;
+      const userAgent = String(body.userAgent || req.headers['user-agent'] || '').slice(0, 255);
+
+      if (!endpoint || !p256dh || !auth) {
+        return sendJson(res, 400, { success: false, message: 'Assinatura Push inválida.' });
+      }
+
+      await pool.query(
+        `INSERT INTO push_subscriptions (endpoint, p256dh, auth, user_agent)
+         VALUES ($1, $2, $3, $4)
+         ON CONFLICT (endpoint) DO UPDATE
+         SET p256dh = EXCLUDED.p256dh,
+             auth = EXCLUDED.auth,
+             user_agent = EXCLUDED.user_agent`,
+        [endpoint, p256dh, auth, userAgent]
+      );
+
+      const countRes = await pool.query(`SELECT COUNT(*)::int AS cnt FROM push_subscriptions`).catch(() => ({ rows: [{ cnt: 1 }] }));
+      return sendJson(res, 201, {
+        success: true,
+        data: { subscribedCount: countRes.rows[0]?.cnt || 1 }
+      });
+    }
+
+    if (method === 'POST' && pathname === '/api/v1/push/test') {
+      const result = await sendPushToAllAdmins({
+        title: 'IT ONE • Alerta Mobile Ativo',
+        body: 'Notificações em tempo real configuradas com sucesso no seu telefone!',
+        url: '/?tab=tickets',
+        tag: `test-${Date.now()}`
+      });
+      return sendJson(res, 200, { success: true, data: result });
     }
 
     return sendJson(res, 404, { success: false, message: `Endpoint não encontrado: ${method} ${pathname}` });

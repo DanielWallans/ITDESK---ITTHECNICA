@@ -86,3 +86,6 @@ export function playNotificationChime() {
   }
 }
 
+export const playNotificationSound = playNotificationChime;
+
+
