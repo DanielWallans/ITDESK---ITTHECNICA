@@ -1,0 +1,29 @@
+# Compilação e Binários
+target/
+dist/
+node_modules/
+.npm/
+
+# IDE e Editores
+.idea/
+*.iml
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Banco de dados local e dados temporários
+data/
+*.db
+*.log
+
+# Variáveis com segredos reais
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
