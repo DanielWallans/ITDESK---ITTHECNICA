@@ -3,17 +3,18 @@ import crypto from 'crypto';
 
 const { Pool } = pg;
 
-// Conexão direta com o Pooler IPv4 do Supabase
+// Conexão direta com o Pooler IPv4 do Supabase em Transaction Mode (Porta 6543 — ideal para Serverless/Vercel)
 const pool = new Pool({
   host: process.env.DB_HOST || 'aws-0-us-east-1.pooler.supabase.com',
-  port: Number(process.env.DB_PORT || 5432),
+  port: Number(process.env.DB_PORT || 6543),
   database: process.env.DB_NAME || 'postgres',
   user: process.env.SPRING_DATASOURCE_USERNAME || 'postgres.onqxaoxrukbrkkdyyatj',
   password: process.env.SPRING_DATASOURCE_PASSWORD || "Wallans019'dan",
   ssl: { rejectUnauthorized: false },
-  max: 5,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 8000
+  max: 1,
+  idleTimeoutMillis: 3000,
+  allowExitOnIdle: true,
+  connectionTimeoutMillis: 10000
 });
 
 function hashPassword(password) {
@@ -278,36 +279,9 @@ const SESSION_SELECT_SQL = `
   LEFT JOIN users tu ON tu.id = rs.technician_id
 `;
 
-// Garante (de forma idempotente) a estrutura de pagamentos: formas de pagamento + status no chamado
-let paymentSchemaReady = null;
+// Estrutura já provisionada no Supabase; evita DDL lock em cada cold start serverless
+let paymentSchemaReady = Promise.resolve();
 function ensurePaymentSchema() {
-  if (!paymentSchemaReady) {
-    paymentSchemaReady = pool.query(`
-      CREATE TABLE IF NOT EXISTS payment_methods (
-        id BIGSERIAL PRIMARY KEY,
-        type VARCHAR(20) NOT NULL DEFAULT 'PIX',
-        label VARCHAR(120) NOT NULL,
-        pix_key VARCHAR(140) NOT NULL,
-        pix_key_type VARCHAR(20) NOT NULL DEFAULT 'ALEATORIA',
-        receiver_name VARCHAR(25) NOT NULL,
-        receiver_city VARCHAR(15) NOT NULL,
-        instructions TEXT,
-        is_active BOOLEAN NOT NULL DEFAULT TRUE,
-        created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
-      );
-      ALTER TABLE payment_methods ADD COLUMN IF NOT EXISTS qr_code_image TEXT;
-      ALTER TABLE payment_methods ALTER COLUMN pix_key TYPE TEXT;
-      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS payment_status VARCHAR(20) NOT NULL DEFAULT 'PENDING';
-      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS payment_method_id BIGINT;
-      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS payment_reported_at TIMESTAMPTZ;
-      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS paid_at TIMESTAMPTZ;
-      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS payment_receipt_url TEXT;
-      ALTER TABLE tickets ADD COLUMN IF NOT EXISTS payment_receipt_name VARCHAR(255);
-    `).catch((err) => {
-      paymentSchemaReady = null;
-      throw err;
-    });
-  }
   return paymentSchemaReady;
 }
 
