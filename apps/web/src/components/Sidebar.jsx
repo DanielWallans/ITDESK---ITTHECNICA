@@ -9,7 +9,8 @@ import {
   Search,
   LogOut,
   Copy,
-  Check
+  Check,
+  Smartphone
 } from 'lucide-react';
 
 export default function Sidebar({ 
@@ -32,6 +33,15 @@ export default function Sidebar({
     { id: 'schedule', label: 'Agenda & Horários', icon: Calendar },
     { id: 'billing', label: 'Faturas & Cobranças', icon: FileText, count: pendingPaymentsCount },
     { id: 'customers', label: 'Clientes & Empresas', icon: Users },
+    { id: 'mobile', label: 'App no Celular', icon: Smartphone },
+  ];
+
+  const mobileNavItems = [
+    { id: 'dashboard', label: 'Painel', icon: LayoutDashboard },
+    { id: 'tickets', label: 'Chamados', icon: TicketCheck, count: ticketCount },
+    { id: 'billing', label: 'Pix/Caixa', icon: FileText, count: pendingPaymentsCount },
+    { id: 'customers', label: 'Clientes', icon: Users },
+    { id: 'mobile', label: 'App Push', icon: Smartphone },
   ];
 
   const handleCopyCustomerLink = (e) => {
@@ -43,7 +53,8 @@ export default function Sidebar({
   };
 
   return (
-    <aside style={{
+    <>
+    <aside className="adm-sidebar" style={{
       width: '248px',
       height: '100vh',
       backgroundColor: '#000000',
@@ -283,5 +294,29 @@ export default function Sidebar({
         )}
       </div>
     </aside>
+
+    {/* Barra Inferior Nativa para iPhone / Celular */}
+    <nav className="adm-mobile-nav">
+      {mobileNavItems.map((item) => {
+        const Icon = item.icon;
+        const isActive = currentTab === item.id;
+        return (
+          <button
+            key={item.id}
+            onClick={() => setCurrentTab(item.id)}
+            className={`adm-mobile-nav-item ${isActive ? 'active' : ''}`}
+          >
+            <div style={{ position: 'relative', display: 'inline-flex' }}>
+              <Icon size={18} color={isActive ? '#ff6b00' : '#71717a'} />
+              {item.count !== undefined && item.count > 0 && (
+                <span className="adm-mobile-nav-badge">{item.count}</span>
+              )}
+            </div>
+            <span>{item.label}</span>
+          </button>
+        );
+      })}
+    </nav>
+    </>
   );
 }

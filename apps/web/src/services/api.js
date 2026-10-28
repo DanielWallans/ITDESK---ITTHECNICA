@@ -554,5 +554,44 @@ export const api = {
     } catch (e) {}
     initialFinancialEntries = initialFinancialEntries.filter(e => e.id !== Number(id));
     return true;
+  },
+
+  // Web Push Notifications (App Mobile Safari iOS / Android)
+  async getPushConfig() {
+    try {
+      const res = await fetch(`${API_BASE}/push/public-key`);
+      if (res.ok) {
+        const json = await res.json();
+        return json.data;
+      }
+    } catch (e) {}
+    return {
+      publicKey: 'BDAH9v7vNy72F160kTuKcCYR_U9lsXwpCEWYY8HcsPu7jqT26xgBCZ0XrRtslyVXyz8pd-__CaxnMtsLo4OLTcg',
+      subscribedCount: 0
+    };
+  },
+
+  async subscribePush(subscription) {
+    const res = await fetch(`${API_BASE}/push/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        subscription,
+        userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : ''
+      })
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || 'Erro ao vincular notificações neste aparelho.');
+    return json.data;
+  },
+
+  async sendTestPush() {
+    const res = await fetch(`${API_BASE}/push/test`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.message || 'Erro ao enviar teste de notificação.');
+    return json.data;
   }
 };

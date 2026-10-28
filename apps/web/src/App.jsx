@@ -9,6 +9,7 @@ import ServicesView from './components/ServicesView';
 import ScheduleView from './components/ScheduleView';
 import BillingView from './components/BillingView';
 import CustomersView from './components/CustomersView';
+import MobileAppView from './components/MobileAppView';
 import CommandPaletteModal from './components/CommandPaletteModal';
 import AdminAuthView from './components/AdminAuthView';
 import CustomerPortalView from './components/CustomerPortalView';
@@ -20,7 +21,8 @@ import {
   ChevronRight, 
   X,
   Volume2,
-  VolumeX
+  VolumeX,
+  Smartphone
 } from 'lucide-react';
 
 export default function App() {
@@ -44,7 +46,14 @@ export default function App() {
     );
   })();
 
-  const [currentTab, setCurrentTab] = useState('dashboard');
+  const [currentTab, setCurrentTab] = useState(() => {
+    const params = new URLSearchParams(window.location.search);
+    const tabParam = params.get('tab');
+    if (tabParam && ['dashboard', 'tickets', 'services', 'schedule', 'billing', 'customers', 'mobile'].includes(tabParam)) {
+      return tabParam;
+    }
+    return 'dashboard';
+  });
   const [tickets, setTickets] = useState([]);
   const [activeSession, setActiveSession] = useState(null);
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -72,6 +81,9 @@ export default function App() {
 
   useEffect(() => {
     if (adminUser && !isCustomerLandingRoute) {
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(() => {});
+      }
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission().catch(() => {});
       }
@@ -254,7 +266,8 @@ export default function App() {
     services: 'Catálogo de Serviços',
     schedule: 'Agenda Técnica',
     billing: 'Faturamento & Cobranças',
-    customers: 'Clientes & Empresas'
+    customers: 'Clientes & Empresas',
+    mobile: 'App no Celular'
   };
 
   return (
@@ -329,6 +342,18 @@ export default function App() {
                 </span>
               </button>
             )}
+
+            <button
+              className="f-btn-icon"
+              title="App no Celular & Notificações Push (Safari / iPhone)"
+              onClick={() => setCurrentTab('mobile')}
+              style={{
+                borderColor: currentTab === 'mobile' ? 'var(--orange)' : undefined,
+                color: currentTab === 'mobile' ? 'var(--orange)' : undefined
+              }}
+            >
+              <Smartphone size={15} />
+            </button>
 
             <div style={{ position: 'relative' }}>
               <button 
@@ -476,7 +501,7 @@ export default function App() {
         </header>
 
         {/* Corpo de Conteúdo */}
-        <div style={{ padding: '28px', flex: 1, maxWidth: '1440px', width: '100%', boxSizing: 'border-box' }}>
+        <div className="adm-main-body" style={{ padding: '28px', flex: 1, maxWidth: '1440px', width: '100%', boxSizing: 'border-box' }}>
           {currentTab === 'dashboard' && (
             <DashboardView
               summary={dashboardSummary}
@@ -529,6 +554,12 @@ export default function App() {
             <CustomersView
               onOpenNewTicket={() => setIsNewTicketModalOpen(true)}
               onStartSession={handleStartSession}
+            />
+          )}
+
+          {currentTab === 'mobile' && (
+            <MobileAppView
+              onNavigateTab={handleNavigateTab}
             />
           )}
         </div>
