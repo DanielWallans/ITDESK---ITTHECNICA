@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "installCommand": "npm install && cd apps/web && npm install",
-  "buildCommand": "cd apps/web && npm run build",
-  "outputDirectory": "apps/web/dist",
+  "installCommand": "npm install && if [ -d apps/web ]; then cd apps/web && npm install; fi",
+  "buildCommand": "if [ -d apps/web ]; then cd apps/web && npm run build && cp -r dist ../dist; else npm run build; fi",
+  "outputDirectory": "dist",
   "rewrites": [
     {
       "source": "/api/(.*)",
