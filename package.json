@@ -5,10 +5,10 @@
   "type": "module",
   "description": "Plataforma de Gestão de Suporte Técnico & Atendimento Remoto",
   "scripts": {
-    "dev": "npm --prefix apps/web run dev",
-    "start": "npm --prefix apps/web run dev",
-    "build": "npm --prefix apps/web run build",
-    "web": "npm --prefix apps/web run dev",
+    "dev": "cd apps/web && npm run dev",
+    "start": "cd apps/web && npm run dev",
+    "build": "cd apps/web && npm run build",
+    "web": "cd apps/web && npm run dev",
     "api": "powershell -Command \"$env:JAVA_HOME='C:\\Java\\jdk-21'; $env:PATH='C:\\Java\\jdk-21\\bin;'+$env:PATH; cd apps/api; mvn spring-boot:run\""
   },
   "dependencies": {
