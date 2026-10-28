@@ -1,0 +1,328 @@
+/* ==========================================================================
+   IT ONE by IT THECNICA — Design System Editorial (Padrão /login & /atendimento)
+   Preto absoluto (#000000), Laranja IT ONE (#ff6b00), tipografia limpa,
+   divisórias finas (#1f1f1f) e zero cards/caixas com cara de IA.
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&family=JetBrains+Mono:wght@500;700&display=swap');
+
+:root {
+  --bg-app: #000000;
+  --bg-sidebar: #000000;
+  --bg-card: transparent;
+  --bg-card-hover: rgba(255, 107, 0, 0.03);
+  --bg-inner: #070707;
+
+  --border-light: #1f1f1f;
+  --border-active: #ff6b00;
+
+  --text-white: #ffffff;
+  --text-primary: #e5e5e5;
+  --text-secondary: #8a8a8a;
+  --text-tertiary: #525252;
+
+  --orange: #ff6b00;
+  --orange-bright: #ff7b1a;
+  --orange-light: #ff9442;
+  --orange-soft: rgba(255, 107, 0, 0.08);
+  --orange-glow: none;
+
+  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-xs: 2px;
+  --radius-sm: 2px;
+  --radius-md: 2px;
+  --radius-lg: 0px;
+  --radius-xl: 2px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: var(--font-main);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Scrollbar discreta */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #1f1f1f;
+  border-radius: 0;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--orange);
+}
+
+/* Botões retos padrão IT ONE (/login e /atendimento) */
+.f-btn-primary {
+  background: var(--orange);
+  color: #000000;
+  font-weight: 800;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 9px 16px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--orange);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  box-shadow: none;
+}
+.f-btn-primary:hover {
+  background: var(--orange-bright);
+  border-color: var(--orange-bright);
+}
+.f-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.f-btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid #262626;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 8px 14px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.f-btn-secondary:hover {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.f-btn-icon {
+  background: transparent;
+  border: 1px solid #262626;
+  color: var(--text-secondary);
+  width: 34px;
+  height: 34px;
+  border-radius: 2px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.f-btn-icon:hover {
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+/* Substituição de Cards por Seções Arquiteturais Planas (Sem caixas arredondadas) */
+.f-card {
+  background-color: transparent;
+  border: none;
+  border-top: 1px solid var(--border-light);
+  border-radius: 0;
+  position: relative;
+}
+
+.f-card-orange-hero {
+  background: rgba(255, 107, 0, 0.04);
+  border: none;
+  border-top: 2px solid var(--orange);
+  border-bottom: 1px solid var(--border-light);
+  border-radius: 0;
+  color: #ffffff;
+  position: relative;
+  box-shadow: none;
+}
+
+/* Inputs com linha inferior (Padrão /login e /atendimento) */
+.f-input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #262626;
+  color: var(--text-white);
+  padding: 10px 2px;
+  border-radius: 0;
+  font-size: 13.5px;
+  outline: none;
+  font-family: var(--font-main);
+  transition: border-color 0.15s ease;
+}
+.f-input:focus {
+  border-bottom-color: var(--orange);
+  box-shadow: none;
+}
+select.f-input option {
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+textarea.f-input {
+  border: 1px solid #262626;
+  padding: 10px 12px;
+  border-radius: 2px;
+}
+textarea.f-input:focus {
+  border-color: var(--orange);
+}
+
+/* Status Dots Minimalistas */
+.status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.status-dot-active {
+  background-color: var(--orange);
+}
+.status-dot-neutral {
+  background-color: var(--text-tertiary);
+}
+.status-dot-waiting {
+  background-color: var(--orange-light);
+}
+
+/* Tabela Editorial Plana (Padrão /atendimento) */
+.f-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.f-table th {
+  padding: 12px 14px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border-light);
+}
+.f-table td {
+  padding: 14px 14px;
+  font-size: 13px;
+  color: var(--text-primary);
+  border-bottom: 1px solid #141414;
+}
+.f-table tr:hover td {
+  background-color: rgba(255, 107, 0, 0.025);
+}
+
+/* Abas de Filtro Planas (Sem pílulas arredondadas) */
+.f-tab-pill {
+  padding: 8px 14px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s ease;
+  background: transparent;
+  color: var(--text-secondary);
+}
+.f-tab-pill:hover {
+  color: var(--text-white);
+}
+.f-tab-pill.active {
+  background-color: transparent;
+  color: var(--orange);
+  border-bottom-color: var(--orange);
+  font-weight: 700;
+}
+
+/* Faixa Horizontal de Indicadores (Padrão .cp-stats do /atendimento) */
+.adm-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+}
+.adm-stat-item {
+  padding: 18px 20px;
+  border-right: 1px solid var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.adm-stat-item:last-child {
+  border-right: none;
+}
+.adm-stat-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+.adm-stat-value {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-white);
+  letter-spacing: -0.02em;
+}
+.adm-stat-sub {
+  font-size: 11.5px;
+  color: var(--text-tertiary);
+}
+
+/* Lista em Linhas Horizontais (Sem cards) */
+.adm-row-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-light);
+}
+.adm-row-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 8px;
+  border-bottom: 1px solid #161616;
+  transition: background-color 0.15s ease;
+}
+.adm-row-item:hover {
+  background-color: rgba(255, 107, 0, 0.025);
+}
+
+/* Modais Sóbrios com Topo Laranja */
+.f-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 24px;
+}
+.f-modal-box {
+  background: #050505;
+  border: 1px solid #262626;
+  border-top: 2px solid var(--orange);
+  border-radius: 2px;
+  width: 100%;
+  max-width: 820px;
+  max-height: 90vh;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
