@@ -9,7 +9,7 @@
       "destination": "/api/index.js"
     },
     {
-      "source": "/((?!assets/|api/|manifest\\.json|sw\\.js|favicon\\.png).*)",
+      "source": "/((?!assets/|api/|manifest\\.json|sw\\.js|favicon\\.png|apple-touch-icon.*).*)",
       "destination": "/index.html"
     }
   ]

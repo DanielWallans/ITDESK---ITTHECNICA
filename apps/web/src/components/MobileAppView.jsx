@@ -117,9 +117,10 @@ export default function MobileAppView({ onNavigateTab }) {
         setSubscribedCount((c) => Math.max(1, c));
       }
       playNotificationSound();
+      await api.sendTestPush().catch(() => {});
       setFeedback({
         type: 'success',
-        text: 'Aparelho vinculado com sucesso! Agora você receberá notificações mesmo fora de casa quando chegar um novo chamado ou mensagem.'
+        text: 'Aparelho vinculado com sucesso! Acabamos de disparar um alerta de confirmação — agora você receberá notificações mesmo com o app fechado ou tela bloqueada!'
       });
     } catch (err) {
       setFeedback({
@@ -162,7 +163,26 @@ export default function MobileAppView({ onNavigateTab }) {
       return;
     }
 
-    // Gera um perfil instalável Apple WebClip (.mobileconfig) para download direto via Safari no iOS
+    let iconXmlBlock = '';
+    try {
+      const iconRes = await fetch('/assets/apple-touch-icon.png?v=2');
+      const iconBlob = await iconRes.blob();
+      const base64Icon = await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const resStr = String(reader.result || '');
+          resolve(resStr.includes(',') ? resStr.split(',')[1] : '');
+        };
+        reader.readAsDataURL(iconBlob);
+      });
+      if (base64Icon) {
+        iconXmlBlock = `\n      <key>Icon</key>\n      <data>${base64Icon}</data>`;
+      }
+    } catch {
+      // ignora
+    }
+
+    // Gera um perfil instalável Apple WebClip (.mobileconfig) com a Logo Oficial IT ONE embutida
     const mobileConfigXml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -171,7 +191,7 @@ export default function MobileAppView({ onNavigateTab }) {
   <array>
     <dict>
       <key>FullScreen</key>
-      <true/>
+      <true/>${iconXmlBlock}
       <key>IsRemovable</key>
       <true/>
       <key>Label</key>
@@ -181,11 +201,11 @@ export default function MobileAppView({ onNavigateTab }) {
       <key>PayloadDisplayName</key>
       <string>IT ONE App</string>
       <key>PayloadIdentifier</key>
-      <string>com.itthecnica.itone.webclip</string>
+      <string>com.itthecnica.itone.webclip.v2</string>
       <key>PayloadType</key>
       <string>com.apple.webClip.managed</string>
       <key>PayloadUUID</key>
-      <string>8A72E9E1-4F92-4C11-9D31-118000170001</string>
+      <string>8A72E9E1-4F92-4C11-9D31-118000170003</string>
       <key>PayloadVersion</key>
       <integer>1</integer>
       <key>Precomposed</key>
@@ -199,7 +219,7 @@ export default function MobileAppView({ onNavigateTab }) {
   <key>PayloadDisplayName</key>
   <string>IT ONE — Central do Especialista</string>
   <key>PayloadIdentifier</key>
-  <string>com.itthecnica.itone.profile</string>
+  <string>com.itthecnica.itone.profile.v2</string>
   <key>PayloadOrganization</key>
   <string>IT THECNICA</string>
   <key>PayloadRemovalDisallowed</key>
@@ -207,7 +227,7 @@ export default function MobileAppView({ onNavigateTab }) {
   <key>PayloadType</key>
   <string>Configuration</string>
   <key>PayloadUUID</key>
-  <string>8A72E9E1-4F92-4C11-9D31-118000170002</string>
+  <string>8A72E9E1-4F92-4C11-9D31-118000170004</string>
   <key>PayloadVersion</key>
   <integer>1</integer>
 </dict>
@@ -237,11 +257,25 @@ export default function MobileAppView({ onNavigateTab }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-      {/* Header */}
+      {/* Header com Prévia do Ícone Oficial IT ONE */}
       <div className="adm-page-head">
-        <div>
-          <div className="adm-kicker">APP MOBILE • IPHONE (SAFARI) & ANDROID SEM LOJA</div>
-          <h2 className="adm-title">App no Celular & Alertas Push</h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img
+            src="/assets/app-icon-512.png?v=2"
+            alt="Ícone do App IT ONE"
+            style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '12px',
+              border: '1px solid #262626',
+              objectFit: 'cover',
+              flexShrink: 0
+            }}
+          />
+          <div>
+            <div className="adm-kicker">APP MOBILE • IPHONE (SAFARI) & ANDROID SEM LOJA</div>
+            <h2 className="adm-title">App no Celular & Alertas Push</h2>
+          </div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
           <button onClick={loadPushStatus} className="adm-btn-ghost">

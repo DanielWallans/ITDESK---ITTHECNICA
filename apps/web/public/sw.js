@@ -13,7 +13,7 @@ self.addEventListener('push', (event) => {
     title: 'IT ONE • Novo Alerta',
     body: 'Um novo chamado ou mensagem acaba de chegar no painel.',
     url: '/?tab=tickets',
-    tag: 'itone-alert'
+    tag: 'itone-alert-' + Date.now()
   };
 
   if (event.data) {
@@ -27,12 +27,9 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: payload.body,
-    icon: '/assets/favicon-it-one.png',
-    badge: '/assets/favicon-it-one.png',
-    tag: payload.tag || 'itone-alert',
-    renotify: true,
-    requireInteraction: true,
-    vibrate: [200, 100, 200, 100, 300],
+    icon: '/assets/apple-touch-icon.png',
+    badge: '/assets/apple-touch-icon.png',
+    tag: payload.tag || ('itone-alert-' + Date.now()),
     data: {
       url: payload.url || '/?tab=tickets'
     }
@@ -64,4 +61,3 @@ self.addEventListener('notificationclick', (event) => {
     })
   );
 });
-
