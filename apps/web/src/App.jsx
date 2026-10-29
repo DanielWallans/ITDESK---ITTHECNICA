@@ -79,11 +79,32 @@ export default function App() {
   const [liveToast, setLiveToast] = useState(null);
   const [pushSubscribed, setPushSubscribed] = useState(true); // oculto até checar
   const [enablingPushBanner, setEnablingPushBanner] = useState(false);
+  const [booting, setBooting] = useState(true);
+  const [bootFadeOut, setBootFadeOut] = useState(false);
+  const [bootProgress, setBootProgress] = useState(12);
 
   const initialLoadDoneRef = useRef(false);
   const knownTicketIdsRef = useRef(new Set());
   const knownReportedPaymentsRef = useRef(new Set());
   const soundEnabledRef = useRef(soundEnabled);
+
+  useEffect(() => {
+    if (!booting) return;
+    setBootFadeOut(false);
+    setBootProgress(15);
+    const t1 = setTimeout(() => setBootProgress(48), 320);
+    const t2 = setTimeout(() => setBootProgress(82), 750);
+    const t3 = setTimeout(() => setBootProgress(100), 1150);
+    const t4 = setTimeout(() => setBootFadeOut(true), 1400);
+    const t5 = setTimeout(() => setBooting(false), 1780);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+      clearTimeout(t5);
+    };
+  }, [booting]);
 
   const urlBase64ToUint8Array = (base64String) => {
     const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
@@ -252,6 +273,7 @@ export default function App() {
   const handleAdminAuthenticated = (user) => {
     localStorage.setItem('itone_admin_user', JSON.stringify(user));
     setAdminUser(user);
+    setBooting(true);
     if (window.location.pathname.toLowerCase().startsWith('/login')) {
       window.history.replaceState({}, '', '/');
     }
@@ -262,6 +284,166 @@ export default function App() {
     setAdminUser(null);
     window.history.replaceState({}, '', '/login');
   };
+
+  // Tela de Carregamento / Splash Screen Oficial IT ONE (Preto Absoluto + Efeitos Laranja + Barra de Progresso)
+  if (booting && !isCustomerLandingRoute) {
+    const bootStepLabel =
+      bootProgress < 45
+        ? 'INICIALIZANDO PLATAFORMA DE GESTÃO DE SUPORTE...'
+        : bootProgress < 85
+        ? 'SINCRONIZANDO CHAMADOS, GATEWAY ANYDESK & ALERTAS PUSH...'
+        : 'AMBIENTE OPERACIONAL PRONTO';
+
+    return (
+      <div
+        style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: '#000000',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '28px',
+          zIndex: 99999,
+          overflow: 'hidden',
+          opacity: bootFadeOut ? 0 : 1,
+          transition: 'opacity 0.38s ease',
+          userSelect: 'none'
+        }}
+      >
+        {/* Linha Laser Superior Laranja */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            background: 'linear-gradient(90deg, transparent 0%, #ff6b00 50%, transparent 100%)',
+            boxShadow: '0 0 18px #ff6b00'
+          }}
+        />
+
+        {/* Efeito de Luz / Glow Radial Laranja ao Fundo */}
+        <div
+          style={{
+            position: 'absolute',
+            width: 'min(560px, 95vw)',
+            height: 'min(560px, 95vw)',
+            borderRadius: '50%',
+            background:
+              'radial-gradient(circle, rgba(255, 107, 0, 0.24) 0%, rgba(255, 75, 0, 0.08) 40%, rgba(0, 0, 0, 0) 72%)',
+            filter: 'blur(26px)',
+            pointerEvents: 'none',
+            animation: 'itonePulseGlow 2.8s ease-in-out infinite'
+          }}
+        />
+
+        {/* Halo Secundário Laranja Inferior */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-120px',
+            width: 'min(680px, 100vw)',
+            height: '240px',
+            background: 'radial-gradient(ellipse at center, rgba(255, 107, 0, 0.16) 0%, transparent 70%)',
+            filter: 'blur(30px)',
+            pointerEvents: 'none'
+          }}
+        />
+
+        {/* Logo Oficial IT ONE — Plataforma de Gestão de Suporte */}
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+            maxWidth: '420px'
+          }}
+        >
+          <img
+            src="/assets/logo-it-one.png"
+            alt="IT ONE — Plataforma de Gestão de Suporte"
+            style={{
+              width: '88%',
+              maxWidth: '380px',
+              height: 'auto',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 0 32px rgba(255, 107, 0, 0.38))'
+            }}
+          />
+
+          {/* Barra de Carregamento Arquitetural Laranja */}
+          <div
+            style={{
+              marginTop: '40px',
+              width: 'min(280px, 78vw)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '10px'
+            }}
+          >
+            <div
+              style={{
+                width: '100%',
+                height: '3px',
+                backgroundColor: '#161616',
+                position: 'relative',
+                overflow: 'hidden',
+                borderRadius: '2px'
+              }}
+            >
+              <div
+                style={{
+                  width: `${bootProgress}%`,
+                  height: '100%',
+                  background: 'linear-gradient(90deg, #ff5100 0%, #ff6b00 60%, #ff9d4d 100%)',
+                  boxShadow: '0 0 14px #ff6b00',
+                  transition: 'width 0.35s cubic-bezier(0.22, 1, 0.36, 1)'
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '12px',
+                fontFamily: 'var(--font-mono)',
+                fontSize: '10px',
+                letterSpacing: '0.1em',
+                textTransform: 'uppercase'
+              }}
+            >
+              <span style={{ color: '#a1a1aa', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {bootStepLabel}
+              </span>
+              <span style={{ color: '#ff6b00', fontWeight: 800, flexShrink: 0 }}>
+                {bootProgress}%
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Linha Laser Inferior Laranja */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '2px',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 107, 0, 0.65) 50%, transparent 100%)'
+          }}
+        />
+      </div>
+    );
+  }
 
   // Se o acesso for pelo link do cliente (/atendimento), renderiza apenas a Landing Page do Cliente
   if (isCustomerLandingRoute) {
