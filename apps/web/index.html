@@ -23,11 +23,11 @@
         background-color: #000000;
         color: #ffffff;
       }
-      @keyframes itonePulseGlow {
+      @keyframes itdeskPulseGlow {
         0%, 100% { opacity: 0.65; transform: scale(1); }
         50% { opacity: 1; transform: scale(1.06); }
       }
-      @keyframes itoneScanBar {
+      @keyframes itdeskScanBar {
         0% { transform: translateX(-100%); }
         100% { transform: translateX(250%); }
       }
@@ -37,10 +37,10 @@
     <div id="root">
       <!-- Boot Loader imediato antes do React montar -->
       <div style="position:fixed;inset:0;background:#000000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow:hidden;z-index:99999;">
-        <div style="position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle, rgba(255,107,0,0.22) 0%, rgba(255,69,0,0.06) 42%, transparent 70%);filter:blur(24px);pointer-events:none;animation:itonePulseGlow 3s ease-in-out infinite;"></div>
+        <div style="position:absolute;width:480px;height:480px;border-radius:50%;background:radial-gradient(circle, rgba(255,107,0,0.22) 0%, rgba(255,69,0,0.06) 42%, transparent 70%);filter:blur(24px);pointer-events:none;animation:itdeskPulseGlow 3s ease-in-out infinite;"></div>
         <img src="/assets/logo-it-desk.png" alt="IT DESK — Plataforma de Gestão de Suporte" style="width:82%;max-width:360px;height:auto;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 28px rgba(255,107,0,0.32));" />
         <div style="margin-top:36px;width:240px;height:2px;background:#1a1a1a;position:relative;overflow:hidden;z-index:2;">
-          <div style="width:45%;height:100%;background:linear-gradient(90deg, transparent, #ff6b00, #ff9442);animation:itoneScanBar 1.2s ease-in-out infinite;"></div>
+          <div style="width:45%;height:100%;background:linear-gradient(90deg, transparent, #ff6b00, #ff9442);animation:itdeskScanBar 1.2s ease-in-out infinite;"></div>
         </div>
       </div>
     </div>

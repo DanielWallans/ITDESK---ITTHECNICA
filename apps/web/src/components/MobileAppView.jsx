@@ -28,7 +28,7 @@ export default function MobileAppView({ onNavigateTab }) {
   const [copiedLink, setCopiedLink] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
 
-  const appUrl = typeof window !== 'undefined' ? `${window.location.origin}/?source=pwa` : 'https://itone-itthecnica.vercel.app/?source=pwa';
+  const appUrl = typeof window !== 'undefined' ? `${window.location.origin}/?source=pwa` : 'https://itdesk-itthecnica.vercel.app/?source=pwa';
 
   useEffect(() => {
     QRCode.toDataURL(appUrl, {

@@ -13,7 +13,7 @@ self.addEventListener('push', (event) => {
     title: 'IT DESK • Novo Alerta',
     body: 'Um novo chamado ou mensagem acaba de chegar no painel.',
     url: '/?tab=tickets',
-    tag: 'itone-alert-' + Date.now()
+    tag: 'itdesk-alert-' + Date.now()
   };
 
   if (event.data) {
@@ -29,7 +29,7 @@ self.addEventListener('push', (event) => {
     body: payload.body,
     icon: '/assets/apple-touch-icon.png',
     badge: '/assets/apple-touch-icon.png',
-    tag: payload.tag || ('itone-alert-' + Date.now()),
+    tag: payload.tag || ('itdesk-alert-' + Date.now()),
     data: {
       url: payload.url || '/?tab=tickets'
     }
