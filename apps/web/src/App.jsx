@@ -77,11 +77,89 @@ export default function App() {
   });
   const [unreadCount, setUnreadCount] = useState(0);
   const [liveToast, setLiveToast] = useState(null);
+  const [pushSubscribed, setPushSubscribed] = useState(true); // oculto até checar
+  const [enablingPushBanner, setEnablingPushBanner] = useState(false);
 
   const initialLoadDoneRef = useRef(false);
   const knownTicketIdsRef = useRef(new Set());
   const knownReportedPaymentsRef = useRef(new Set());
   const soundEnabledRef = useRef(soundEnabled);
+
+  const urlBase64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
+
+  const syncPushSubscription = async (interactive = false) => {
+    try {
+      if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+        setPushSubscribed(false);
+        if (interactive) {
+          alert(
+            'Atenção iPhone (Safari): A Apple só libera notificações com o App Fechado / Tela Bloqueada quando você instala pelo Safari tocando em "Compartilhar" -> "Adicionar à Tela de Início". Adicione à Tela de Início, abra o novo ícone IT ONE com a logo oficial e toque neste botão novamente!'
+          );
+        }
+        return false;
+      }
+
+      const reg = await navigator.serviceWorker.register('/sw.js');
+      await navigator.serviceWorker.ready;
+
+      let existing = await reg.pushManager.getSubscription();
+      if (existing) {
+        await api.subscribePush(existing).catch(() => {});
+        setPushSubscribed(true);
+        if (interactive) {
+          await api.sendTestPush().catch(() => {});
+        }
+        return true;
+      }
+
+      if (!interactive && typeof Notification !== 'undefined' && Notification.permission !== 'granted') {
+        setPushSubscribed(false);
+        return false;
+      }
+
+      if (interactive && typeof Notification !== 'undefined') {
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') {
+          setPushSubscribed(false);
+          alert('Permissão de notificação negada. Ative as notificações para o app IT ONE nos Ajustes do iPhone.');
+          return false;
+        }
+      }
+
+      const cfg = await api.getPushConfig();
+      const vapidKey =
+        cfg?.publicKey ||
+        'BDAH9v7vNy72F160kTuKcCYR_U9lsXwpCEWYY8HcsPu7jqT26xgBCZ0XrRtslyVXyz8pd-__CaxnMtsLo4OLTcg';
+
+      const newSub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(vapidKey)
+      });
+
+      await api.subscribePush(newSub);
+      setPushSubscribed(true);
+      if (interactive) {
+        playNotificationChime();
+        await api.sendTestPush().catch(() => {});
+      }
+      return true;
+    } catch (err) {
+      setPushSubscribed(false);
+      if (interactive) {
+        alert(err.message || 'Para receber com o app fechado no iPhone, instale pelo Safari em Compartilhar -> Adicionar à Tela de Início.');
+      }
+      return false;
+    }
+  };
 
   useEffect(() => {
     soundEnabledRef.current = soundEnabled;
@@ -90,12 +168,7 @@ export default function App() {
 
   useEffect(() => {
     if (adminUser && !isCustomerLandingRoute) {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('/sw.js').catch(() => {});
-      }
-      if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission().catch(() => {});
-      }
+      syncPushSubscription(false);
       loadData();
       const interval = setInterval(() => {
         loadData();
@@ -304,7 +377,7 @@ export default function App() {
       }}>
         {/* Top Navbar */}
         <header className="adm-top-header" style={{
-          height: '60px',
+          height: '62px',
           borderBottom: '1px solid var(--border-light)',
           backgroundColor: '#000000',
           display: 'flex',
@@ -315,17 +388,18 @@ export default function App() {
           top: 0,
           zIndex: 40
         }}>
-          {/* Breadcrumb / Brand Mobile */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', minWidth: 0 }}>
+          {/* Breadcrumb / Brand Mobile com Logo Oficial Destacada */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', minWidth: 0 }}>
             <img
               src="/assets/logo-it-one.png"
               alt="IT ONE"
               className="adm-mobile-only"
-              style={{ height: '20px', width: 'auto', objectFit: 'contain' }}
+              onClick={() => setCurrentTab('dashboard')}
+              style={{ height: '32px', maxWidth: '140px', width: 'auto', objectFit: 'contain', cursor: 'pointer', flexShrink: 0 }}
             />
             <span className="adm-desktop-only" style={{ color: 'var(--orange)', fontWeight: 800, fontStyle: 'italic' }}>IT ONE</span>
-            <ChevronRight size={13} color="var(--text-tertiary)" />
-            <span style={{ color: 'var(--text-white)', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <ChevronRight size={13} color="var(--text-tertiary)" style={{ flexShrink: 0 }} />
+            <span style={{ color: 'var(--text-white)', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '11.5px' }}>
               {tabLabels[currentTab]}
             </span>
           </div>
@@ -601,6 +675,41 @@ export default function App() {
                 <LogOut size={13} /> Sair
               </button>
             </div>
+          </div>
+        )}
+
+        {/* Faixa de Ativação 1-Toque de Notificações com o App Fechado (Aparece automaticamente se o aparelho ainda não estiver inscrito no Push) */}
+        {!pushSubscribed && (
+          <div
+            style={{
+              backgroundColor: 'rgba(255, 107, 0, 0.1)',
+              borderBottom: '1px solid var(--orange)',
+              padding: '10px 16px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: '10px'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#ffffff' }}>
+              <Bell size={14} color="var(--orange)" style={{ flexShrink: 0 }} />
+              <span>
+                <strong>Alertas com o App Fechado:</strong> Toque ao lado para vincular este iPhone e receber notificações mesmo com a tela bloqueada.
+              </span>
+            </div>
+            <button
+              onClick={async () => {
+                setEnablingPushBanner(true);
+                await syncPushSubscription(true);
+                setEnablingPushBanner(false);
+              }}
+              disabled={enablingPushBanner}
+              className="f-btn-primary"
+              style={{ padding: '6px 12px', fontSize: '11px' }}
+            >
+              {enablingPushBanner ? 'ATIVANDO...' : 'ATIVAR NOTIFICAÇÕES EM 2º PLANO'}
+            </button>
           </div>
         )}
 

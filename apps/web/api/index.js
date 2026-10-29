@@ -17,10 +17,31 @@ try {
   // Ignora erro de configuração inicial
 }
 
+let pushTableReady = false;
+async function ensurePushTable() {
+  if (pushTableReady) return;
+  try {
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS push_subscriptions (
+        id SERIAL PRIMARY KEY,
+        endpoint TEXT UNIQUE NOT NULL,
+        p256dh TEXT NOT NULL,
+        auth TEXT NOT NULL,
+        user_agent TEXT,
+        created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    pushTableReady = true;
+  } catch {
+    // ignora
+  }
+}
+
 async function sendPushToAllAdmins(payloadObj) {
   try {
+    await ensurePushTable();
     const { rows } = await pool.query(`SELECT id, endpoint, p256dh, auth FROM push_subscriptions`);
-    if (!rows || rows.length === 0) return { sent: 0 };
+    if (!rows || rows.length === 0) return { sent: 0, total: 0 };
     const payload = JSON.stringify(payloadObj);
     let sent = 0;
     await Promise.all(
@@ -31,19 +52,25 @@ async function sendPushToAllAdmins(payloadObj) {
               endpoint: sub.endpoint,
               keys: { p256dh: sub.p256dh, auth: sub.auth }
             },
-            payload
+            payload,
+            {
+              TTL: 86400,
+              urgency: 'high'
+            }
           );
           sent++;
         } catch (err) {
+          console.error('[WebPush Error]:', err.statusCode, err.body || err.message);
           if (err.statusCode === 404 || err.statusCode === 410) {
             await pool.query(`DELETE FROM push_subscriptions WHERE id = $1`, [sub.id]).catch(() => {});
           }
         }
       })
     );
-    return { sent };
-  } catch {
-    return { sent: 0 };
+    return { sent, total: rows.length };
+  } catch (err) {
+    console.error('[sendPushToAllAdmins Error]:', err.message);
+    return { sent: 0, total: 0 };
   }
 }
 
@@ -1331,6 +1358,7 @@ export default async function handler(req, res) {
 
     // 11. Web Push Notifications (Safari iOS 16.4+ / Android / Desktop PWA)
     if (method === 'GET' && pathname === '/api/v1/push/public-key') {
+      await ensurePushTable();
       const countRes = await pool.query(`SELECT COUNT(*)::int AS cnt FROM push_subscriptions`).catch(() => ({ rows: [{ cnt: 0 }] }));
       return sendJson(res, 200, {
         success: true,
@@ -1342,6 +1370,7 @@ export default async function handler(req, res) {
     }
 
     if (method === 'POST' && pathname === '/api/v1/push/subscribe') {
+      await ensurePushTable();
       const body = await parseBody(req);
       const sub = body.subscription || body;
       const endpoint = sub?.endpoint;
