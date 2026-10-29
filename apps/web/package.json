@@ -1,5 +1,6 @@
 {
-  "name": "suporte-remoto-web",
+  "name": "itdesk-web",
+  "description": "IT DESK — Plataforma de Gestão de Suporte Técnico & Atendimento Remoto | IT THECNICA",
   "private": true,
   "version": "1.0.0",
   "type": "module",

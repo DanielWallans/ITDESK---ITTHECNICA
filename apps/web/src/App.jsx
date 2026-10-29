@@ -35,7 +35,7 @@ import {
 export default function App() {
   const [adminUser, setAdminUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('itone_admin_user');
+      const saved = localStorage.getItem('itdesk_admin_user') || localStorage.getItem('itone_admin_user');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -73,6 +73,8 @@ export default function App() {
   const [ticketsInitialFilter, setTicketsInitialFilter] = useState('ALL');
   const [dashboardSummary, setDashboardSummary] = useState(null);
   const [soundEnabled, setSoundEnabled] = useState(() => {
+    const saved = localStorage.getItem('itdesk_sound_enabled');
+    if (saved !== null) return saved !== 'false';
     return localStorage.getItem('itone_sound_enabled') !== 'false';
   });
   const [unreadCount, setUnreadCount] = useState(0);
@@ -184,7 +186,7 @@ export default function App() {
 
   useEffect(() => {
     soundEnabledRef.current = soundEnabled;
-    localStorage.setItem('itone_sound_enabled', String(soundEnabled));
+    localStorage.setItem('itdesk_sound_enabled', String(soundEnabled));
   }, [soundEnabled]);
 
   useEffect(() => {
@@ -271,7 +273,7 @@ export default function App() {
   };
 
   const handleAdminAuthenticated = (user) => {
-    localStorage.setItem('itone_admin_user', JSON.stringify(user));
+    localStorage.setItem('itdesk_admin_user', JSON.stringify(user));
     setAdminUser(user);
     setBooting(true);
     if (window.location.pathname.toLowerCase().startsWith('/login')) {
@@ -280,6 +282,7 @@ export default function App() {
   };
 
   const handleAdminLogout = () => {
+    localStorage.removeItem('itdesk_admin_user');
     localStorage.removeItem('itone_admin_user');
     setAdminUser(null);
     window.history.replaceState({}, '', '/login');
@@ -336,7 +339,7 @@ export default function App() {
               'radial-gradient(circle, rgba(255, 107, 0, 0.24) 0%, rgba(255, 75, 0, 0.08) 40%, rgba(0, 0, 0, 0) 72%)',
             filter: 'blur(26px)',
             pointerEvents: 'none',
-            animation: 'itonePulseGlow 2.8s ease-in-out infinite'
+            animation: 'itdeskPulseGlow 2.8s ease-in-out infinite'
           }}
         />
 

@@ -44,7 +44,7 @@ function getChecklistForService(service) {
 export default function CustomerPortalView() {
   const [customerUser, setCustomerUser] = useState(() => {
     try {
-      const saved = localStorage.getItem('itone_customer_user');
+      const saved = localStorage.getItem('itdesk_customer_user') || localStorage.getItem('itone_customer_user');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -280,14 +280,14 @@ export default function CustomerPortalView() {
     try {
       if (authMode === 'signup') {
         const res = await api.registerCustomer(authForm);
-        localStorage.setItem('itone_customer_user', JSON.stringify(res.user));
+        localStorage.setItem('itdesk_customer_user', JSON.stringify(res.user));
         setCustomerUser(res.user);
       } else {
         const res = await api.login({
           email: authForm.email,
           password: authForm.password
         });
-        localStorage.setItem('itone_customer_user', JSON.stringify(res.user));
+        localStorage.setItem('itdesk_customer_user', JSON.stringify(res.user));
         setCustomerUser(res.user);
       }
     } catch (err) {
@@ -298,6 +298,7 @@ export default function CustomerPortalView() {
   };
 
   const handleLogout = () => {
+    localStorage.removeItem('itdesk_customer_user');
     localStorage.removeItem('itone_customer_user');
     setCustomerUser(null);
     setMyTickets([]);
