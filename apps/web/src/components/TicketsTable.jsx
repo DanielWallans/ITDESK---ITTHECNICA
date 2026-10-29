@@ -63,14 +63,14 @@ export default function TicketsTable({
           </h1>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', width: '100%', maxWidth: '460px' }}>
           <div style={{
             display: 'flex',
             alignItems: 'center',
             gap: '8px',
             borderBottom: '1px solid #262626',
             padding: '6px 2px',
-            width: '260px'
+            flex: '1 1 200px'
           }}>
             <Search size={14} color="var(--text-tertiary)" />
             <input
@@ -107,7 +107,7 @@ export default function TicketsTable({
           flexWrap: 'wrap',
           gap: '8px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
+          <div className="adm-tabs-scroll" style={{ display: 'flex', alignItems: 'center', gap: '4px', flexWrap: 'wrap' }}>
             {[
               { id: 'ALL', label: `Todos (${tickets.length})` },
               { id: 'OPEN', label: `Fila em Aberto (${openQueueTickets.length})` },
@@ -165,26 +165,26 @@ export default function TicketsTable({
             <tbody>
               {filteredTickets.map(t => (
                 <tr key={t.id} style={{ cursor: 'pointer' }} onClick={() => onSelectTicket(t)}>
-                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
+                  <td data-label="Código" style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
                     {t.code}
                   </td>
 
-                  <td>
+                  <td className="m-full">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-white)' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-white)' }}>
                         {t.title}
                       </span>
-                      <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>
+                      <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                         {t.customerName} {t.customerEmail ? `• ${t.customerEmail}` : ''}
                       </span>
                     </div>
                   </td>
 
-                  <td style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
+                  <td data-label="Serviço" style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
                     {t.serviceName || 'Suporte Remoto'}
                   </td>
 
-                  <td>
+                  <td data-label="AnyDesk ID">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <Monitor size={13} color="var(--orange)" />
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--text-white)' }}>
@@ -193,7 +193,7 @@ export default function TicketsTable({
                     </div>
                   </td>
 
-                  <td>
+                  <td data-label="Status">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span className={`status-dot ${
                         t.status === 'IN_PROGRESS' ? 'status-dot-active' :
@@ -212,11 +212,11 @@ export default function TicketsTable({
                     </div>
                   </td>
 
-                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
+                  <td data-label="Valor" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
                     R$ {Number(t.estimatedPrice || 0).toFixed(2).replace('.', ',')}
                   </td>
 
-                  <td style={{ textAlign: 'right' }}>
+                  <td className="m-actions" style={{ textAlign: 'right' }}>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: '6px' }}>
                       {t.status !== 'IN_PROGRESS' && t.status !== 'RESOLVED' && (
                         <button
@@ -225,7 +225,7 @@ export default function TicketsTable({
                             onStartSession(t.id); 
                           }}
                           className="f-btn-primary"
-                          style={{ padding: '5px 10px', fontSize: '11px' }}
+                          style={{ padding: '6px 12px', fontSize: '11px', flex: 1, justifyContent: 'center' }}
                         >
                           <Play size={11} /> Atender
                         </button>
@@ -233,9 +233,9 @@ export default function TicketsTable({
                       <button
                         onClick={(e) => { e.stopPropagation(); onSelectTicket(t); }}
                         className="f-btn-secondary"
-                        style={{ padding: '5px 10px', fontSize: '11px' }}
+                        style={{ padding: '6px 12px', fontSize: '11px', flex: 1, justifyContent: 'center' }}
                       >
-                        Abrir
+                        Abrir Chat
                       </button>
                       {onDeleteTicket && (
                         <button
@@ -244,7 +244,7 @@ export default function TicketsTable({
                             onDeleteTicket(t.id);
                           }}
                           className="f-btn-secondary"
-                          style={{ padding: '5px 8px', fontSize: '11px', color: '#fca5a5' }}
+                          style={{ padding: '6px 10px', fontSize: '11px', color: '#fca5a5' }}
                           title="Excluir chamado"
                         >
                           <Trash2 size={12} />

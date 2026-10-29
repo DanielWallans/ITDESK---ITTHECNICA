@@ -415,40 +415,209 @@ textarea.f-input:focus {
 .adm-mobile-nav {
   display: none;
 }
+.adm-mobile-only {
+  display: none;
+}
+.adm-form-row {
+  display: flex;
+  gap: 14px;
+}
 
 @media (max-width: 860px) {
+  html, body {
+    overflow-x: hidden;
+  }
+
   .adm-sidebar {
     display: none !important;
   }
-  .adm-main-body {
-    padding: 18px 16px 96px 16px !important;
+  .adm-desktop-only {
+    display: none !important;
   }
+  .adm-hide-on-mobile {
+    display: none !important;
+  }
+  .adm-mobile-only {
+    display: flex !important;
+  }
+
+  /* Evita auto-zoom do Safari iOS ao tocar em campos de texto */
+  input, select, textarea, .f-input, .cp-input {
+    font-size: 16px !important;
+  }
+
+  /* Header Superior Mobile */
+  .adm-top-header {
+    padding: 0 14px !important;
+    height: 56px !important;
+  }
+
+  .adm-main-body {
+    padding: 18px 14px 96px 14px !important;
+  }
+
+  /* Tipografia de Cabeçalhos Mobile */
+  .adm-page-head {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+  }
+  .adm-title, h1 {
+    font-size: 20px !important;
+    line-height: 1.2 !important;
+  }
+
   .adm-mobile-grid {
     grid-template-columns: 1fr !important;
     gap: 28px !important;
   }
+
+  /* Strip de Indicadores 2x2 no Mobile sem estourar largura */
   .adm-stats-strip {
     grid-template-columns: repeat(2, 1fr) !important;
   }
   .adm-stat-item {
+    padding: 14px 12px !important;
     border-bottom: 1px solid var(--border-light);
+    min-width: 0;
+  }
+  .adm-stat-item:nth-child(2n) {
+    border-right: none !important;
+  }
+  .adm-stat-label {
+    font-size: 9.5px !important;
+    letter-spacing: 0.06em !important;
+  }
+  .adm-stat-value {
+    font-size: 18px !important;
+    word-break: break-word;
+  }
+  .adm-stat-sub {
+    font-size: 10.5px !important;
+  }
+
+  /* Linhas Horizontais (.adm-row-item) empilhadas com perfeição no Mobile */
+  .adm-row-item {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    padding: 16px 2px !important;
+  }
+  .adm-row-item > div {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  /* Abas Horizontais com Scroll Suave no Mobile */
+  .adm-tabs-scroll {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    padding-bottom: 2px;
+  }
+  .adm-tabs-scroll .f-tab-pill {
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding: 9px 12px;
+  }
+
+  /* Tabelas Desktop (.f-table) viram Blocos Editoriais Empilhados no Mobile */
+  .f-table,
+  .f-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+  .f-table thead {
+    display: none !important;
+  }
+  .f-table tr {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 16px 2px !important;
+    border-bottom: 1px solid #1f1f1f !important;
+    width: 100% !important;
+  }
+  .f-table td {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    padding: 2px 0 !important;
+    border-bottom: none !important;
+    width: 100% !important;
+    text-align: left !important;
+    font-size: 13px !important;
+  }
+  .f-table td[data-label]::before {
+    content: attr(data-label);
+    font-size: 10px;
+    font-weight: 800;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+  .f-table td.m-full {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+  }
+  .f-table td.m-actions {
+    margin-top: 6px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid #141414 !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+  }
+  .f-table td.m-actions > div {
+    width: 100%;
+    justify-content: flex-start !important;
+    flex-wrap: wrap;
+  }
+
+  /* Formulários e Modais no Celular */
+  .adm-form-row {
+    flex-direction: column !important;
+    gap: 14px !important;
+  }
+  .f-modal-overlay {
+    padding: 0 !important;
+    align-items: flex-end !important;
+  }
+  .f-modal-box {
+    max-width: 100% !important;
+    width: 100% !important;
+    height: 92vh !important;
+    max-height: 92vh !important;
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    border-radius: 0 !important;
   }
   .adm-ticket-modal-body {
     flex-direction: column !important;
-    overflow-y: auto !important;
+    overflow: hidden !important;
   }
   .adm-ticket-modal-sidebar {
     width: 100% !important;
     border-right: none !important;
     border-bottom: 1px solid var(--border-light);
-    max-height: 42vh;
+    flex: 1;
+    overflow-y: auto !important;
   }
-  .f-modal-overlay {
-    padding: 8px !important;
+
+  /* Toast Flutuante Mobile */
+  .adm-live-toast {
+    left: 12px !important;
+    right: 12px !important;
+    bottom: 76px !important;
+    width: auto !important;
   }
-  .f-modal-box {
-    max-height: 94vh !important;
-  }
+
+  /* Barra Inferior Nativa (iOS / Android) */
   .adm-mobile-nav {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
@@ -456,9 +625,10 @@ textarea.f-input:focus {
     bottom: 0;
     left: 0;
     right: 0;
-    height: 64px;
+    min-height: 64px;
     padding-bottom: env(safe-area-inset-bottom, 0px);
-    background-color: #000000;
+    background-color: rgba(0, 0, 0, 0.96);
+    backdrop-filter: blur(12px);
     border-top: 1px solid #262626;
     z-index: 900;
   }
@@ -472,8 +642,9 @@ textarea.f-input:focus {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    font-size: 10px;
-    font-weight: 700;
+    padding: 8px 2px;
+    font-size: 9.5px;
+    font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.04em;
     cursor: pointer;
@@ -481,7 +652,7 @@ textarea.f-input:focus {
   .adm-mobile-nav-item.active {
     color: #ffffff;
     border-top-color: var(--orange);
-    background-color: rgba(255, 107, 0, 0.05);
+    background-color: rgba(255, 107, 0, 0.06);
   }
   .adm-mobile-nav-badge {
     position: absolute;

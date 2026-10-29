@@ -121,9 +121,9 @@ export default function CustomersView({ onOpenNewTicket }) {
             <tbody>
               {customers.map(c => (
                 <tr key={c.id}>
-                  <td>
+                  <td className="m-full">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                      <span style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-white)' }}>
+                      <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-white)' }}>
                         {c.name}
                       </span>
                       {c.cnpj && (
@@ -134,18 +134,18 @@ export default function CustomersView({ onOpenNewTicket }) {
                     </div>
                   </td>
 
-                  <td style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
+                  <td data-label="Responsável" style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
                     {c.contactPerson}
                   </td>
 
-                  <td>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', fontSize: '12px', color: 'var(--text-secondary)' }}>
+                  <td data-label="Contato">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px', fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'right' }}>
                       <span>{c.email}</span>
                       {c.phone && <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11.5px' }}>{c.phone}</span>}
                     </div>
                   </td>
 
-                  <td>
+                  <td data-label="AnyDesk">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <Monitor size={13} color="var(--orange)" />
                       <span style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--text-white)' }}>
@@ -154,23 +154,23 @@ export default function CustomersView({ onOpenNewTicket }) {
                     </div>
                   </td>
 
-                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', color: c.activeTickets > 0 ? 'var(--orange)' : 'var(--text-secondary)', fontWeight: 700 }}>
+                  <td data-label="Chamados" style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', color: c.activeTickets > 0 ? 'var(--orange)' : 'var(--text-secondary)', fontWeight: 700 }}>
                     {c.activeTickets} ativo(s)
                   </td>
 
-                  <td style={{ textAlign: 'right' }}>
-                    <div style={{ display: 'inline-flex', gap: '8px' }}>
+                  <td className="m-actions" style={{ textAlign: 'right' }}>
+                    <div style={{ display: 'inline-flex', gap: '8px', width: '100%' }}>
                       <button
                         onClick={onOpenNewTicket}
                         className="f-btn-secondary"
-                        style={{ padding: '5px 10px', fontSize: '11px' }}
+                        style={{ padding: '6px 12px', fontSize: '11px', flex: 1, justifyContent: 'center' }}
                       >
-                        <Plus size={12} /> Chamado
+                        <Plus size={12} /> Novo Chamado
                       </button>
                       <button
                         onClick={() => handleDeleteCustomer(c.id)}
                         className="f-btn-secondary"
-                        style={{ padding: '5px 8px', fontSize: '11px', color: '#fca5a5' }}
+                        style={{ padding: '6px 10px', fontSize: '11px', color: '#fca5a5' }}
                         title="Excluir cliente"
                       >
                         <Trash2 size={12} />
@@ -232,7 +232,7 @@ export default function CustomersView({ onOpenNewTicket }) {
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '16px' }}>
+              <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     Empresa (Opcional)
@@ -259,7 +259,7 @@ export default function CustomersView({ onOpenNewTicket }) {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '16px' }}>
+              <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     Telefone / WhatsApp

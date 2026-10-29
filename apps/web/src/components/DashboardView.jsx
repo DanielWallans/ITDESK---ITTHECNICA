@@ -352,8 +352,8 @@ export default function DashboardView({
             </span>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap', width: '100%', justifyContent: 'space-between' }}>
+            <div className="adm-tabs-scroll" style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
               {[
                 { id: 'ALL', label: 'Todos' },
                 { id: 'NEW', label: 'Novos' },
@@ -375,7 +375,9 @@ export default function DashboardView({
               alignItems: 'center',
               gap: '8px',
               borderBottom: '1px solid #262626',
-              padding: '4px 2px'
+              padding: '4px 2px',
+              flex: '1 1 180px',
+              maxWidth: '260px'
             }}>
               <Search size={13} color="var(--text-tertiary)" />
               <input
@@ -383,7 +385,7 @@ export default function DashboardView({
                 placeholder="Filtrar chamado ou cliente..."
                 value={recentSearch}
                 onChange={(e) => setRecentSearch(e.target.value)}
-                style={{ background: 'none', border: 'none', padding: 0, outline: 'none', color: '#fff', fontSize: '12.5px', width: '180px' }}
+                style={{ background: 'none', border: 'none', padding: 0, outline: 'none', color: '#fff', fontSize: '12.5px', width: '100%' }}
               />
             </div>
           </div>
@@ -409,11 +411,11 @@ export default function DashboardView({
             <tbody>
               {filteredRecentTickets.map(t => (
                 <tr key={t.id} style={{ cursor: 'pointer' }} onClick={() => onSelectTicket(t)}>
-                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
+                  <td data-label="Código" style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
                     {t.code}
                   </td>
 
-                  <td>
+                  <td className="m-full">
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
                       <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-white)' }}>
                         {t.title}
@@ -424,19 +426,19 @@ export default function DashboardView({
                     </div>
                   </td>
 
-                  <td style={{ fontSize: '12px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
+                  <td data-label="Data" style={{ fontSize: '12px', color: 'var(--text-secondary)', fontFamily: 'var(--font-mono)' }}>
                     {new Date(t.createdAt).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: '2-digit' })}
                   </td>
 
-                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', color: 'var(--text-white)' }}>
+                  <td data-label="AnyDesk" style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', color: 'var(--text-white)' }}>
                     {t.remoteAccessId || '—'}
                   </td>
 
-                  <td style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
+                  <td data-label="Valor" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
                     R$ {Number(t.estimatedPrice || 0).toFixed(2).replace('.', ',')}
                   </td>
 
-                  <td>
+                  <td data-label="Status">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
                       <span className={`status-dot ${
                         t.status === 'IN_PROGRESS' ? 'status-dot-active' :
@@ -450,13 +452,13 @@ export default function DashboardView({
                     </div>
                   </td>
 
-                  <td style={{ textAlign: 'right' }}>
+                  <td className="m-actions" style={{ textAlign: 'right' }}>
                     <button 
                       onClick={(e) => { e.stopPropagation(); onSelectTicket(t); }}
                       className="f-btn-secondary" 
-                      style={{ padding: '5px 10px', fontSize: '11px' }}
+                      style={{ padding: '6px 12px', fontSize: '11px', width: '100%', justifyContent: 'center' }}
                     >
-                      Abrir
+                      Abrir Chamado / Chat
                     </button>
                   </td>
                 </tr>

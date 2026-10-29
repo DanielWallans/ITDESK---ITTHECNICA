@@ -22,7 +22,14 @@ import {
   X,
   Volume2,
   VolumeX,
-  Smartphone
+  Smartphone,
+  Menu,
+  Copy,
+  Check,
+  Search,
+  LogOut,
+  Wrench,
+  Calendar
 } from 'lucide-react';
 
 export default function App() {
@@ -61,6 +68,8 @@ export default function App() {
   const [isSessionManagerOpen, setIsSessionManagerOpen] = useState(false);
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [copiedPortalMobile, setCopiedPortalMobile] = useState(false);
   const [ticketsInitialFilter, setTicketsInitialFilter] = useState('ALL');
   const [dashboardSummary, setDashboardSummary] = useState(null);
   const [soundEnabled, setSoundEnabled] = useState(() => {
@@ -294,7 +303,7 @@ export default function App() {
         overflowX: 'hidden'
       }}>
         {/* Top Navbar */}
-        <header style={{
+        <header className="adm-top-header" style={{
           height: '60px',
           borderBottom: '1px solid var(--border-light)',
           backgroundColor: '#000000',
@@ -306,17 +315,23 @@ export default function App() {
           top: 0,
           zIndex: 40
         }}>
-          {/* Breadcrumb minimalista */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-            <span style={{ color: 'var(--orange)', fontWeight: 800, fontStyle: 'italic' }}>IT ONE</span>
+          {/* Breadcrumb / Brand Mobile */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', minWidth: 0 }}>
+            <img
+              src="/assets/logo-it-one.png"
+              alt="IT ONE"
+              className="adm-mobile-only"
+              style={{ height: '20px', width: 'auto', objectFit: 'contain' }}
+            />
+            <span className="adm-desktop-only" style={{ color: 'var(--orange)', fontWeight: 800, fontStyle: 'italic' }}>IT ONE</span>
             <ChevronRight size={13} color="var(--text-tertiary)" />
-            <span style={{ color: 'var(--text-white)', fontWeight: 700 }}>
+            <span style={{ color: 'var(--text-white)', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {tabLabels[currentTab]}
             </span>
           </div>
 
           {/* Ações da Direita */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
             {/* Banner HUD de Sessão Ativa Global */}
             {activeSession && (
               <button
@@ -324,27 +339,27 @@ export default function App() {
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
+                  gap: '6px',
                   backgroundColor: 'rgba(255, 107, 0, 0.08)',
                   border: '1px solid var(--orange)',
                   borderRadius: '2px',
-                  padding: '6px 12px',
+                  padding: '6px 10px',
                   color: 'var(--orange)',
-                  fontSize: '11.5px',
+                  fontSize: '11px',
                   fontWeight: 700,
                   cursor: 'pointer'
                 }}
               >
                 <span className="status-dot status-dot-active" />
-                <span style={{ fontFamily: 'var(--font-mono)' }}>AnyDesk {activeSession.remoteAccessId || 'ATIVO'}</span>
-                <span style={{ color: 'var(--text-white)', marginLeft: '4px', fontSize: '11px' }}>
+                <span style={{ fontFamily: 'var(--font-mono)' }}>{activeSession.remoteAccessId || 'ATIVO'}</span>
+                <span className="adm-desktop-only" style={{ color: 'var(--text-white)', marginLeft: '4px', fontSize: '11px' }}>
                   • Gerenciar
                 </span>
               </button>
             )}
 
             <button
-              className="f-btn-icon"
+              className="f-btn-icon adm-desktop-only"
               title="App no Celular & Notificações Push (Safari / iPhone)"
               onClick={() => setCurrentTab('mobile')}
               style={{
@@ -361,6 +376,7 @@ export default function App() {
                 title="Notificações & Alerta Sonoro"
                 onClick={() => {
                   setIsNotificationsOpen(!isNotificationsOpen);
+                  setIsMobileMenuOpen(false);
                   setUnreadCount(0);
                 }}
                 style={{
@@ -392,17 +408,17 @@ export default function App() {
               {/* Popover de Notificações */}
               {isNotificationsOpen && (
                 <div style={{
-                  position: 'absolute',
-                  top: '44px',
-                  right: 0,
-                  width: '340px',
+                  position: 'fixed',
+                  top: '58px',
+                  right: '14px',
+                  width: 'min(340px, calc(100vw - 28px))',
                   backgroundColor: '#050505',
                   border: '1px solid #262626',
                   borderTop: '2px solid var(--orange)',
                   borderRadius: '2px',
                   padding: '16px',
                   boxShadow: '0 16px 40px rgba(0,0,0,0.85)',
-                  zIndex: 50,
+                  zIndex: 80,
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '12px'
@@ -494,11 +510,99 @@ export default function App() {
             <button 
               onClick={() => setIsNewTicketModalOpen(true)} 
               className="f-btn-primary"
+              style={{ padding: '8px 12px' }}
             >
-              <Plus size={14} /> Novo Chamado
+              <Plus size={14} />
+              <span className="adm-desktop-only">Novo Chamado</span>
+            </button>
+
+            {/* Botão Menu Gaveta Mobile (Acesso a Serviços, Agenda, Link Cliente, Busca e Logout) */}
+            <button
+              className="f-btn-icon adm-mobile-only"
+              onClick={() => {
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+                setIsNotificationsOpen(false);
+              }}
+              style={{
+                borderColor: isMobileMenuOpen ? 'var(--orange)' : undefined,
+                color: isMobileMenuOpen ? 'var(--orange)' : undefined
+              }}
+              title="Menu Operacional"
+            >
+              {isMobileMenuOpen ? <X size={16} /> : <Menu size={16} />}
             </button>
           </div>
         </header>
+
+        {/* Gaveta de Menu Rápido Mobile (Quando o usuário toca no ícone Menu no celular) */}
+        {isMobileMenuOpen && (
+          <div
+            className="adm-mobile-only"
+            style={{
+              flexDirection: 'column',
+              backgroundColor: '#050505',
+              borderBottom: '2px solid var(--orange)',
+              padding: '16px 14px',
+              gap: '12px',
+              zIndex: 39
+            }}
+          >
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+              <button
+                onClick={() => {
+                  setCurrentTab('services');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="f-btn-secondary"
+                style={{ justifyContent: 'flex-start', borderColor: currentTab === 'services' ? 'var(--orange)' : undefined }}
+              >
+                <Wrench size={13} color="var(--orange)" /> Catálogo de Serviços
+              </button>
+              <button
+                onClick={() => {
+                  setCurrentTab('schedule');
+                  setIsMobileMenuOpen(false);
+                }}
+                className="f-btn-secondary"
+                style={{ justifyContent: 'flex-start', borderColor: currentTab === 'schedule' ? 'var(--orange)' : undefined }}
+              >
+                <Calendar size={13} color="var(--orange)" /> Agenda & Horários
+              </button>
+              <button
+                onClick={() => {
+                  setIsCommandPaletteOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="f-btn-secondary"
+                style={{ justifyContent: 'flex-start' }}
+              >
+                <Search size={13} color="var(--orange)" /> Buscar Chamado
+              </button>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/atendimento`);
+                  setCopiedPortalMobile(true);
+                  setTimeout(() => setCopiedPortalMobile(false), 2000);
+                }}
+                className="f-btn-primary"
+                style={{ justifyContent: 'center', fontSize: '11px' }}
+              >
+                {copiedPortalMobile ? <Check size={13} /> : <Copy size={13} />}
+                {copiedPortalMobile ? 'Link Copiado!' : 'Link /atendimento'}
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #1f1f1f' }}>
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#ffffff' }}>{adminUser?.fullName || 'IT THECNICA'}</span>
+                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)' }}>{adminUser?.email}</span>
+              </div>
+              <button onClick={handleAdminLogout} className="f-btn-secondary" style={{ padding: '6px 12px', color: '#fca5a5' }}>
+                <LogOut size={13} /> Sair
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Corpo de Conteúdo */}
         <div className="adm-main-body" style={{ padding: '28px', flex: 1, maxWidth: '1440px', width: '100%', boxSizing: 'border-box' }}>
@@ -608,6 +712,7 @@ export default function App() {
       {/* Alerta Flutuante em Tempo Real quando chega Novo Chamado / Comprovante */}
       {liveToast && (
         <div
+          className="adm-live-toast"
           style={{
             position: 'fixed',
             bottom: '24px',

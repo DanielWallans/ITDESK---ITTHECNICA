@@ -150,7 +150,7 @@ export default function NewTicketModal({ onClose, onCreated }) {
             </div>
           )}
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="adm-form-row">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
               <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                 Nome do Cliente *
@@ -180,7 +180,7 @@ export default function NewTicketModal({ onClose, onCreated }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="adm-form-row">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
               <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                 Empresa (Opcional)
@@ -208,7 +208,7 @@ export default function NewTicketModal({ onClose, onCreated }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="adm-form-row">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 2 }}>
               <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                 Serviço do Catálogo (ou Avulso)
@@ -271,7 +271,7 @@ export default function NewTicketModal({ onClose, onCreated }) {
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
+          <div className="adm-form-row">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
               <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                 Prioridade
