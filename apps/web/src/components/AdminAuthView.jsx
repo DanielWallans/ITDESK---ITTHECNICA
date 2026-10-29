@@ -14,7 +14,7 @@ export default function AdminAuthView({ onAuthenticated }) {
     email: '',
     password: '',
     phone: '',
-    companyName: 'IT ONE'
+    companyName: 'IT DESK'
   });
 
   const handleSubmit = async (e) => {
@@ -29,7 +29,7 @@ export default function AdminAuthView({ onAuthenticated }) {
           email: formData.email,
           password: formData.password,
           phone: formData.phone,
-          companyName: formData.companyName || 'IT ONE'
+          companyName: formData.companyName || 'IT DESK'
         });
         onAuthenticated(res.user);
       } else {
@@ -54,7 +54,7 @@ export default function AdminAuthView({ onAuthenticated }) {
       {/* Barra superior minimalista sem cards */}
       <header className="cp-header">
         <div className="cp-brand">
-          <img src="/assets/logo-it-one.png" alt="IT ONE" />
+          <img src="/assets/logo-it-desk.png" alt="IT DESK" />
           <span>Console Operacional</span>
         </div>
 
@@ -67,7 +67,7 @@ export default function AdminAuthView({ onAuthenticated }) {
         </a>
       </header>
 
-      {/* Corpo Principal Assimétrico — Logo Oficial IT ONE + Formulário Limpo */}
+      {/* Corpo Principal Assimétrico — Logo Oficial IT DESK + Formulário Limpo */}
       <main
         className="cp-main cp-grid"
         style={{
@@ -76,14 +76,14 @@ export default function AdminAuthView({ onAuthenticated }) {
           alignItems: 'center'
         }}
       >
-        {/* Coluna Esquerda: Logo Oficial IT ONE */}
+        {/* Coluna Esquerda: Logo Oficial IT DESK */}
         <section>
           <div className="cp-eyebrow">Acesso Restrito · Ambiente Técnico</div>
 
           <div style={{ margin: '16px 0 24px' }}>
             <img
-              src="/assets/logo-it-one.png"
-              alt="IT ONE — Plataforma de Gestão de Suporte"
+              src="/assets/logo-it-desk.png"
+              alt="IT DESK — Plataforma de Gestão de Suporte"
               style={{
                 width: '100%',
                 maxWidth: 380,
@@ -191,7 +191,7 @@ export default function AdminAuthView({ onAuthenticated }) {
                     <input
                       className="cp-input"
                       type="text"
-                      placeholder="IT ONE"
+                      placeholder="IT DESK"
                       value={formData.companyName}
                       onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
                     />
@@ -216,7 +216,7 @@ export default function AdminAuthView({ onAuthenticated }) {
                 className="cp-input"
                 type="email"
                 required
-                placeholder="admin@itone.com.br"
+                placeholder="admin@itdesk.com.br"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               />

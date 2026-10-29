@@ -1,4 +1,4 @@
-/* IT ONE — Service Worker para Web Push (iOS 16.4+ Safari Home Screen & Android) */
+/* IT DESK — Service Worker para Web Push (iOS 16.4+ Safari Home Screen & Android) */
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
@@ -10,7 +10,7 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('push', (event) => {
   let payload = {
-    title: 'IT ONE • Novo Alerta',
+    title: 'IT DESK • Novo Alerta',
     body: 'Um novo chamado ou mensagem acaba de chegar no painel.',
     url: '/?tab=tickets',
     tag: 'itone-alert-' + Date.now()

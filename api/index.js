@@ -375,7 +375,7 @@ function mapPaymentMethodRow(r) {
 function readPaymentMethodBody(body) {
   const pixKey = String(body.pixKey || '').trim();
   const qrCodeImage = String(body.qrCodeImage || '').trim();
-  const receiverName = (String(body.receiverName || 'IT ONE').trim() || 'IT ONE').slice(0, 25);
+  const receiverName = (String(body.receiverName || 'IT DESK').trim() || 'IT DESK').slice(0, 25);
   const receiverCity = (String(body.receiverCity || 'SAO PAULO').trim() || 'SAO PAULO').slice(0, 15);
   if (!pixKey && !qrCodeImage) return null;
   return [
@@ -1401,7 +1401,7 @@ export default async function handler(req, res) {
 
     if (method === 'POST' && pathname === '/api/v1/push/test') {
       const result = await sendPushToAllAdmins({
-        title: 'IT ONE • Alerta Mobile Ativo',
+        title: 'IT DESK • Alerta Mobile Ativo',
         body: 'Notificações em tempo real configuradas com sucesso no seu telefone!',
         url: '/?tab=tickets',
         tag: `test-${Date.now()}`

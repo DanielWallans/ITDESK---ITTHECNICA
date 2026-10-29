@@ -10,7 +10,7 @@ export default function ScheduleView({ tickets = [], onOpenNewTicket, onStartSes
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
-            OPERAÇÃO TÉCNICA • IT ONE
+            OPERAÇÃO TÉCNICA • IT DESK
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
             Agenda & Janelas de Atendimento

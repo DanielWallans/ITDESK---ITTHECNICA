@@ -228,7 +228,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
               borderBottom: '1px solid var(--border-light)'
             }}>
               <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                {editingServiceId ? 'Editar Serviço & Checklist' : 'Novo Serviço • Catálogo IT ONE'}
+                {editingServiceId ? 'Editar Serviço & Checklist' : 'Novo Serviço • Catálogo IT DESK'}
               </span>
               <button onClick={() => setIsModalOpen(false)} className="f-btn-icon" style={{ width: '28px', height: '28px' }}>
                 <X size={15} />

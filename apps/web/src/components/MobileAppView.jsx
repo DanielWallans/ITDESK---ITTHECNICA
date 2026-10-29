@@ -85,7 +85,7 @@ export default function MobileAppView({ onNavigateTab }) {
         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
         if (isIOS && !isStandalone) {
           throw new Error(
-            'No iPhone (Safari), toque primeiro em "Compartilhar" -> "Adicionar à Tela de Início" e abra o app IT ONE pela tela inicial para liberar as notificações da Apple.'
+            'No iPhone (Safari), toque primeiro em "Compartilhar" -> "Adicionar à Tela de Início" e abra o app IT DESK pela tela inicial para liberar as notificações da Apple.'
           );
         }
         throw new Error('Este navegador não suporta Web Push. No iPhone, abra pelo app instalado na Tela de Início.');
@@ -182,7 +182,7 @@ export default function MobileAppView({ onNavigateTab }) {
       // ignora
     }
 
-    // Gera um perfil instalável Apple WebClip (.mobileconfig) com a Logo Oficial IT ONE embutida
+    // Gera um perfil instalável Apple WebClip (.mobileconfig) com a Logo Oficial IT DESK embutida
     const mobileConfigXml = `<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -195,13 +195,13 @@ export default function MobileAppView({ onNavigateTab }) {
       <key>IsRemovable</key>
       <true/>
       <key>Label</key>
-      <string>IT ONE</string>
+      <string>IT DESK</string>
       <key>PayloadDescription</key>
-      <string>Instala o aplicativo administrativo IT ONE na Tela de Início do iOS</string>
+      <string>Instala o aplicativo administrativo IT DESK na Tela de Início do iOS</string>
       <key>PayloadDisplayName</key>
-      <string>IT ONE App</string>
+      <string>IT DESK App</string>
       <key>PayloadIdentifier</key>
-      <string>com.itthecnica.itone.webclip.v2</string>
+      <string>com.itthecnica.itdesk.webclip.v2</string>
       <key>PayloadType</key>
       <string>com.apple.webClip.managed</string>
       <key>PayloadUUID</key>
@@ -215,11 +215,11 @@ export default function MobileAppView({ onNavigateTab }) {
     </dict>
   </array>
   <key>PayloadDescription</key>
-  <string>Aplicativo Mobile IT ONE — Monitoramento de Chamados e Chat em Tempo Real</string>
+  <string>Aplicativo Mobile IT DESK — Monitoramento de Chamados e Chat em Tempo Real</string>
   <key>PayloadDisplayName</key>
-  <string>IT ONE — Central do Especialista</string>
+  <string>IT DESK — Central do Especialista</string>
   <key>PayloadIdentifier</key>
-  <string>com.itthecnica.itone.profile.v2</string>
+  <string>com.itthecnica.itdesk.profile.v2</string>
   <key>PayloadOrganization</key>
   <string>IT THECNICA</string>
   <key>PayloadRemovalDisallowed</key>
@@ -257,12 +257,12 @@ export default function MobileAppView({ onNavigateTab }) {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '36px' }}>
-      {/* Header com Prévia do Ícone Oficial IT ONE */}
+      {/* Header com Prévia do Ícone Oficial IT DESK */}
       <div className="adm-page-head">
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img
             src="/assets/app-icon-512.png?v=2"
-            alt="Ícone do App IT ONE"
+            alt="Ícone do App IT DESK"
             style={{
               width: '56px',
               height: '56px',
@@ -385,7 +385,7 @@ export default function MobileAppView({ onNavigateTab }) {
                   Toque em Compartilhar <Share size={14} color="#ff6b00" /> e em "Adicionar à Tela de Início" <PlusSquare size={14} color="#ff6b00" />
                 </div>
                 <div style={{ fontSize: '0.82rem', color: '#a1a1aa', lineHeight: 1.5 }}>
-                  No iPhone, a Apple bloqueia arquivos <code>.apk</code> (que são exclusivos do Android), mas permite instalar Web Apps nativos direto pelo Safari sem precisar pagar ou publicar na App Store. O ícone oficial do <strong>IT ONE</strong> será criado na tela inicial do seu iPhone.
+                  No iPhone, a Apple bloqueia arquivos <code>.apk</code> (que são exclusivos do Android), mas permite instalar Web Apps nativos direto pelo Safari sem precisar pagar ou publicar na App Store. O ícone oficial do <strong>IT DESK</strong> será criado na tela inicial do seu iPhone.
                 </div>
               </div>
             </div>
@@ -394,7 +394,7 @@ export default function MobileAppView({ onNavigateTab }) {
               <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: '#ff6b00' }}>03</div>
               <div>
                 <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
-                  Abra o App IT ONE na Tela Inicial e toque em "Ativar Notificações"
+                  Abra o App IT DESK na Tela Inicial e toque em "Ativar Notificações"
                 </div>
                 <div style={{ fontSize: '0.82rem', color: '#a1a1aa', lineHeight: 1.5 }}>
                   Assim que abrir pelo ícone na Tela de Início, entre nesta aba <strong>App no Celular</strong> e toque no botão laranja <strong>Ativar Notificações neste Aparelho</strong>. Quando você sair de casa e um cliente abrir chamado ou mandar mensagem, seu telefone vai vibrar e mostrar o alerta na tela bloqueada!
@@ -433,7 +433,7 @@ export default function MobileAppView({ onNavigateTab }) {
           <div style={{ padding: '24px 0', borderBottom: '1px solid #1f1f1f', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
             {qrDataUrl && (
               <div style={{ padding: '10px', backgroundColor: '#ffffff', border: '2px solid #ff6b00', display: 'inline-block' }}>
-                <img src={qrDataUrl} alt="QR Code App IT ONE" style={{ width: '148px', height: '148px', display: 'block' }} />
+                <img src={qrDataUrl} alt="QR Code App IT DESK" style={{ width: '148px', height: '148px', display: 'block' }} />
               </div>
             )}
             <div style={{ flex: 1, minWidth: '200px' }}>

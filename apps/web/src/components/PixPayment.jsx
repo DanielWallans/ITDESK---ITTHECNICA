@@ -15,7 +15,7 @@ export default function PixPayment({ method, amount, ticketCode }) {
     return buildPixPayload({
       pixKey: method.pixKey,
       pixKeyType: method.pixKeyType,
-      receiverName: method.receiverName || 'IT ONE',
+      receiverName: method.receiverName || 'IT DESK',
       receiverCity: method.receiverCity || 'SAO PAULO',
       amount,
       txid: ticketCode
@@ -71,7 +71,7 @@ export default function PixPayment({ method, amount, ticketCode }) {
         )}
 
         <dl className="cp-pix-meta">
-          <div><dt>Favorecido</dt><dd>{method.receiverName || 'IT ONE'}</dd></div>
+          <div><dt>Favorecido</dt><dd>{method.receiverName || 'IT DESK'}</dd></div>
           <div><dt>Banco / Identificação</dt><dd>{method.label || 'Pix'}</dd></div>
         </dl>
         {method.instructions && <p className="cp-sub" style={{ fontSize: 12.5 }}>{method.instructions}</p>}

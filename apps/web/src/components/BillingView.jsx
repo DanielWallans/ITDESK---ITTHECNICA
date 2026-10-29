@@ -8,7 +8,7 @@ const EMPTY_PIX_FORM = {
   label: 'Pix PicPay',
   pixKeyType: 'CNPJ',
   pixKey: '',
-  receiverName: 'IT ONE',
+  receiverName: 'IT DESK',
   receiverCity: 'SAO PAULO',
   instructions: '',
   qrCodeImage: '',
@@ -58,7 +58,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
       label: pm.label || 'Pix',
       pixKeyType: pm.pixKeyType || 'ALEATORIA',
       pixKey: pm.pixKey || '',
-      receiverName: pm.receiverName || 'IT ONE',
+      receiverName: pm.receiverName || 'IT DESK',
       receiverCity: pm.receiverCity || 'SAO PAULO',
       instructions: pm.instructions || '',
       qrCodeImage: pm.qrCodeImage || '',
@@ -185,7 +185,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
 
   const buildBillingMessage = (ticket) => {
     const val = `R$ ${Number(ticket.estimatedPrice || 0).toFixed(2).replace('.', ',')}`;
-    let msg = `Olá, ${ticket.customerName}! Segue a cobrança referente ao atendimento técnico finalizado na IT ONE:\n\n` +
+    let msg = `Olá, ${ticket.customerName}! Segue a cobrança referente ao atendimento técnico finalizado na IT DESK:\n\n` +
       `• Chamado: ${ticket.code}\n` +
       `• Serviço: ${ticket.title}\n` +
       `• Valor: ${val}\n`;
@@ -226,7 +226,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
-            CONTROLE DE CAIXA & PIX • IT ONE
+            CONTROLE DE CAIXA & PIX • IT DESK
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
             Faturamento, Chaves Pix & Cobranças
@@ -803,7 +803,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                   </label>
                   <input
                     type="text"
-                    placeholder="Ex: Pix CNPJ IT ONE"
+                    placeholder="Ex: Pix CNPJ IT DESK"
                     value={pixForm.label}
                     onChange={(e) => setPixForm({ ...pixForm, label: e.target.value })}
                     className="f-input"
@@ -890,7 +890,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                   <input
                     type="text"
                     maxLength={25}
-                    placeholder="IT ONE SUPORTE"
+                    placeholder="IT DESK SUPORTE"
                     value={pixForm.receiverName}
                     onChange={(e) => setPixForm({ ...pixForm, receiverName: e.target.value })}
                     className="f-input"
