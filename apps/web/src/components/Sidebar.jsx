@@ -68,7 +68,7 @@ export default function Sidebar({
       top: 0,
       userSelect: 'none'
     }}>
-      {/* Brand Header com a Logo Oficial IT ONE */}
+      {/* Brand Header com a Logo Oficial IT DESK */}
       <div style={{
         display: 'flex',
         flexDirection: 'column',
@@ -79,8 +79,8 @@ export default function Sidebar({
         gap: '6px'
       }}>
         <img 
-          src="/assets/logo-it-one.png" 
-          alt="IT ONE - Plataforma de Gestão de Suporte" 
+          src="/assets/logo-it-desk.png" 
+          alt="IT DESK - Plataforma de Gestão de Suporte" 
           style={{
             width: '100%',
             maxWidth: '185px',

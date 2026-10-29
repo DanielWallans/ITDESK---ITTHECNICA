@@ -56,7 +56,7 @@ export default function TicketsTable({
       }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
-            CENTRAL OPERACIONAL • IT ONE
+            CENTRAL OPERACIONAL • IT DESK
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
             Fila de Chamados & Despacho Remoto

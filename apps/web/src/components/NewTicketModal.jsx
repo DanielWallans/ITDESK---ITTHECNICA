@@ -121,7 +121,7 @@ export default function NewTicketModal({ onClose, onCreated }) {
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-white)' }}>
-              Novo Chamado • IT ONE
+              Novo Chamado • IT DESK
             </span>
           </div>
           <button onClick={onClose} className="f-btn-icon" style={{ width: '28px', height: '28px' }}>

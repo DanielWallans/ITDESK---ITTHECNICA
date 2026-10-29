@@ -1,6 +1,6 @@
 /* ==========================================================================
-   IT ONE by IT THECNICA — Design System Editorial (Padrão /login & /atendimento)
-   Preto absoluto (#000000), Laranja IT ONE (#ff6b00), tipografia limpa,
+   IT DESK by IT THECNICA — Design System Editorial (Padrão /login & /atendimento)
+   Preto absoluto (#000000), Laranja IT DESK (#ff6b00), tipografia limpa,
    divisórias finas (#1f1f1f) e zero cards/caixas com cara de IA.
    ========================================================================== */
 
@@ -67,7 +67,7 @@ html, body {
   background: var(--orange);
 }
 
-/* Botões retos padrão IT ONE (/login e /atendimento) */
+/* Botões retos padrão IT DESK (/login e /atendimento) */
 .f-btn-primary {
   background: var(--orange);
   color: #000000;

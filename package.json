@@ -1,9 +1,9 @@
 {
-  "name": "itone-itthecnica",
+  "name": "itdesk-itthecnica",
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "IT ONE — Plataforma de Gestão de Suporte Técnico & Atendimento Remoto | IT THECNICA",
+  "description": "IT DESK — Plataforma de Gestão de Suporte Técnico & Atendimento Remoto | IT THECNICA",
   "scripts": {
     "dev": "cd apps/web && npm run dev",
     "start": "cd apps/web && npm run dev",

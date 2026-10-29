@@ -170,7 +170,7 @@ export default function CustomerPortalView() {
   }, []);
 
   useEffect(() => {
-    const base = 'IT ONE · Atendimento';
+    const base = 'IT DESK · Atendimento';
     document.title = unread > 0 ? `(${unread}) ${base}` : base;
   }, [unread]);
 
@@ -515,7 +515,7 @@ export default function CustomerPortalView() {
     <div className="cp">
       <header className="cp-header">
         <div className="cp-brand">
-          <img src="/assets/logo-it-one.png" alt="IT ONE" />
+          <img src="/assets/logo-it-desk.png" alt="IT DESK" />
           <span>Central de Atendimento</span>
         </div>
         {customerUser && (
@@ -548,7 +548,7 @@ export default function CustomerPortalView() {
           /* VISITANTE */
           <div className="cp-grid">
             <section>
-              <div className="cp-eyebrow">IT ONE · Suporte remoto</div>
+              <div className="cp-eyebrow">IT DESK · Suporte remoto</div>
               <h1 className="cp-h1">Suporte técnico<br />direto com o especialista.</h1>
               <p className="cp-sub" style={{ marginBottom: 28 }}>
                 Consulte os serviços e valores praticados. Entre ou crie seu acesso para abrir um chamado.
@@ -1187,7 +1187,7 @@ export default function CustomerPortalView() {
       <footer className="cp-footer">
         <dl className="cp-footer-cols" style={{ margin: 0 }}>
           <div className="cp-footer-col">
-            <dt>IT ONE · Suporte Técnico</dt>
+            <dt>IT DESK · Suporte Técnico</dt>
             <dd>
               Plataforma de atendimento remoto especializado e gestão de chamados.<br />
               IT THECNICA · Soluções em TI
@@ -1216,7 +1216,7 @@ export default function CustomerPortalView() {
         </dl>
 
         <div className="cp-footer-bottom">
-          <span>© {new Date().getFullYear()} IT ONE — Todos os direitos reservados a Daniel Wallans · CEO IT THECNICA.</span>
+          <span>© {new Date().getFullYear()} IT DESK — Todos os direitos reservados a Daniel Wallans · CEO IT THECNICA.</span>
           <span>Conexão segura · Pagamento via Pix auditado</span>
         </div>
       </footer>

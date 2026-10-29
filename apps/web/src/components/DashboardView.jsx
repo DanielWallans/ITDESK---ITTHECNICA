@@ -99,7 +99,7 @@ export default function DashboardView({
             textTransform: 'uppercase',
             letterSpacing: '0.14em'
           }}>
-            OPERAÇÃO TÉCNICA • IT ONE
+            OPERAÇÃO TÉCNICA • IT DESK
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
             Visão Geral do Atendimento

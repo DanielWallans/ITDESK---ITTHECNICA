@@ -1,20 +1,20 @@
 <div align="center">
-  <img src="apps/web/public/assets/logo-it-one.png" alt="IT ONE — Plataforma de Gestão de Suporte" width="420" />
+  <img src="apps/web/public/assets/logo-it-desk.png" alt="IT DESK — Plataforma de Gestão de Suporte" width="420" />
 
   <h3>PLATAFORMA DE GESTÃO DE SUPORTE TÉCNICO & ATENDIMENTO REMOTO</h3>
-  <p><strong>IT ONE</strong> • Uma solução corporativa desenvolvida por <strong>IT THECNICA</strong></p>
+  <p><strong>IT DESK</strong> • Uma solução corporativa desenvolvida por <strong>IT THECNICA</strong></p>
 </div>
 
 ---
 
 ## Sobre a Plataforma
 
-A **IT ONE** é uma plataforma proprietária de gestão operacional para suporte técnico especializado e atendimento remoto auditado, projetada pela **IT THECNICA** para conectar clientes e especialistas em tempo real com transparência de ponta a ponta.
+A **IT DESK** é uma plataforma proprietária de gestão operacional para suporte técnico especializado e atendimento remoto auditado, projetada pela **IT THECNICA** para conectar clientes e especialistas em tempo real com transparência de ponta a ponta.
 
 O ecossistema elimina intermediários e centraliza todo o ciclo de um atendimento técnico — desde a abertura do chamado e diagnóstico prévio até a conexão remota via **AnyDesk**, cronometragem oficial de sessão, chat em tempo real e liquidação financeira via **Pix**.
 
 <div align="center">
-  <img src="apps/web/public/assets/preview-admin.png" alt="Painel Operacional IT ONE" width="100%" />
+  <img src="apps/web/public/assets/preview-admin.png" alt="Painel Operacional IT DESK" width="100%" />
 </div>
 
 ---
@@ -57,5 +57,5 @@ Painel administrativo de comando e telemetria da **IT THECNICA**:
 ---
 
 <div align="center">
-  <p><strong>© 2026 IT ONE — Todos os direitos reservados a Daniel Wallans · CEO IT THECNICA</strong></p>
+  <p><strong>© 2026 IT DESK — Todos os direitos reservados a Daniel Wallans · CEO IT THECNICA</strong></p>
 </div>
