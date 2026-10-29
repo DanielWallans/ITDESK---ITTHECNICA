@@ -297,10 +297,41 @@ select.cp-input option { background: #111; }
   .cp-footer-cols { grid-template-columns: 1fr; }
 }
 
-/* Celular: Tabela de histórico vira lista empilhada */
+/* Celular: Ajustes gerais de espaçamento, formulários e tabela empilhada */
 @media (max-width: 720px) {
-  .cp-stats { flex-direction: column; }
-  .cp-stat { border-right: none; border-bottom: 1px solid var(--cp-line); margin-right: 0; padding: 14px 0; }
+  .cp-header {
+    height: 56px;
+    padding: 0 16px;
+  }
+  .cp-brand img {
+    height: 24px;
+  }
+  .cp-brand span {
+    display: none;
+  }
+  .cp-main {
+    padding: 28px 16px 80px;
+  }
+  .cp-h1 {
+    font-size: 24px;
+  }
+  .cp-two {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+  .cp-steps {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .cp-chat {
+    height: 440px;
+  }
+  .cp-pix-meta {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .cp-stats { flex-direction: column; margin-bottom: 32px; }
+  .cp-stat { border-right: none; border-bottom: 1px solid var(--cp-line); margin-right: 0; padding: 12px 0; }
   .cp-stat:last-child { border-bottom: none; }
   .cp-summary { grid-template-columns: 1fr; }
   .cp-summary > div { border-bottom: 1px solid var(--cp-line); padding: 12px 0; }

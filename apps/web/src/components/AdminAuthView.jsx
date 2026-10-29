@@ -69,30 +69,24 @@ export default function AdminAuthView({ onAuthenticated }) {
 
       {/* Corpo Principal Assimétrico — Logo Oficial IT ONE + Formulário Limpo */}
       <main
+        className="cp-main cp-grid"
         style={{
           flex: 1,
-          maxWidth: 1200,
           width: '100%',
-          margin: '0 auto',
-          padding: '64px 40px',
-          display: 'grid',
-          gridTemplateColumns: '1.15fr 0.85fr',
-          gap: 72,
           alignItems: 'center'
         }}
-        className="cp-grid"
       >
         {/* Coluna Esquerda: Logo Oficial IT ONE */}
-        <section style={{ paddingRight: 16 }}>
+        <section>
           <div className="cp-eyebrow">Acesso Restrito · Ambiente Técnico</div>
 
-          <div style={{ margin: '20px 0 30px' }}>
+          <div style={{ margin: '16px 0 24px' }}>
             <img
               src="/assets/logo-it-one.png"
               alt="IT ONE — Plataforma de Gestão de Suporte"
               style={{
                 width: '100%',
-                maxWidth: 420,
+                maxWidth: 380,
                 height: 'auto',
                 display: 'block',
                 objectFit: 'contain'
@@ -100,7 +94,7 @@ export default function AdminAuthView({ onAuthenticated }) {
             />
           </div>
 
-          <p className="cp-sub" style={{ maxWidth: 460, fontSize: 14, lineHeight: 1.7, marginBottom: 36 }}>
+          <p className="cp-sub" style={{ maxWidth: 460, fontSize: 13.5, lineHeight: 1.65, marginBottom: 28 }}>
             Controle centralizado de chamados, sessões remotas auditadas, catálogo técnico e faturamento Pix em tempo real.
           </p>
 
@@ -111,31 +105,32 @@ export default function AdminAuthView({ onAuthenticated }) {
               gridTemplateColumns: 'repeat(3, 1fr)',
               borderTop: '1px solid var(--cp-line)',
               borderBottom: '1px solid var(--cp-line)',
-              padding: '16px 0',
-              maxWidth: 480
+              padding: '14px 0',
+              maxWidth: 480,
+              gap: '8px'
             }}
           >
             <div>
-              <span style={{ display: 'block', fontSize: 10.5, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
-                Acesso Remoto
+              <span style={{ display: 'block', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
+                Remoto
               </span>
-              <strong style={{ fontSize: 13.5, color: 'var(--cp-text)', fontFamily: 'var(--font-mono)' }}>
-                AnyDesk Sync
+              <strong style={{ fontSize: 12.5, color: 'var(--cp-text)', fontFamily: 'var(--font-mono)' }}>
+                AnyDesk
               </strong>
             </div>
-            <div style={{ borderLeft: '1px solid var(--cp-line)', paddingLeft: 18 }}>
-              <span style={{ display: 'block', fontSize: 10.5, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
-                Cronômetro
+            <div style={{ borderLeft: '1px solid var(--cp-line)', paddingLeft: 12 }}>
+              <span style={{ display: 'block', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
+                Alertas
               </span>
-              <strong style={{ fontSize: 13.5, color: 'var(--cp-orange)', fontFamily: 'var(--font-mono)' }}>
-                Server UTC
+              <strong style={{ fontSize: 12.5, color: 'var(--cp-orange)', fontFamily: 'var(--font-mono)' }}>
+                Push iOS
               </strong>
             </div>
-            <div style={{ borderLeft: '1px solid var(--cp-line)', paddingLeft: 18 }}>
-              <span style={{ display: 'block', fontSize: 10.5, letterSpacing: '.12em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
+            <div style={{ borderLeft: '1px solid var(--cp-line)', paddingLeft: 12 }}>
+              <span style={{ display: 'block', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
                 Financeiro
               </span>
-              <strong style={{ fontSize: 13.5, color: 'var(--cp-text)', fontFamily: 'var(--font-mono)' }}>
+              <strong style={{ fontSize: 12.5, color: 'var(--cp-text)', fontFamily: 'var(--font-mono)' }}>
                 Pix & Caixa
               </strong>
             </div>

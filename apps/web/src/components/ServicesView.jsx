@@ -250,7 +250,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
                 />
               </div>
 
-              <div style={{ display: 'flex', gap: '16px' }}>
+              <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     Categoria
@@ -279,7 +279,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '16px' }}>
+              <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
                     Valor Cobrado (R$) *

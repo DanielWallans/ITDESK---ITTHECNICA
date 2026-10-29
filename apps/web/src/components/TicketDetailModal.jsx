@@ -21,6 +21,7 @@ export default function TicketDetailModal({
   const [newMessage, setNewMessage] = useState('');
   const [isInternalNote, setIsInternalNote] = useState(false);
   const [activeTab, setActiveTab] = useState('ALL');
+  const [mobilePane, setMobilePane] = useState('CHAT'); // 'CHAT' | 'DETAILS'
   const [resolutionText, setResolutionText] = useState(ticket?.resolutionSummary || '');
   const [savingResolution, setSavingResolution] = useState(false);
 
@@ -97,34 +98,61 @@ export default function TicketDetailModal({
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '16px 24px',
+          padding: '14px 18px',
           borderBottom: '1px solid var(--border-light)',
-          backgroundColor: 'var(--bg-card)'
+          backgroundColor: 'var(--bg-card)',
+          gap: '10px'
         }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', minWidth: 0 }}>
             <span style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '14px',
+              fontSize: '13px',
               fontWeight: 700,
-              color: 'var(--orange)'
+              color: 'var(--orange)',
+              flexShrink: 0
             }}>
               {ticket.code}
             </span>
-            <div style={{ width: '1px', height: '14px', backgroundColor: 'var(--border-light)' }} />
-            <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-white)' }}>
+            <div style={{ width: '1px', height: '14px', backgroundColor: 'var(--border-light)', flexShrink: 0 }} />
+            <span style={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--text-white)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {ticket.title}
             </span>
           </div>
 
-          <button onClick={onClose} className="f-btn-icon" style={{ width: '28px', height: '28px' }}>
+          <button onClick={onClose} className="f-btn-icon" style={{ width: '28px', height: '28px', flexShrink: 0 }}>
             <X size={15} />
+          </button>
+        </div>
+
+        {/* Seletor Rápido Mobile: Alternar entre Chat ao Vivo e Dados/AnyDesk/Finalização */}
+        <div className="adm-mobile-only" style={{
+          borderBottom: '1px solid var(--border-light)',
+          backgroundColor: '#000000',
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr'
+        }}>
+          <button
+            type="button"
+            onClick={() => setMobilePane('CHAT')}
+            className={`f-tab-pill ${mobilePane === 'CHAT' ? 'active' : ''}`}
+            style={{ width: '100%', textAlign: 'center', padding: '10px 8px' }}
+          >
+            Chat ao Vivo ({messages.filter(m => !m.internal).length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobilePane('DETAILS')}
+            className={`f-tab-pill ${mobilePane === 'DETAILS' ? 'active' : ''}`}
+            style={{ width: '100%', textAlign: 'center', padding: '10px 8px' }}
+          >
+            AnyDesk • Dados • Finalizar
           </button>
         </div>
 
         {/* Corpo do Modal em 2 Colunas */}
         <div className="adm-ticket-modal-body" style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
           {/* Painel Esquerdo: Metadados, Checklist, Resumo de Resolução & Avaliação */}
-          <div className="adm-ticket-modal-sidebar" style={{
+          <div className={`adm-ticket-modal-sidebar ${mobilePane === 'CHAT' ? 'adm-hide-on-mobile' : ''}`} style={{
             width: '320px',
             backgroundColor: 'var(--bg-inner)',
             borderRight: '1px solid var(--border-light)',
@@ -330,21 +358,23 @@ export default function TicketDetailModal({
           </div>
 
           {/* Painel Direito: Chat em Tempo Real com o Cliente & Notas Internas */}
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, backgroundColor: 'var(--bg-card)' }}>
+          <div className={mobilePane === 'DETAILS' ? 'adm-hide-on-mobile' : ''} style={{ display: 'flex', flexDirection: 'column', flex: 1, backgroundColor: 'var(--bg-card)', overflow: 'hidden' }}>
             {/* Abas */}
             <div style={{
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '10px 20px',
-              borderBottom: '1px solid var(--border-light)'
+              padding: '10px 16px',
+              borderBottom: '1px solid var(--border-light)',
+              flexWrap: 'wrap',
+              gap: '8px'
             }}>
               <div style={{ display: 'flex', gap: '6px' }}>
                 <button
                   onClick={() => setActiveTab('ALL')}
                   className={`f-tab-pill ${activeTab === 'ALL' ? 'active' : ''}`}
                 >
-                  Chat com o Cliente ({messages.filter(m => !m.internal).length})
+                  Chat Cliente ({messages.filter(m => !m.internal).length})
                 </button>
                 <button
                   onClick={() => setActiveTab('INTERNAL')}
@@ -354,7 +384,7 @@ export default function TicketDetailModal({
                 </button>
               </div>
 
-              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
+              <span className="adm-desktop-only" style={{ fontSize: '11px', color: 'var(--text-tertiary)' }}>
                 Sincronizado em tempo real com a página do cliente
               </span>
             </div>

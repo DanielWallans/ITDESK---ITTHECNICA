@@ -285,7 +285,7 @@ export default function MobileAppView({ onNavigateTab }) {
       )}
 
       {/* Strip de Métricas do App Mobile */}
-      <div className="adm-stats-strip" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
+      <div className="adm-stats-strip">
         <div className="adm-stat-item">
           <span className="adm-stat-label">MODO DO APLICATIVO</span>
           <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: isStandalone ? '#ff6b00' : '#ffffff' }}>
@@ -431,3 +431,4 @@ export default function MobileAppView({ onNavigateTab }) {
     </div>
   );
 }
+

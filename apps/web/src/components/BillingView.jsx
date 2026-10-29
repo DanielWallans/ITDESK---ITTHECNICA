@@ -397,11 +397,11 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                 const isReported = t.paymentStatus === 'REPORTED';
                 return (
                   <tr key={`unpaid-${t.id}`}>
-                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
+                    <td data-label="Chamado" style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
                       {t.code}
                     </td>
-                    <td>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <td data-label="Cliente">
+                      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
                         <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-white)' }}>
                           {t.customerName} {t.companyName ? `(${t.companyName})` : ''}
                         </span>
@@ -410,7 +410,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         </span>
                       </div>
                     </td>
-                    <td>
+                    <td className="m-full">
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontSize: '13px', color: 'var(--text-white)' }}>{t.title}</span>
                         {t.resolutionSummary && (
@@ -418,25 +418,25 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         )}
                       </div>
                     </td>
-                    <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    <td data-label="Conclusão" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                       {new Date(t.resolvedAt || t.createdAt).toLocaleDateString('pt-BR')}
                     </td>
-                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '13.5px', fontWeight: 800, color: 'var(--orange)' }}>
+                    <td data-label="Valor" style={{ fontFamily: 'var(--font-mono)', fontSize: '13.5px', fontWeight: 800, color: 'var(--orange)' }}>
                       R$ {Number(t.estimatedPrice || 0).toFixed(2).replace('.', ',')}
                     </td>
-                    <td>
+                    <td data-label="Situação">
                       <span style={{
                         fontSize: '11px',
                         fontWeight: 700,
                         padding: '4px 8px',
-                        borderRadius: '6px',
+                        borderRadius: '2px',
                         backgroundColor: isReported ? 'rgba(250, 204, 21, 0.14)' : 'rgba(255, 94, 0, 0.14)',
                         color: isReported ? '#facc15' : 'var(--orange)'
                       }}>
                         {isReported ? 'Cliente informou Pix' : 'Pendente (Cobrar)'}
                       </span>
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="m-actions" style={{ textAlign: 'right' }}>
                       <div style={{ display: 'inline-flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                         {t.paymentReceiptUrl && (
                           <button
@@ -529,7 +529,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                 const isPaid = e.status === 'PAID';
                 return (
                   <tr key={`entry-${e.id}`}>
-                    <td>
+                    <td data-label="Origem">
                       <span style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '11.5px',
@@ -537,21 +537,21 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         color: isExpense ? '#fca5a5' : 'var(--orange)',
                         backgroundColor: isExpense ? 'rgba(239, 68, 68, 0.12)' : 'rgba(255, 94, 0, 0.12)',
                         padding: '3px 8px',
-                        borderRadius: '6px'
+                        borderRadius: '2px'
                       }}>
                         {isExpense ? 'RETIRADA / SAÍDA' : `ENTRADA (${e.paymentMethod})`}
                       </span>
                     </td>
-                    <td style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-white)' }}>
+                    <td data-label="Cliente / Destino" style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-white)' }}>
                       {e.partyName}
                     </td>
-                    <td style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
+                    <td data-label="Descrição" style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
                       {e.description}
                     </td>
-                    <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    <td data-label="Data" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                       {new Date(e.entryDate).toLocaleDateString('pt-BR')}
                     </td>
-                    <td style={{
+                    <td data-label="Valor" style={{
                       fontFamily: 'var(--font-mono)',
                       fontSize: '13px',
                       fontWeight: 700,
@@ -559,7 +559,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                     }}>
                       {isExpense ? '- ' : '+ '}R$ {Number(e.amount || 0).toFixed(2).replace('.', ',')}
                     </td>
-                    <td>
+                    <td data-label="Status">
                       {isExpense ? (
                         <span style={{ fontSize: '12px', color: '#fca5a5', fontWeight: 600 }}>Retirado</span>
                       ) : (
@@ -575,7 +575,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         </button>
                       )}
                     </td>
-                    <td style={{ textAlign: 'right' }}>
+                    <td className="m-actions" style={{ textAlign: 'right' }}>
                       <button
                         onClick={() => handleDeleteEntry(e.id)}
                         className="f-btn-secondary"
@@ -595,11 +595,11 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                 const isReported = t.paymentStatus === 'REPORTED';
                 return (
                   <tr key={`ticket-${t.id}`}>
-                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
+                    <td data-label="Origem" style={{ fontFamily: 'var(--font-mono)', fontSize: '12.5px', fontWeight: 700, color: 'var(--orange)' }}>
                       CHAMADO {t.code}
                     </td>
-                    <td>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <td data-label="Cliente">
+                      <div style={{ display: 'flex', flexDirection: 'column', textAlign: 'right' }}>
                         <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-white)' }}>
                           {t.customerName}
                         </span>
@@ -608,16 +608,16 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         </span>
                       </div>
                     </td>
-                    <td style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
+                    <td data-label="Serviço" style={{ fontSize: '12.5px', color: 'var(--text-secondary)' }}>
                       {t.title}
                     </td>
-                    <td style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
+                    <td data-label="Data" style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>
                       {new Date(t.createdAt).toLocaleDateString('pt-BR')}
                     </td>
-                    <td style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
+                    <td data-label="Valor" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
                       + R$ {Number(t.estimatedPrice || 0).toFixed(2).replace('.', ',')}
                     </td>
-                    <td>
+                    <td data-label="Pagamento">
                       <button
                         onClick={() => handleToggleTicketPayment(t)}
                         className="f-btn-secondary"
@@ -637,7 +637,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         </span>
                       </button>
                     </td>
-                    <td style={{ textAlign: 'right', fontSize: '11px', color: 'var(--text-tertiary)' }}>
+                    <td className="m-actions" style={{ textAlign: 'right', fontSize: '11px', color: 'var(--text-tertiary)' }}>
                       {t.paymentReceiptUrl ? (
                         <button
                           onClick={() => setReceiptPreviewTicket(t)}
@@ -796,7 +796,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                 </div>
               )}
 
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                     Identificação *
@@ -811,7 +811,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '160px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                     Tipo da Chave *
                   </label>
@@ -882,7 +882,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                 )}
               </div>
 
-              <div style={{ display: 'flex', gap: '12px' }}>
+              <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                     Nome do Recebedor (máx. 25) *
@@ -898,7 +898,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                   />
                 </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', width: '170px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
                   <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)' }}>
                     Cidade (máx. 15) *
                   </label>

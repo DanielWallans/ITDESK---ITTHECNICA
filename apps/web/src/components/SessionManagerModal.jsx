@@ -162,13 +162,13 @@ export default function SessionManagerModal({
           </div>
 
           {/* Dados do Chamado & AnyDesk */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
+          <div className="adm-form-row" style={{
+            display: 'flex',
             gap: '12px'
           }}>
             {/* Bloco AnyDesk */}
             <div style={{
+              flex: 1,
               backgroundColor: 'var(--bg-inner)',
               border: '1px solid var(--border-light)',
               borderRadius: 'var(--radius-sm)',
@@ -197,6 +197,7 @@ export default function SessionManagerModal({
 
             {/* Bloco Chamado Vinculado */}
             <div style={{
+              flex: 1,
               backgroundColor: 'var(--bg-inner)',
               border: '1px solid var(--border-light)',
               borderRadius: 'var(--radius-sm)',
