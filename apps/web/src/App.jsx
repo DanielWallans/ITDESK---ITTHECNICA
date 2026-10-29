@@ -125,7 +125,7 @@ export default function App() {
         setPushSubscribed(false);
         if (interactive) {
           alert(
-            'Atenção iPhone (Safari): A Apple só libera notificações com o App Fechado / Tela Bloqueada quando você instala pelo Safari tocando em "Compartilhar" -> "Adicionar à Tela de Início". Adicione à Tela de Início, abra o novo ícone IT DESK com a logo oficial e toque neste botão novamente!'
+            'Atenção iPhone (Safari): A Apple só libera notificações com o App Fechado / Tela Bloqueada quando você instala pelo Safari tocando em "Compartilhar" -> "Adicionar à Tela de Início". Adicione à Tela de Início, abra o novo ícone IT ONE com a logo oficial e toque neste botão novamente!'
           );
         }
         return false;
@@ -153,7 +153,7 @@ export default function App() {
         const perm = await Notification.requestPermission();
         if (perm !== 'granted') {
           setPushSubscribed(false);
-          alert('Permissão de notificação negada. Ative as notificações para o app IT DESK nos Ajustes do iPhone.');
+          alert('Permissão de notificação negada. Ative as notificações para o app IT ONE nos Ajustes do iPhone.');
           return false;
         }
       }
@@ -288,7 +288,7 @@ export default function App() {
     window.history.replaceState({}, '', '/login');
   };
 
-  // Tela de Carregamento / Splash Screen Oficial IT DESK (Preto Absoluto + Efeitos Laranja + Barra de Progresso)
+  // Tela de Carregamento / Splash Screen Oficial IT ONE (Preto Absoluto + Efeitos Laranja + Barra de Progresso)
   if (booting && !isCustomerLandingRoute) {
     const bootStepLabel =
       bootProgress < 45
@@ -356,7 +356,7 @@ export default function App() {
           }}
         />
 
-        {/* Logo Oficial IT DESK — Plataforma de Gestão de Suporte */}
+        {/* Logo Oficial IT ONE — Plataforma de Gestão de Suporte */}
         <div
           style={{
             position: 'relative',
@@ -369,8 +369,8 @@ export default function App() {
           }}
         >
           <img
-            src="/assets/logo-it-desk.png"
-            alt="IT DESK — Plataforma de Gestão de Suporte"
+            src="/assets/logo-it-one.png"
+            alt="IT ONE — Plataforma de Gestão de Suporte"
             style={{
               width: '88%',
               maxWidth: '380px',
@@ -576,13 +576,13 @@ export default function App() {
           {/* Breadcrumb / Brand Mobile com Logo Oficial Destacada */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', minWidth: 0 }}>
             <img
-              src="/assets/logo-it-desk.png"
-              alt="IT DESK"
+              src="/assets/logo-it-one.png"
+              alt="IT ONE"
               className="adm-mobile-only"
               onClick={() => setCurrentTab('dashboard')}
               style={{ height: '32px', maxWidth: '140px', width: 'auto', objectFit: 'contain', cursor: 'pointer', flexShrink: 0 }}
             />
-            <span className="adm-desktop-only" style={{ color: 'var(--orange)', fontWeight: 800, fontStyle: 'italic' }}>IT DESK</span>
+            <span className="adm-desktop-only" style={{ color: 'var(--orange)', fontWeight: 800, fontStyle: 'italic' }}>IT ONE</span>
             <ChevronRight size={13} color="var(--text-tertiary)" style={{ flexShrink: 0 }} />
             <span style={{ color: 'var(--text-white)', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '11.5px' }}>
               {tabLabels[currentTab]}
