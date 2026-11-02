@@ -45,7 +45,8 @@ export default function CustomerPortalView() {
   const [customerUser, setCustomerUser] = useState(() => {
     try {
       const saved = localStorage.getItem('itdesk_customer_user') || localStorage.getItem('itone_customer_user');
-      return saved ? JSON.parse(saved) : null;
+      const parsed = saved ? JSON.parse(saved) : null;
+      return parsed && parsed.token ? parsed : null;
     } catch {
       return null;
     }
@@ -280,15 +281,15 @@ export default function CustomerPortalView() {
     try {
       if (authMode === 'signup') {
         const res = await api.registerCustomer(authForm);
-        localStorage.setItem('itdesk_customer_user', JSON.stringify(res.user));
-        setCustomerUser(res.user);
+        localStorage.setItem('itdesk_customer_user', JSON.stringify({ ...res.user, token: res.token }));
+        setCustomerUser({ ...res.user, token: res.token });
       } else {
         const res = await api.login({
           email: authForm.email,
           password: authForm.password
         });
-        localStorage.setItem('itdesk_customer_user', JSON.stringify(res.user));
-        setCustomerUser(res.user);
+        localStorage.setItem('itdesk_customer_user', JSON.stringify({ ...res.user, token: res.token }));
+        setCustomerUser({ ...res.user, token: res.token });
       }
     } catch (err) {
       setAuthError(err.message || 'Não foi possível entrar. Verifique seus dados.');
@@ -803,7 +804,7 @@ export default function CustomerPortalView() {
                             <div className="cp-stars">
                               {[1, 2, 3, 4, 5].map((n) => (
                                 <button key={n} type="button" onClick={() => setter(n)}>
-                                  <Star size={20} color="#ff6b00" fill={n <= val ? '#ff6b00' : 'transparent'} />
+                                  <Star size={20} color="var(--orange)" fill={n <= val ? 'var(--orange)' : 'transparent'} />
                                 </button>
                               ))}
                             </div>

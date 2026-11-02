@@ -225,7 +225,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
       {/* Header Editorial */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
             CONTROLE DE CAIXA & PIX • IT DESK
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
@@ -285,7 +285,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-            <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
               Chaves Pix & QR Code (/atendimento)
             </h2>
             <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)' }}>
@@ -315,7 +315,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                     <img
                       src={pm.qrCodeImage}
                       alt="QR Pix"
-                      style={{ width: '44px', height: '44px', objectFit: 'contain', backgroundColor: '#ffffff', padding: '2px', borderRadius: '2px', flexShrink: 0 }}
+                      style={{ width: '44px', height: '44px', objectFit: 'contain', backgroundColor: 'var(--text-white)', padding: '2px', borderRadius: 'var(--radius-sm)', flexShrink: 0 }}
                     />
                   )}
                   <div style={{ minWidth: 0 }}>
@@ -357,7 +357,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
           gap: '12px',
           padding: '16px 20px',
           borderBottom: '1px solid var(--border-light)',
-          backgroundColor: unpaidClosedTickets.length > 0 ? 'rgba(255, 94, 0, 0.06)' : 'transparent'
+          backgroundColor: unpaidClosedTickets.length > 0 ? 'rgba(232, 115, 42, 0.06)' : 'transparent'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <AlertCircle size={18} color="var(--orange)" />
@@ -429,8 +429,8 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         fontSize: '11px',
                         fontWeight: 700,
                         padding: '4px 8px',
-                        borderRadius: '2px',
-                        backgroundColor: isReported ? 'rgba(250, 204, 21, 0.14)' : 'rgba(255, 94, 0, 0.14)',
+                        borderRadius: 'var(--radius-sm)',
+                        backgroundColor: isReported ? 'rgba(250, 204, 21, 0.14)' : 'rgba(232, 115, 42, 0.14)',
                         color: isReported ? '#facc15' : 'var(--orange)'
                       }}>
                         {isReported ? 'Cliente informou Pix' : 'Pendente (Cobrar)'}
@@ -442,7 +442,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                           <button
                             onClick={() => setReceiptPreviewTicket(t)}
                             className="f-btn-secondary"
-                            style={{ padding: '5px 10px', fontSize: '11.5px', borderColor: 'rgba(255,94,0,0.5)', color: 'var(--orange)' }}
+                            style={{ padding: '5px 10px', fontSize: '11.5px', borderColor: 'rgba(232, 115, 42, 0.5)', color: 'var(--orange)' }}
                             title="Visualizar comprovante de pagamento enviado pelo cliente"
                           >
                             <Eye size={13} /> Ver Comprovante
@@ -535,9 +535,9 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         fontSize: '11.5px',
                         fontWeight: 700,
                         color: isExpense ? '#fca5a5' : 'var(--orange)',
-                        backgroundColor: isExpense ? 'rgba(239, 68, 68, 0.12)' : 'rgba(255, 94, 0, 0.12)',
+                        backgroundColor: isExpense ? 'rgba(239, 68, 68, 0.12)' : 'rgba(232, 115, 42, 0.12)',
                         padding: '3px 8px',
-                        borderRadius: '2px'
+                        borderRadius: 'var(--radius-sm)'
                       }}>
                         {isExpense ? 'RETIRADA / SAÍDA' : `ENTRADA (${e.paymentMethod})`}
                       </span>
@@ -566,7 +566,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         <button
                           onClick={() => handleToggleEntryStatus(e)}
                           className="f-btn-secondary"
-                          style={{ padding: '4px 10px', fontSize: '11px', borderColor: isPaid ? 'rgba(255,94,0,0.4)' : 'var(--border-light)' }}
+                          style={{ padding: '4px 10px', fontSize: '11px', borderColor: isPaid ? 'rgba(232, 115, 42, 0.4)' : 'var(--border-light)' }}
                         >
                           {isPaid ? <CheckCircle2 size={12} color="var(--orange)" /> : <Clock size={12} />}
                           <span style={{ color: isPaid ? 'var(--orange)' : 'var(--text-secondary)' }}>
@@ -624,7 +624,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                         style={{
                           padding: '4px 10px',
                           fontSize: '11px',
-                          borderColor: isPaid ? 'rgba(255,94,0,0.4)' : isReported ? 'rgba(250,204,21,0.5)' : 'var(--border-light)'
+                          borderColor: isPaid ? 'rgba(232, 115, 42, 0.4)' : isReported ? 'rgba(250,204,21,0.5)' : 'var(--border-light)'
                         }}
                       >
                         {isPaid ? <CheckCircle2 size={12} color="var(--orange)" /> : <Clock size={12} color={isReported ? '#facc15' : undefined} />}
@@ -873,7 +873,7 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                     <img
                       src={pixForm.qrCodeImage}
                       alt="Prévia QR Code Pix"
-                      style={{ width: '96px', height: '96px', objectFit: 'contain', backgroundColor: '#ffffff', padding: '6px', borderRadius: '6px', border: '1px solid var(--border-light)' }}
+                      style={{ width: '96px', height: '96px', objectFit: 'contain', backgroundColor: 'var(--text-white)', padding: '6px', borderRadius: '6px', border: '1px solid var(--border-light)' }}
                     />
                     <span style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>
                       Esta imagem do QR Code será exibida para o cliente na tela de pagamento.
@@ -981,11 +981,12 @@ export default function BillingView({ tickets = [], onStatusChange, onRefresh })
                   alt="Comprovante Pix"
                   style={{ maxWidth: '100%', maxHeight: '420px', objectFit: 'contain', borderRadius: '8px', border: '1px solid var(--border-light)' }}
                 />
-              ) : (
+              ) : receiptPreviewTicket.paymentReceiptUrl?.startsWith('data:application/pdf') && (
                 <iframe
                   src={receiptPreviewTicket.paymentReceiptUrl}
+                  sandbox=""
                   title="Comprovante PDF"
-                  style={{ width: '100%', height: '420px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: '#ffffff' }}
+                  style={{ width: '100%', height: '420px', borderRadius: '8px', border: '1px solid var(--border-light)', backgroundColor: 'var(--text-white)' }}
                 />
               )}
 

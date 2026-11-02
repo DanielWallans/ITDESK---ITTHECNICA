@@ -4,8 +4,8 @@ import webpush from 'web-push';
 
 const { Pool } = pg;
 
-const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || 'BDAH9v7vNy72F160kTuKcCYR_U9lsXwpCEWYY8HcsPu7jqT26xgBCZ0XrRtslyVXyz8pd-__CaxnMtsLo4OLTcg';
-const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || 'REMOVIDO';
+const VAPID_PUBLIC_KEY = process.env.VAPID_PUBLIC_KEY || '';
+const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY || '';
 
 try {
   webpush.setVapidDetails(
@@ -76,11 +76,11 @@ async function sendPushToAllAdmins(payloadObj) {
 
 // Conexão direta com o Pooler IPv4 do Supabase em Transaction Mode (Porta 6543 — ideal para Serverless/Vercel)
 const pool = new Pool({
-  host: process.env.DB_HOST || 'aws-0-us-east-1.pooler.supabase.com',
+  host: process.env.DB_HOST,
   port: Number(process.env.DB_PORT || 6543),
   database: process.env.DB_NAME || 'postgres',
-  user: process.env.SPRING_DATASOURCE_USERNAME || 'postgres.onqxaoxrukbrkkdyyatj',
-  password: process.env.SPRING_DATASOURCE_PASSWORD || "REMOVIDO",
+  user: process.env.SPRING_DATASOURCE_USERNAME,
+  password: process.env.SPRING_DATASOURCE_PASSWORD,
   ssl: { rejectUnauthorized: false },
   max: 1,
   idleTimeoutMillis: 3000,
@@ -105,6 +105,87 @@ function verifyPassword(password, storedHash) {
   }
   return false;
 }
+
+// ---------------------------------------------------------------------------
+// Autenticação: token assinado (HMAC-SHA256) emitido no login
+// ---------------------------------------------------------------------------
+const AUTH_SECRET =
+  process.env.AUTH_SECRET ||
+  (process.env.SPRING_DATASOURCE_PASSWORD
+    ? crypto.createHash('sha256').update(`itdesk-auth:${process.env.SPRING_DATASOURCE_PASSWORD}`).digest('hex')
+    : '');
+const TOKEN_TTL_SECONDS = 30 * 24 * 60 * 60;
+
+function b64url(input) {
+  return Buffer.from(input).toString('base64url');
+}
+
+function signToken(user) {
+  if (!AUTH_SECRET) throw new Error('AUTH_SECRET não configurado');
+  const payload = b64url(
+    JSON.stringify({ uid: Number(user.id), role: user.role, exp: Math.floor(Date.now() / 1000) + TOKEN_TTL_SECONDS })
+  );
+  const sig = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest('base64url');
+  return `${payload}.${sig}`;
+}
+
+function verifyToken(req) {
+  if (!AUTH_SECRET) return null;
+  const header = String(req.headers.authorization || '');
+  const token = header.startsWith('Bearer ') ? header.slice(7).trim() : '';
+  const [payload, sig] = token.split('.');
+  if (!payload || !sig) return null;
+  const expected = crypto.createHmac('sha256', AUTH_SECRET).update(payload).digest();
+  const given = Buffer.from(sig, 'base64url');
+  if (given.length !== expected.length || !crypto.timingSafeEqual(given, expected)) return null;
+  try {
+    const data = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8'));
+    if (!data.uid || !data.role || data.exp < Math.floor(Date.now() / 1000)) return null;
+    return data;
+  } catch {
+    return null;
+  }
+}
+
+// Limite de tentativas (por instância serverless; reduz força bruta)
+const attempts = new Map();
+const ATTEMPT_WINDOW_MS = 15 * 60 * 1000;
+const MAX_ATTEMPTS = 8;
+function clientIp(req) {
+  return String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || '').split(',')[0].trim();
+}
+function isRateLimited(key) {
+  const now = Date.now();
+  const entry = attempts.get(key);
+  if (!entry || now - entry.first > ATTEMPT_WINDOW_MS) return false;
+  return entry.count >= MAX_ATTEMPTS;
+}
+function registerFailure(key) {
+  const now = Date.now();
+  const entry = attempts.get(key);
+  if (!entry || now - entry.first > ATTEMPT_WINDOW_MS) attempts.set(key, { first: now, count: 1 });
+  else entry.count++;
+  if (attempts.size > 5000) attempts.clear();
+}
+
+const DUMMY_HASH = `scrypt$${'0'.repeat(32)}$${'0'.repeat(128)}`;
+
+// Rotas que um cliente (CUSTOMER) pode chamar; todas as outras são só da equipe
+const CUSTOMER_ROUTES = [
+  ['GET', /^\/api\/v1\/services$/],
+  ['GET', /^\/api\/v1\/payment-methods$/],
+  ['GET', /^\/api\/v1\/tickets$/],
+  ['POST', /^\/api\/v1\/tickets$/],
+  ['POST', /^\/api\/v1\/tickets\/\d+\/rating$/],
+  ['PATCH', /^\/api\/v1\/tickets\/\d+\/payment$/],
+  ['GET', /^\/api\/v1\/tickets\/\d+\/messages$/],
+  ['POST', /^\/api\/v1\/tickets\/\d+\/messages$/],
+  ['GET', /^\/api\/v1\/remote-sessions\/active$/]
+];
+const PUBLIC_ROUTES = [
+  ['POST', /^\/api\/v1\/auth\/(login|register|admin-setup)$/]
+];
+const matchesRoute = (list, method, pathname) => list.some(([m, re]) => m === method && re.test(pathname));
 
 function parseBody(req) {
   return new Promise((resolve) => {
@@ -185,7 +266,7 @@ async function ensureCustomerUser({ fullName, email, phone, companyName, cnpj, p
   const cleanPhone = (phone || '').trim();
   const cleanCompany = (companyName || '').trim();
   const cleanCnpj = (cnpj || '').trim() || null;
-  const pwdHash = password ? hashPassword(password) : hashPassword('cliente123');
+  const pwdHash = password ? hashPassword(password) : hashPassword(crypto.randomBytes(24).toString('hex'));
 
   let companyId = null;
   if (cleanCompany) {
@@ -374,7 +455,8 @@ function mapPaymentMethodRow(r) {
 
 function readPaymentMethodBody(body) {
   const pixKey = String(body.pixKey || '').trim();
-  const qrCodeImage = String(body.qrCodeImage || '').trim();
+  let qrCodeImage = String(body.qrCodeImage || '').trim();
+  if (qrCodeImage && !/^data:image\/(png|jpe?g|webp);base64,[A-Za-z0-9+/=]+$/.test(qrCodeImage)) qrCodeImage = '';
   const receiverName = (String(body.receiverName || 'IT DESK').trim() || 'IT DESK').slice(0, 25);
   const receiverCity = (String(body.receiverCity || 'SAO PAULO').trim() || 'SAO PAULO').slice(0, 15);
   if (!pixKey && !qrCodeImage) return null;
@@ -391,9 +473,12 @@ function readPaymentMethodBody(body) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const allowedOrigin = process.env.ALLOWED_ORIGIN;
+  if (allowedOrigin && req.headers.origin === allowedOrigin) res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PATCH,PUT,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Cache-Control', 'no-store');
 
   if (req.method === 'OPTIONS') {
     res.statusCode = 204;
@@ -403,6 +488,35 @@ export default async function handler(req, res) {
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = parsedUrl.pathname.replace(/\/+$/, '');
   const method = req.method.toUpperCase();
+
+  // Porta de entrada: toda rota não pública exige token válido
+  const auth = verifyToken(req);
+  const isStaff = Boolean(auth && (auth.role === 'ADMIN' || auth.role === 'TECHNICIAN'));
+  const isCustomer = Boolean(auth && auth.role === 'CUSTOMER');
+  if (!matchesRoute(PUBLIC_ROUTES, method, pathname)) {
+    if (!auth) {
+      return sendJson(res, 401, { success: false, message: 'Sua sessão expirou. Entre novamente.' });
+    }
+    if (!isStaff && !(isCustomer && matchesRoute(CUSTOMER_ROUTES, method, pathname))) {
+      return sendJson(res, 403, { success: false, message: 'Você não tem permissão para esta ação.' });
+    }
+  }
+
+  // Cliente só enxerga o que é dele
+  if (isCustomer) {
+    if (pathname === '/api/v1/tickets' || pathname === '/api/v1/remote-sessions/active') {
+      parsedUrl.searchParams.set('customerId', String(auth.uid));
+    }
+    if (pathname === '/api/v1/payment-methods') parsedUrl.searchParams.set('active', 'true');
+    if (/\/messages$/.test(pathname)) parsedUrl.searchParams.set('role', 'CUSTOMER');
+    const ownTicket = pathname.match(/^\/api\/v1\/tickets\/(\d+)\//);
+    if (ownTicket) {
+      const own = await pool.query(`SELECT customer_id FROM tickets WHERE id = $1`, [Number(ownTicket[1])]).catch(() => ({ rows: [] }));
+      if (!own.rows[0] || Number(own.rows[0].customer_id) !== Number(auth.uid)) {
+        return sendJson(res, 404, { success: false, message: 'Chamado não encontrado' });
+      }
+    }
+  }
 
   try {
     // 0. AUTENTICAÇÃO & CADASTRO (/api/v1/auth/admin-setup, /api/v1/auth/register, /api/v1/auth/login)
@@ -414,10 +528,18 @@ export default async function handler(req, res) {
       const phone = (body.phone || '').trim();
       const companyName = (body.companyName || 'IT THECNICA').trim();
 
-      if (!email || !fullName || password.length < 4) {
+      if (!email || !fullName || password.length < 8) {
         return sendJson(res, 400, {
           success: false,
-          message: 'Preencha nome completo, e-mail válido e uma senha de pelo menos 4 caracteres.'
+          message: 'Preencha nome completo, e-mail válido e uma senha de pelo menos 8 caracteres.'
+        });
+      }
+
+      const adminExists = await pool.query(`SELECT 1 FROM users WHERE role = 'ADMIN' LIMIT 1`);
+      if (adminExists.rows[0]) {
+        return sendJson(res, 403, {
+          success: false,
+          message: 'O administrador já foi configurado. Novos administradores precisam ser criados por um administrador existente.'
         });
       }
 
@@ -450,7 +572,7 @@ export default async function handler(req, res) {
       return sendJson(res, 201, {
         success: true,
         data: {
-          token: `supabase-session-${u.id}`,
+          token: signToken({ id: u.id, role: 'ADMIN' }),
           user: {
             id: Number(u.id),
             fullName: u.full_name,
@@ -472,10 +594,10 @@ export default async function handler(req, res) {
       const phone = (body.phone || '').trim();
       const companyName = (body.companyName || '').trim();
 
-      if (!email || !fullName || password.length < 4) {
+      if (!email || !fullName || password.length < 8) {
         return sendJson(res, 400, {
           success: false,
-          message: 'Preencha nome, e-mail e uma senha de pelo menos 4 caracteres.'
+          message: 'Preencha nome, e-mail e uma senha de pelo menos 8 caracteres.'
         });
       }
 
@@ -498,7 +620,7 @@ export default async function handler(req, res) {
       return sendJson(res, 201, {
         success: true,
         data: {
-          token: `supabase-customer-${userId}`,
+          token: signToken({ id: userId, role: 'CUSTOMER' }),
           user: {
             id: Number(userId),
             fullName,
@@ -521,6 +643,11 @@ export default async function handler(req, res) {
         return sendJson(res, 400, { success: false, message: 'Informe seu e-mail e senha.' });
       }
 
+      const limitKey = `${clientIp(req)}|${email}`;
+      if (isRateLimited(limitKey) || isRateLimited(clientIp(req))) {
+        return sendJson(res, 429, { success: false, message: 'Muitas tentativas. Aguarde 15 minutos e tente de novo.' });
+      }
+
       const { rows } = await pool.query(
         `SELECT u.*, c.name AS company_name
          FROM users u
@@ -530,7 +657,10 @@ export default async function handler(req, res) {
         [email]
       );
       const user = rows[0];
-      if (!user || !verifyPassword(password, user.password_hash)) {
+      const passwordOk = verifyPassword(password, user ? user.password_hash : DUMMY_HASH);
+      if (!user || !passwordOk || user.is_active === false) {
+        registerFailure(limitKey);
+        registerFailure(clientIp(req));
         return sendJson(res, 401, {
           success: false,
           message: 'E-mail ou senha incorretos. Verifique seus dados ou crie sua conta.'
@@ -540,7 +670,7 @@ export default async function handler(req, res) {
       return sendJson(res, 200, {
         success: true,
         data: {
-          token: `supabase-session-${user.id}`,
+          token: signToken(user),
           user: {
             id: Number(user.id),
             fullName: user.full_name,
@@ -819,7 +949,7 @@ export default async function handler(req, res) {
         }
       }
 
-      let customerId = body.customerId ? Number(body.customerId) : null;
+      let customerId = isCustomer ? Number(auth.uid) : body.customerId ? Number(body.customerId) : null;
       if (!customerId) {
         const ensured = await ensureCustomerUser({
           fullName: body.customerName || 'Cliente',
@@ -986,9 +1116,16 @@ export default async function handler(req, res) {
       await ensurePaymentSchema();
       const ticketId = Number(paymentMatch[1]);
       const body = await parseBody(req);
-      const newStatus = ['PENDING', 'REPORTED', 'PAID'].includes(body.status) ? body.status : 'REPORTED';
+      const newStatus = isCustomer ? 'REPORTED' : ['PENDING', 'REPORTED', 'PAID'].includes(body.status) ? body.status : 'REPORTED';
       const paymentMethodId = body.paymentMethodId ? Number(body.paymentMethodId) : null;
-      const receiptUrl = body.receiptUrl ? String(body.receiptUrl) : null;
+      const rawReceipt = body.receiptUrl ? String(body.receiptUrl) : null;
+      if (rawReceipt && !/^data:(image\/(png|jpe?g|webp)|application\/pdf);base64,[A-Za-z0-9+/=]+$/.test(rawReceipt)) {
+        return sendJson(res, 400, { success: false, message: 'Envie o comprovante como imagem (PNG, JPG, WEBP) ou PDF.' });
+      }
+      if (rawReceipt && rawReceipt.length > 8 * 1024 * 1024) {
+        return sendJson(res, 413, { success: false, message: 'O comprovante passa de 6 MB. Envie um arquivo menor.' });
+      }
+      const receiptUrl = rawReceipt;
       const receiptName = body.receiptName ? String(body.receiptName).slice(0, 255) : null;
 
       const prev = await pool.query(`SELECT payment_status FROM tickets WHERE id = $1`, [ticketId]);
@@ -1150,7 +1287,7 @@ export default async function handler(req, res) {
 
       if (method === 'POST') {
         const body = await parseBody(req);
-        const authorId = await getDefaultTechnicianId(body.authorId);
+        const authorId = Number(auth.uid);
         if (!authorId) {
           return sendJson(res, 400, { success: false, message: 'Nenhum usuário autenticado.' });
         }
@@ -1217,7 +1354,7 @@ export default async function handler(req, res) {
       const body = await parseBody(req);
       const ticketId = Number(body.ticketId);
       const toolUsed = body.toolUsed || 'ANYDESK';
-      const techId = await getDefaultTechnicianId(body.technicianId);
+      const techId = await getDefaultTechnicianId(auth.uid);
 
       const existing = await pool.query(
         `${SESSION_SELECT_SQL}
@@ -1412,6 +1549,6 @@ export default async function handler(req, res) {
     return sendJson(res, 404, { success: false, message: `Endpoint não encontrado: ${method} ${pathname}` });
   } catch (err) {
     console.error('[Supabase API Error]:', err);
-    return sendJson(res, 500, { success: false, message: err.message });
+    return sendJson(res, 500, { success: false, message: 'Erro interno. Tente novamente em instantes.' });
   }
 }

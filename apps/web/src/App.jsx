@@ -36,7 +36,8 @@ export default function App() {
   const [adminUser, setAdminUser] = useState(() => {
     try {
       const saved = localStorage.getItem('itdesk_admin_user') || localStorage.getItem('itone_admin_user');
-      return saved ? JSON.parse(saved) : null;
+      const parsed = saved ? JSON.parse(saved) : null;
+      return parsed && parsed.token ? parsed : null;
     } catch {
       return null;
     }
@@ -302,7 +303,7 @@ export default function App() {
         style={{
           position: 'fixed',
           inset: 0,
-          backgroundColor: '#000000',
+          backgroundColor: 'var(--bg-app)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -315,18 +316,6 @@ export default function App() {
           userSelect: 'none'
         }}
       >
-        {/* Linha Laser Superior Laranja */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '2px',
-            background: 'linear-gradient(90deg, transparent 0%, #ff6b00 50%, transparent 100%)',
-            boxShadow: '0 0 18px #ff6b00'
-          }}
-        />
 
         {/* Efeito de Luz / Glow Radial Laranja ao Fundo */}
         <div
@@ -336,7 +325,7 @@ export default function App() {
             height: 'min(560px, 95vw)',
             borderRadius: '50%',
             background:
-              'radial-gradient(circle, rgba(255, 107, 0, 0.24) 0%, rgba(255, 75, 0, 0.08) 40%, rgba(0, 0, 0, 0) 72%)',
+              'radial-gradient(circle, rgba(232, 115, 42, 0.24) 0%, rgba(232, 115, 42, 0.08) 40%, rgba(0, 0, 0, 0) 72%)',
             filter: 'blur(26px)',
             pointerEvents: 'none',
             animation: 'itdeskPulseGlow 2.8s ease-in-out infinite'
@@ -350,7 +339,7 @@ export default function App() {
             bottom: '-120px',
             width: 'min(680px, 100vw)',
             height: '240px',
-            background: 'radial-gradient(ellipse at center, rgba(255, 107, 0, 0.16) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse at center, rgba(232, 115, 42, 0.16) 0%, transparent 70%)',
             filter: 'blur(30px)',
             pointerEvents: 'none'
           }}
@@ -376,7 +365,7 @@ export default function App() {
               maxWidth: '380px',
               height: 'auto',
               objectFit: 'contain',
-              filter: 'drop-shadow(0 0 32px rgba(255, 107, 0, 0.38))'
+              filter: 'drop-shadow(0 0 32px rgba(232, 115, 42, 0.38))'
             }}
           />
 
@@ -394,18 +383,18 @@ export default function App() {
               style={{
                 width: '100%',
                 height: '3px',
-                backgroundColor: '#161616',
+                backgroundColor: 'var(--border-light)',
                 position: 'relative',
                 overflow: 'hidden',
-                borderRadius: '2px'
+                borderRadius: 'var(--radius-sm)'
               }}
             >
               <div
                 style={{
                   width: `${bootProgress}%`,
                   height: '100%',
-                  background: 'linear-gradient(90deg, #ff5100 0%, #ff6b00 60%, #ff9d4d 100%)',
-                  boxShadow: '0 0 14px #ff6b00',
+                  background: 'var(--orange)',
+                  boxShadow: 'none',
                   transition: 'width 0.35s cubic-bezier(0.22, 1, 0.36, 1)'
                 }}
               />
@@ -419,14 +408,13 @@ export default function App() {
                 gap: '12px',
                 fontFamily: 'var(--font-mono)',
                 fontSize: '10px',
-                letterSpacing: '0.1em',
-                textTransform: 'uppercase'
+                letterSpacing: '0'
               }}
             >
-              <span style={{ color: '#a1a1aa', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              <span style={{ color: 'var(--text-secondary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                 {bootStepLabel}
               </span>
-              <span style={{ color: '#ff6b00', fontWeight: 800, flexShrink: 0 }}>
+              <span style={{ color: 'var(--orange)', fontWeight: 800, flexShrink: 0 }}>
                 {bootProgress}%
               </span>
             </div>
@@ -441,7 +429,7 @@ export default function App() {
             left: 0,
             right: 0,
             height: '2px',
-            background: 'linear-gradient(90deg, transparent 0%, rgba(255, 107, 0, 0.65) 50%, transparent 100%)'
+            background: 'linear-gradient(90deg, transparent 0%, rgba(232, 115, 42, 0.65) 50%, transparent 100%)'
           }}
         />
       </div>
@@ -564,7 +552,7 @@ export default function App() {
         <header className="adm-top-header" style={{
           height: '62px',
           borderBottom: '1px solid var(--border-light)',
-          backgroundColor: '#000000',
+          backgroundColor: 'var(--bg-app)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
@@ -574,7 +562,7 @@ export default function App() {
           zIndex: 40
         }}>
           {/* Breadcrumb / Brand Mobile com Logo Oficial Destacada */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '0.08em', minWidth: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '12px', letterSpacing: '0', minWidth: 0 }}>
             <img
               src="/assets/logo-it-desk.png"
               alt="IT DESK"
@@ -599,9 +587,9 @@ export default function App() {
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
-                  backgroundColor: 'rgba(255, 107, 0, 0.08)',
+                  backgroundColor: 'rgba(232, 115, 42, 0.08)',
                   border: '1px solid var(--orange)',
-                  borderRadius: '2px',
+                  borderRadius: 'var(--radius-sm)',
                   padding: '6px 10px',
                   color: 'var(--orange)',
                   fontSize: '11px',
@@ -651,12 +639,12 @@ export default function App() {
                     top: '-5px',
                     right: '-5px',
                     backgroundColor: 'var(--orange)',
-                    color: '#000000',
+                    color: 'var(--orange-ink)',
                     fontFamily: 'var(--font-mono)',
                     fontSize: '9.5px',
                     fontWeight: 800,
                     padding: '1px 5px',
-                    borderRadius: '2px',
+                    borderRadius: 'var(--radius-sm)',
                     lineHeight: 1.2
                   }}>
                     {unreadCount}
@@ -671,19 +659,19 @@ export default function App() {
                   top: '58px',
                   right: '14px',
                   width: 'min(340px, calc(100vw - 28px))',
-                  backgroundColor: '#050505',
+                  backgroundColor: 'var(--bg-card)',
                   border: '1px solid #262626',
                   borderTop: '2px solid var(--orange)',
-                  borderRadius: '2px',
+                  borderRadius: 'var(--radius-sm)',
                   padding: '16px',
-                  boxShadow: '0 16px 40px rgba(0,0,0,0.85)',
+                  boxShadow: 'var(--elev-float)',
                   zIndex: 80,
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '12px'
                 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid #1f1f1f', paddingBottom: '8px' }}>
-                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
                       Notificações Operacionais
                     </span>
                     <button 
@@ -709,7 +697,7 @@ export default function App() {
                       style={{
                         padding: '5px 10px',
                         fontSize: '11px',
-                        borderColor: soundEnabled ? 'var(--orange)' : '#262626',
+                        borderColor: soundEnabled ? 'var(--orange)' : 'var(--border-strong)',
                         color: soundEnabled ? 'var(--orange)' : 'var(--text-secondary)'
                       }}
                     >
@@ -799,7 +787,7 @@ export default function App() {
             className="adm-mobile-only"
             style={{
               flexDirection: 'column',
-              backgroundColor: '#050505',
+              backgroundColor: 'var(--bg-card)',
               borderBottom: '2px solid var(--orange)',
               padding: '16px 14px',
               gap: '12px',
@@ -853,7 +841,7 @@ export default function App() {
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '10px', borderTop: '1px solid #1f1f1f' }}>
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: '#ffffff' }}>{adminUser?.fullName || 'IT THECNICA'}</span>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-white)' }}>{adminUser?.fullName || 'IT THECNICA'}</span>
                 <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)' }}>{adminUser?.email}</span>
               </div>
               <button onClick={handleAdminLogout} className="f-btn-secondary" style={{ padding: '6px 12px', color: '#fca5a5' }}>
@@ -867,7 +855,7 @@ export default function App() {
         {!pushSubscribed && (
           <div
             style={{
-              backgroundColor: 'rgba(255, 107, 0, 0.1)',
+              backgroundColor: 'rgba(232, 115, 42, 0.1)',
               borderBottom: '1px solid var(--orange)',
               padding: '10px 16px',
               display: 'flex',
@@ -877,7 +865,7 @@ export default function App() {
               gap: '10px'
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: '#ffffff' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '12px', color: 'var(--text-white)' }}>
               <Bell size={14} color="var(--orange)" style={{ flexShrink: 0 }} />
               <span>
                 <strong>Alertas com o App Fechado:</strong> Toque ao lado para vincular este iPhone e receber notificações mesmo com a tela bloqueada.
@@ -1012,12 +1000,12 @@ export default function App() {
             bottom: '24px',
             right: '24px',
             width: '340px',
-            backgroundColor: '#050505',
+            backgroundColor: 'var(--bg-card)',
             border: '1px solid #262626',
             borderTop: '2px solid var(--orange)',
-            borderRadius: '2px',
+            borderRadius: 'var(--radius-sm)',
             padding: '16px',
-            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.9)',
+            boxShadow: 'var(--elev-float)',
             zIndex: 9999,
             display: 'flex',
             flexDirection: 'column',
@@ -1025,7 +1013,7 @@ export default function App() {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
               ● {liveToast.title}
             </span>
             <button

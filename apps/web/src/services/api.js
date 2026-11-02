@@ -2,6 +2,34 @@
 
 const API_BASE = '/api/v1';
 
+// Sessão: o token assinado fica junto do usuário salvo no navegador
+function isCustomerContext() {
+  const path = window.location.pathname.toLowerCase();
+  return path.startsWith('/atendimento') || path.startsWith('/cliente') || new URLSearchParams(window.location.search).get('portal') === 'cliente';
+}
+function sessionKey() {
+  return isCustomerContext() ? 'itdesk_customer_user' : 'itdesk_admin_user';
+}
+function getToken() {
+  try {
+    return JSON.parse(localStorage.getItem(sessionKey()) || 'null')?.token || '';
+  } catch {
+    return '';
+  }
+}
+async function authFetch(url, options = {}) {
+  const token = getToken();
+  const headers = { ...(options.headers || {}) };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const res = await fetch(url, { ...options, headers });
+  if (res.status === 401 && token) {
+    try { localStorage.removeItem(sessionKey()); } catch {}
+    window.location.reload();
+  }
+  return res;
+}
+
+
 // Estado em memória vazio (sem dados fictícios)
 let initialTickets = [];
 let initialMessages = {};
@@ -13,7 +41,7 @@ let initialFinancialEntries = [];
 export const api = {
   // Autenticação & Cadastro (Admin e Cliente no Supabase)
   async registerAdmin(data) {
-    const res = await fetch(`${API_BASE}/auth/admin-setup`, {
+    const res = await authFetch(`${API_BASE}/auth/admin-setup`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -24,7 +52,7 @@ export const api = {
   },
 
   async registerCustomer(data) {
-    const res = await fetch(`${API_BASE}/auth/register`, {
+    const res = await authFetch(`${API_BASE}/auth/register`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -35,7 +63,7 @@ export const api = {
   },
 
   async login(data) {
-    const res = await fetch(`${API_BASE}/auth/login`, {
+    const res = await authFetch(`${API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -47,7 +75,7 @@ export const api = {
 
   async getCustomerTickets(customerId) {
     try {
-      const res = await fetch(`${API_BASE}/tickets?customerId=${customerId}`);
+      const res = await authFetch(`${API_BASE}/tickets?customerId=${customerId}`);
       if (res.ok) {
         const json = await res.json();
         return json.data || [];
@@ -59,8 +87,8 @@ export const api = {
   // Clientes / Usuários Reais
   async getCustomers() {
     try {
-      const res = await fetch(`${API_BASE}/customers`, {
-        headers: { 'Authorization': 'Bearer demo-token' }
+      const res = await authFetch(`${API_BASE}/customers`, {
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -72,9 +100,9 @@ export const api = {
 
   async createCustomer(data) {
     try {
-      const res = await fetch(`${API_BASE}/customers`, {
+      const res = await authFetch(`${API_BASE}/customers`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
       if (res.ok) {
@@ -99,9 +127,9 @@ export const api = {
 
   async deleteCustomer(id) {
     try {
-      await fetch(`${API_BASE}/customers/${id}`, {
+      await authFetch(`${API_BASE}/customers/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': 'Bearer demo-token' }
+        headers: {}
       });
     } catch (e) {}
     initialCustomers = initialCustomers.filter(c => c.id !== Number(id));
@@ -112,7 +140,7 @@ export const api = {
   async getTickets(statusFilter) {
     try {
       const url = statusFilter ? `${API_BASE}/tickets?status=${statusFilter}` : `${API_BASE}/tickets`;
-      const res = await fetch(url, { headers: { 'Authorization': 'Bearer demo-token' } });
+      const res = await authFetch(url, { headers: {} });
       if (res.ok) {
         const json = await res.json();
         return json.data || [];
@@ -126,9 +154,9 @@ export const api = {
 
   async createTicket(data) {
     try {
-      const res = await fetch(`${API_BASE}/tickets`, {
+      const res = await authFetch(`${API_BASE}/tickets`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
       if (res.ok) {
@@ -164,9 +192,9 @@ export const api = {
 
   async deleteTicket(id) {
     try {
-      await fetch(`${API_BASE}/tickets/${id}`, {
+      await authFetch(`${API_BASE}/tickets/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': 'Bearer demo-token' }
+        headers: {}
       });
     } catch (e) {}
     initialTickets = initialTickets.filter(t => t.id !== Number(id));
@@ -175,9 +203,9 @@ export const api = {
 
   async updateTicketStatus(id, newStatus, reason, resolutionSummary) {
     try {
-      const res = await fetch(`${API_BASE}/tickets/${id}/status`, {
+      const res = await authFetch(`${API_BASE}/tickets/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status: newStatus, reason, resolutionSummary })
       });
       if (res.ok) {
@@ -196,7 +224,7 @@ export const api = {
   },
 
   async rateTicket(ticketId, ratingData) {
-    const res = await fetch(`${API_BASE}/tickets/${ticketId}/rating`, {
+    const res = await authFetch(`${API_BASE}/tickets/${ticketId}/rating`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(ratingData)
@@ -209,7 +237,7 @@ export const api = {
   // Pagamentos (formas de pagamento cadastradas pelo admin + status de pagamento do chamado)
   async getPaymentMethods(onlyActive = false) {
     try {
-      const res = await fetch(`${API_BASE}/payment-methods${onlyActive ? '?active=true' : ''}`);
+      const res = await authFetch(`${API_BASE}/payment-methods${onlyActive ? '?active=true' : ''}`);
       const json = await res.json();
       return res.ok ? json.data || [] : [];
     } catch {
@@ -218,7 +246,7 @@ export const api = {
   },
 
   async savePaymentMethod(data) {
-    const res = await fetch(`${API_BASE}/payment-methods${data.id ? `/${data.id}` : ''}`, {
+    const res = await authFetch(`${API_BASE}/payment-methods${data.id ? `/${data.id}` : ''}`, {
       method: data.id ? 'PUT' : 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
@@ -229,11 +257,11 @@ export const api = {
   },
 
   async deletePaymentMethod(id) {
-    await fetch(`${API_BASE}/payment-methods/${id}`, { method: 'DELETE' });
+    await authFetch(`${API_BASE}/payment-methods/${id}`, { method: 'DELETE' });
   },
 
   async updateTicketPayment(ticketId, status, paymentMethodId = null, receiptUrl = null, receiptName = null) {
-    const res = await fetch(`${API_BASE}/tickets/${ticketId}/payment`, {
+    const res = await authFetch(`${API_BASE}/tickets/${ticketId}/payment`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, paymentMethodId, receiptUrl, receiptName })
@@ -246,8 +274,8 @@ export const api = {
   // Mensagens
   async getMessages(ticketId, userRole = 'TECHNICIAN') {
     try {
-      const res = await fetch(`${API_BASE}/tickets/${ticketId}/messages?role=${userRole}`, {
-        headers: { 'Authorization': 'Bearer demo-token' }
+      const res = await authFetch(`${API_BASE}/tickets/${ticketId}/messages?role=${userRole}`, {
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -264,9 +292,9 @@ export const api = {
 
   async addMessage(ticketId, message, isInternal = false, authorId = null) {
     try {
-      const res = await fetch(`${API_BASE}/tickets/${ticketId}/messages`, {
+      const res = await authFetch(`${API_BASE}/tickets/${ticketId}/messages`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message, internal: isInternal, authorId })
       });
       if (res.ok) {
@@ -301,8 +329,8 @@ export const api = {
       const url = qs.toString()
         ? `${API_BASE}/remote-sessions/active?${qs.toString()}`
         : `${API_BASE}/remote-sessions/active`;
-      const res = await fetch(url, {
-        headers: { 'Authorization': 'Bearer demo-token' }
+      const res = await authFetch(url, {
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -314,9 +342,9 @@ export const api = {
 
   async startSession(ticketId, toolUsed = 'ANYDESK') {
     try {
-      const res = await fetch(`${API_BASE}/remote-sessions/start`, {
+      const res = await authFetch(`${API_BASE}/remote-sessions/start`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ticketId, toolUsed })
       });
       if (res.ok) {
@@ -347,9 +375,9 @@ export const api = {
 
   async pauseSession(id) {
     try {
-      const res = await fetch(`${API_BASE}/remote-sessions/${id}/pause`, {
+      const res = await authFetch(`${API_BASE}/remote-sessions/${id}/pause`, {
         method: 'POST',
-        headers: { 'Authorization': 'Bearer demo-token' }
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -364,9 +392,9 @@ export const api = {
 
   async resumeSession(id) {
     try {
-      const res = await fetch(`${API_BASE}/remote-sessions/${id}/resume`, {
+      const res = await authFetch(`${API_BASE}/remote-sessions/${id}/resume`, {
         method: 'POST',
-        headers: { 'Authorization': 'Bearer demo-token' }
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -381,9 +409,9 @@ export const api = {
 
   async endSession(id, resolutionSummary = '') {
     try {
-      const res = await fetch(`${API_BASE}/remote-sessions/${id}/end`, {
+      const res = await authFetch(`${API_BASE}/remote-sessions/${id}/end`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ resolutionSummary })
       });
       if (res.ok) {
@@ -403,8 +431,8 @@ export const api = {
   // Dashboard
   async getDashboardSummary() {
     try {
-      const res = await fetch(`${API_BASE}/dashboard/summary`, {
-        headers: { 'Authorization': 'Bearer demo-token' }
+      const res = await authFetch(`${API_BASE}/dashboard/summary`, {
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -428,7 +456,7 @@ export const api = {
   // Catálogo de Serviços (Gerenciado pelo Admin)
   async getServices() {
     try {
-      const res = await fetch(`${API_BASE}/services`);
+      const res = await authFetch(`${API_BASE}/services`);
       if (res.ok) {
         const json = await res.json();
         return json.data || [];
@@ -439,9 +467,9 @@ export const api = {
 
   async createService(data) {
     try {
-      const res = await fetch(`${API_BASE}/services`, {
+      const res = await authFetch(`${API_BASE}/services`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
       if (res.ok) {
@@ -464,9 +492,9 @@ export const api = {
 
   async updateService(id, data) {
     try {
-      const res = await fetch(`${API_BASE}/services/${id}`, {
+      const res = await authFetch(`${API_BASE}/services/${id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
       if (res.ok) {
@@ -479,9 +507,9 @@ export const api = {
 
   async deleteService(id) {
     try {
-      await fetch(`${API_BASE}/services/${id}`, {
+      await authFetch(`${API_BASE}/services/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': 'Bearer demo-token' }
+        headers: {}
       });
     } catch (e) {}
     initialServices = initialServices.filter(s => s.id !== Number(id));
@@ -491,8 +519,8 @@ export const api = {
   // Controle Financeiro Manual (Entradas e Retiradas)
   async getFinancialEntries() {
     try {
-      const res = await fetch(`${API_BASE}/financial-entries`, {
-        headers: { 'Authorization': 'Bearer demo-token' }
+      const res = await authFetch(`${API_BASE}/financial-entries`, {
+        headers: {}
       });
       if (res.ok) {
         const json = await res.json();
@@ -504,9 +532,9 @@ export const api = {
 
   async createFinancialEntry(data) {
     try {
-      const res = await fetch(`${API_BASE}/financial-entries`, {
+      const res = await authFetch(`${API_BASE}/financial-entries`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data)
       });
       if (res.ok) {
@@ -530,9 +558,9 @@ export const api = {
 
   async updateFinancialEntryStatus(id, status) {
     try {
-      const res = await fetch(`${API_BASE}/financial-entries/${id}/status`, {
+      const res = await authFetch(`${API_BASE}/financial-entries/${id}/status`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer demo-token' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status })
       });
       if (res.ok) {
@@ -547,9 +575,9 @@ export const api = {
 
   async deleteFinancialEntry(id) {
     try {
-      await fetch(`${API_BASE}/financial-entries/${id}`, {
+      await authFetch(`${API_BASE}/financial-entries/${id}`, {
         method: 'DELETE',
-        headers: { 'Authorization': 'Bearer demo-token' }
+        headers: {}
       });
     } catch (e) {}
     initialFinancialEntries = initialFinancialEntries.filter(e => e.id !== Number(id));
@@ -559,7 +587,7 @@ export const api = {
   // Web Push Notifications (App Mobile Safari iOS / Android)
   async getPushConfig() {
     try {
-      const res = await fetch(`${API_BASE}/push/public-key`);
+      const res = await authFetch(`${API_BASE}/push/public-key`);
       if (res.ok) {
         const json = await res.json();
         return json.data;
@@ -572,7 +600,7 @@ export const api = {
   },
 
   async subscribePush(subscription) {
-    const res = await fetch(`${API_BASE}/push/subscribe`, {
+    const res = await authFetch(`${API_BASE}/push/subscribe`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -586,7 +614,7 @@ export const api = {
   },
 
   async sendTestPush() {
-    const res = await fetch(`${API_BASE}/push/test`, {
+    const res = await authFetch(`${API_BASE}/push/test`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' }
     });

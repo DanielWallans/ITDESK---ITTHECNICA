@@ -31,7 +31,7 @@ export default function AdminAuthView({ onAuthenticated }) {
           phone: formData.phone,
           companyName: formData.companyName || 'IT DESK'
         });
-        onAuthenticated(res.user);
+        onAuthenticated({ ...res.user, token: res.token });
       } else {
         const res = await api.login({
           email: formData.email,
@@ -40,7 +40,7 @@ export default function AdminAuthView({ onAuthenticated }) {
         if (res.user.role !== 'ADMIN' && res.user.role !== 'TECHNICIAN') {
           throw new Error('Acesso restrito a administradores e técnicos.');
         }
-        onAuthenticated(res.user);
+        onAuthenticated({ ...res.user, token: res.token });
       }
     } catch (err) {
       setError(err.message || 'Não foi possível autenticar. Verifique suas credenciais.');
@@ -61,7 +61,7 @@ export default function AdminAuthView({ onAuthenticated }) {
         <a
           href="/atendimento"
           className="cp-link"
-          style={{ textDecoration: 'none', letterSpacing: '.08em', textTransform: 'uppercase', fontSize: 11 }}
+          style={{ textDecoration: 'none', letterSpacing: '0', fontSize: 11 }}
         >
           Portal do Cliente →
         </a>
@@ -111,7 +111,7 @@ export default function AdminAuthView({ onAuthenticated }) {
             }}
           >
             <div>
-              <span style={{ display: 'block', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
+              <span style={{ display: 'block', fontSize: 10, letterSpacing: '0', color: 'var(--cp-dim)' }}>
                 Remoto
               </span>
               <strong style={{ fontSize: 12.5, color: 'var(--cp-text)', fontFamily: 'var(--font-mono)' }}>
@@ -119,7 +119,7 @@ export default function AdminAuthView({ onAuthenticated }) {
               </strong>
             </div>
             <div style={{ borderLeft: '1px solid var(--cp-line)', paddingLeft: 12 }}>
-              <span style={{ display: 'block', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
+              <span style={{ display: 'block', fontSize: 10, letterSpacing: '0', color: 'var(--cp-dim)' }}>
                 Alertas
               </span>
               <strong style={{ fontSize: 12.5, color: 'var(--cp-orange)', fontFamily: 'var(--font-mono)' }}>
@@ -127,7 +127,7 @@ export default function AdminAuthView({ onAuthenticated }) {
               </strong>
             </div>
             <div style={{ borderLeft: '1px solid var(--cp-line)', paddingLeft: 12 }}>
-              <span style={{ display: 'block', fontSize: 10, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--cp-dim)' }}>
+              <span style={{ display: 'block', fontSize: 10, letterSpacing: '0', color: 'var(--cp-dim)' }}>
                 Financeiro
               </span>
               <strong style={{ fontSize: 12.5, color: 'var(--cp-text)', fontFamily: 'var(--font-mono)' }}>
