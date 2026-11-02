@@ -96,7 +96,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
       {/* Header Editorial */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxWidth: '720px' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
             CATÁLOGO DE SERVIÇOS • SINCRONIZADO COM /ATENDIMENTO
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
@@ -146,7 +146,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
             >
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: '260px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                  <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
                     {s.categoryName || 'Suporte Técnico'}
                   </span>
                   <span style={{ fontSize: '11.5px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
@@ -164,7 +164,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
 
                 {Array.isArray(s.checklistQuestions) && s.checklistQuestions.length > 0 && (
                   <div style={{ marginTop: '6px', paddingLeft: '10px', borderLeft: '2px solid #262626', display: 'flex', flexDirection: 'column', gap: '3px' }}>
-                    <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                    <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--orange)', letterSpacing: '0' }}>
                       Checklist de Triagem ({s.checklistQuestions.length}):
                     </span>
                     {s.checklistQuestions.map((q, idx) => (
@@ -178,7 +178,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
 
               <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexShrink: 0, alignSelf: 'center' }}>
                 <div style={{ textAlign: 'right' }}>
-                  <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block' }}>
+                  <span style={{ fontSize: '10px', color: 'var(--text-tertiary)', letterSpacing: '0', display: 'block' }}>
                     {s.billingModel === 'HOURLY' ? 'Hora Técnica' : 'Valor Fixo'}
                   </span>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', fontWeight: 800, color: 'var(--text-white)' }}>
@@ -227,7 +227,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
               padding: '16px 24px',
               borderBottom: '1px solid var(--border-light)'
             }}>
-              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
                 {editingServiceId ? 'Editar Serviço & Checklist' : 'Novo Serviço • Catálogo IT DESK'}
               </span>
               <button onClick={() => setIsModalOpen(false)} className="f-btn-icon" style={{ width: '28px', height: '28px' }}>
@@ -237,7 +237,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
 
             <form onSubmit={handleSaveService} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                   Nome do Serviço *
                 </label>
                 <input
@@ -252,7 +252,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
 
               <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     Categoria
                   </label>
                   <input
@@ -265,7 +265,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     Tipo de Cobrança
                   </label>
                   <select
@@ -281,7 +281,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
 
               <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     Valor Cobrado (R$) *
                   </label>
                   <input
@@ -297,7 +297,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     Tempo Estimado (minutos)
                   </label>
                   <input
@@ -312,7 +312,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                   Descrição do que está incluso
                 </label>
                 <textarea
@@ -325,7 +325,7 @@ export default function ServicesView({ onSelectServiceToOpenTicket }) {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)', letterSpacing: '0' }}>
                   Perguntas do Checklist para o Cliente (1 por linha)
                 </label>
                 <textarea

@@ -281,7 +281,7 @@ export default function MobileAppView({ onNavigateTab }) {
           <button onClick={loadPushStatus} className="adm-btn-ghost">
             <RefreshCw size={13} /> Atualizar Status
           </button>
-          <button onClick={handleTestPush} disabled={testingPush} className="adm-btn-ghost" style={{ borderColor: '#ff6b00', color: '#ff6b00' }}>
+          <button onClick={handleTestPush} disabled={testingPush} className="adm-btn-ghost" style={{ borderColor: 'var(--orange)', color: 'var(--orange)' }}>
             <Send size={13} /> {testingPush ? 'DISPARANDO...' : 'TESTAR NOTIFICAÇÃO AGORA'}
           </button>
           <button onClick={handleEnablePush} disabled={loadingPush} className="adm-btn-primary">
@@ -300,20 +300,20 @@ export default function MobileAppView({ onNavigateTab }) {
         <div
           style={{
             padding: '14px 18px',
-            borderLeft: `3px solid ${feedback.type === 'error' ? '#ef4444' : '#ff6b00'}`,
+            borderLeft: `3px solid ${feedback.type === 'error' ? '#ef4444' : 'var(--orange)'}`,
             borderTop: '1px solid #1f1f1f',
             borderRight: '1px solid #1f1f1f',
             borderBottom: '1px solid #1f1f1f',
-            backgroundColor: '#050505',
+            backgroundColor: 'var(--bg-card)',
             display: 'flex',
             alignItems: 'center',
             gap: '12px',
-            color: feedback.type === 'error' ? '#fca5a5' : '#ffffff',
+            color: feedback.type === 'error' ? '#fca5a5' : 'var(--text-white)',
             fontSize: '0.84rem',
             lineHeight: 1.5
           }}
         >
-          {feedback.type === 'error' ? <AlertCircle size={16} color="#ef4444" /> : <CheckCircle2 size={16} color="#ff6b00" />}
+          {feedback.type === 'error' ? <AlertCircle size={16} color="#ef4444" /> : <CheckCircle2 size={16} color="var(--orange)" />}
           <span>{feedback.text}</span>
         </div>
       )}
@@ -322,7 +322,7 @@ export default function MobileAppView({ onNavigateTab }) {
       <div className="adm-stats-strip">
         <div className="adm-stat-item">
           <span className="adm-stat-label">MODO DO APLICATIVO</span>
-          <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: isStandalone ? '#ff6b00' : '#ffffff' }}>
+          <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: isStandalone ? 'var(--orange)' : 'var(--text-white)' }}>
             {isStandalone ? 'APP INSTALADO' : 'NAVEGADOR'}
           </div>
           <span className="adm-stat-sub">{isStandalone ? 'Rodando em tela cheia nativa' : 'Adicione à Tela de Início'}</span>
@@ -330,7 +330,7 @@ export default function MobileAppView({ onNavigateTab }) {
 
         <div className="adm-stat-item">
           <span className="adm-stat-label">ALERTAS NESTE APARELHO</span>
-          <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: isSubscribedLocal ? '#ff6b00' : '#71717a' }}>
+          <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: isSubscribedLocal ? 'var(--orange)' : 'var(--text-tertiary)' }}>
             {isSubscribedLocal ? 'CONECTADO' : 'DESATIVADO'}
           </div>
           <span className="adm-stat-sub"> Permissão: {permissionState.toUpperCase()}</span>
@@ -346,7 +346,7 @@ export default function MobileAppView({ onNavigateTab }) {
 
         <div className="adm-stat-item">
           <span className="adm-stat-label">EVENTOS MONITORADOS</span>
-          <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: '#ff6b00' }}>
+          <div className="adm-stat-value" style={{ fontSize: '1.35rem', color: 'var(--orange)' }}>
             100% AO VIVO
           </div>
           <span className="adm-stat-sub">Novo chamado • Chat • Pix</span>
@@ -359,7 +359,7 @@ export default function MobileAppView({ onNavigateTab }) {
         <div>
           <div className="adm-section-bar">
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <Smartphone size={15} color="#ff6b00" />
+              <Smartphone size={15} color="var(--orange)" />
               <span className="adm-section-title">COMO INSTALAR NO IPHONE PELO SAFARI (SEM APP STORE)</span>
             </div>
             <span className="adm-section-meta">iOS 16.4+ & ANDROID</span>
@@ -367,36 +367,36 @@ export default function MobileAppView({ onNavigateTab }) {
 
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div className="adm-row" style={{ gridTemplateColumns: '42px 1fr', gap: '16px', padding: '18px 8px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: '#ff6b00' }}>01</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: 'var(--orange)' }}>01</div>
               <div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-white)', marginBottom: '4px' }}>
                   Abra este painel pelo Safari do seu iPhone
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#a1a1aa', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                   Aponte a câmera do iPhone para o QR Code ao lado ou copie o link direto abaixo e abra no navegador <strong>Safari</strong>.
                 </div>
               </div>
             </div>
 
             <div className="adm-row" style={{ gridTemplateColumns: '42px 1fr', gap: '16px', padding: '18px 8px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: '#ff6b00' }}>02</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: 'var(--orange)' }}>02</div>
               <div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  Toque em Compartilhar <Share size={14} color="#ff6b00" /> e em "Adicionar à Tela de Início" <PlusSquare size={14} color="#ff6b00" />
+                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-white)', marginBottom: '4px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  Toque em Compartilhar <Share size={14} color="var(--orange)" /> e em "Adicionar à Tela de Início" <PlusSquare size={14} color="var(--orange)" />
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#a1a1aa', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                   No iPhone, a Apple bloqueia arquivos <code>.apk</code> (que são exclusivos do Android), mas permite instalar Web Apps nativos direto pelo Safari sem precisar pagar ou publicar na App Store. O ícone oficial do <strong>IT DESK</strong> será criado na tela inicial do seu iPhone.
                 </div>
               </div>
             </div>
 
             <div className="adm-row" style={{ gridTemplateColumns: '42px 1fr', gap: '16px', padding: '18px 8px' }}>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: '#ff6b00' }}>03</div>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '1rem', fontWeight: 800, color: 'var(--orange)' }}>03</div>
               <div>
-                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: '#ffffff', marginBottom: '4px' }}>
+                <div style={{ fontSize: '0.92rem', fontWeight: 700, color: 'var(--text-white)', marginBottom: '4px' }}>
                   Abra o App IT DESK na Tela Inicial e toque em "Ativar Notificações"
                 </div>
-                <div style={{ fontSize: '0.82rem', color: '#a1a1aa', lineHeight: 1.5 }}>
+                <div style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
                   Assim que abrir pelo ícone na Tela de Início, entre nesta aba <strong>App no Celular</strong> e toque no botão laranja <strong>Ativar Notificações neste Aparelho</strong>. Quando você sair de casa e um cliente abrir chamado ou mandar mensagem, seu telefone vai vibrar e mostrar o alerta na tela bloqueada!
                 </div>
               </div>
@@ -411,7 +411,7 @@ export default function MobileAppView({ onNavigateTab }) {
             </button>
 
             <button onClick={copyAppLink} className="adm-btn-ghost">
-              {copiedLink ? <Check size={14} color="#ff6b00" /> : <Copy size={14} />}
+              {copiedLink ? <Check size={14} color="var(--orange)" /> : <Copy size={14} />}
               {copiedLink ? 'LINK COPIADO!' : 'COPIAR LINK DO APP'}
             </button>
 
@@ -432,31 +432,31 @@ export default function MobileAppView({ onNavigateTab }) {
 
           <div style={{ padding: '24px 0', borderBottom: '1px solid #1f1f1f', display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
             {qrDataUrl && (
-              <div style={{ padding: '10px', backgroundColor: '#ffffff', border: '2px solid #ff6b00', display: 'inline-block' }}>
+              <div style={{ padding: '10px', backgroundColor: 'var(--text-white)', border: '1px solid var(--border-strong)', display: 'inline-block' }}>
                 <img src={qrDataUrl} alt="QR Code App IT DESK" style={{ width: '148px', height: '148px', display: 'block' }} />
               </div>
             )}
             <div style={{ flex: 1, minWidth: '200px' }}>
-              <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ff6b00', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '6px' }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0', marginBottom: '6px' }}>
                 ACESSO DIRETO NO TELEFONE
               </div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 700, color: '#ffffff', marginBottom: '8px' }}>
+              <div style={{ fontSize: '0.95rem', fontWeight: 700, color: 'var(--text-white)', marginBottom: '8px' }}>
                 Aponte a câmera do iPhone para abrir no Safari
               </div>
-              <div style={{ fontSize: '0.8rem', color: '#71717a', lineHeight: 1.5, marginBottom: '12px' }}>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-tertiary)', lineHeight: 1.5, marginBottom: '12px' }}>
                 Use o mesmo login de administrador (<strong>itthecnica@hotmail.com</strong>) para monitorar todos os chamados em tempo real na rua.
               </div>
-              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: '#a1a1aa', wordBreak: 'break-all' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.74rem', color: 'var(--text-secondary)', wordBreak: 'break-all' }}>
                 {appUrl}
               </div>
             </div>
           </div>
 
           <div style={{ paddingTop: '20px' }}>
-            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: '#ff6b00', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '8px' }}>
+            <div style={{ fontSize: '0.72rem', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0', marginBottom: '8px' }}>
               MODO "FORA DE CASA" INTEGRADO AO CHAT
             </div>
-            <p style={{ fontSize: '0.82rem', color: '#a1a1aa', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '0.82rem', color: 'var(--text-secondary)', lineHeight: 1.6, margin: 0 }}>
               Quando chegar uma notificação no seu celular e você estiver na rua, basta tocar na notificação para abrir o chamado e usar os novos <strong>Botões de Resposta Rápida (1 Toque)</strong> no chat ou chamar o cliente no WhatsApp para avisar em quantos minutos você iniciará o acesso remoto.
             </p>
           </div>

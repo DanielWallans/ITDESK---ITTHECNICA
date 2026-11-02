@@ -1,14 +1,14 @@
 /* Portal do Cliente (/atendimento) — tema IT DESK (preto + laranja), layout sem cards */
 .cp {
-  --cp-bg: #000000;
-  --cp-bg2: #0b0b0b;
-  --cp-line: #1f1f1f;
-  --cp-line2: #2a2a2a;
-  --cp-text: #f5f5f5;
-  --cp-muted: #8a8a8a;
-  --cp-dim: #5c5c5c;
-  --cp-orange: #ff6b00;
-  --cp-orange-hover: #ff8226;
+  --cp-bg: var(--bg-app);
+  --cp-bg2: var(--bg-card);
+  --cp-line: var(--border-light);
+  --cp-line2: var(--border-strong);
+  --cp-text: var(--text-white);
+  --cp-muted: var(--text-secondary);
+  --cp-dim: var(--text-tertiary);
+  --cp-orange: var(--orange);
+  --cp-orange-hover: var(--orange-bright);
   min-height: 100vh;
   background: var(--cp-bg);
   color: var(--cp-text);
@@ -31,7 +31,7 @@
 .cp-brand { display: flex; align-items: center; gap: 16px; }
 .cp-brand img { height: 28px; object-fit: contain; }
 .cp-brand span {
-  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0;
   color: var(--cp-muted); padding-left: 16px; border-left: 1px solid var(--cp-line2);
 }
 .cp-user { display: flex; align-items: center; gap: 20px; font-size: 13px; }
@@ -45,9 +45,9 @@
 /* Live session strip */
 .cp-live {
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 12px 40px; background: var(--cp-orange); color: #000;
+  padding: 12px 40px; background: var(--cp-orange); color: var(--orange-ink);
 }
-.cp-live.paused { background: #1a1a1a; color: var(--cp-text); border-bottom: 1px solid var(--cp-line2); }
+.cp-live.paused { background: var(--bg-raised); color: var(--cp-text); border-bottom: 1px solid var(--cp-line2); }
 .cp-live strong { font-size: 13.5px; }
 .cp-live span { font-size: 12.5px; opacity: .8; margin-left: 12px; }
 .cp-live-timer { font-family: var(--font-mono); font-size: 22px; font-weight: 700; }
@@ -56,7 +56,7 @@
 
 /* Typography */
 .cp-eyebrow {
-  font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
+  font-size: 11px; letter-spacing: 0;
   color: var(--cp-orange); font-weight: 600; margin-bottom: 10px;
 }
 .cp-h1 { font-size: 34px; font-weight: 700; letter-spacing: -.025em; line-height: 1.15; margin: 0 0 12px; }
@@ -74,7 +74,7 @@
 }
 .cp-stat { padding: 18px 32px 18px 0; margin-right: 32px; border-right: 1px solid var(--cp-line); }
 .cp-stat:last-child { border-right: none; }
-.cp-stat label { display: block; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cp-dim); margin-bottom: 4px; }
+.cp-stat label { display: block; font-size: 11px; letter-spacing: 0; color: var(--cp-dim); margin-bottom: 4px; }
 .cp-stat strong { font-size: 20px; font-weight: 600; }
 .cp-stat strong.accent { color: var(--cp-orange); }
 
@@ -104,7 +104,7 @@
 
 /* Forms */
 .cp-form { display: flex; flex-direction: column; gap: 18px; }
-.cp-label { display: block; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cp-muted); margin-bottom: 6px; }
+.cp-label { display: block; font-size: 11px; letter-spacing: 0; color: var(--cp-muted); margin-bottom: 6px; }
 .cp-input {
   width: 100%; padding: 10px 0; background: transparent; color: var(--cp-text);
   border: none; border-bottom: 1px solid var(--cp-line2); border-radius: 0;
@@ -116,9 +116,9 @@ select.cp-input { padding: 6px 0; font-size: 12.5px; width: auto; max-width: 260
 select.cp-input option { background: #111; }
 .cp-two { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .cp-btn {
-  padding: 13px 20px; border: none; border-radius: 2px; cursor: pointer;
-  background: var(--cp-orange); color: #000; font-weight: 700; font-size: 13px;
-  letter-spacing: .04em; text-transform: uppercase; transition: background .15s;
+  padding: 13px 20px; border: none; border-radius: var(--radius-sm); cursor: pointer;
+  background: var(--cp-orange); color: var(--orange-ink); font-weight: 700; font-size: 13px;
+  letter-spacing: 0; transition: background .15s;
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
 }
 .cp-btn:hover { background: var(--cp-orange-hover); }
@@ -141,7 +141,7 @@ select.cp-input option { background: #111; }
 @media (max-width: 900px) { .cp-auth { border-left: none; padding-left: 0; } }
 
 .cp-checklist { border-left: 2px solid var(--cp-orange); padding-left: 16px; display: flex; flex-direction: column; gap: 16px; }
-.cp-checklist-title { font-size: 12px; color: var(--cp-orange); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.cp-checklist-title { font-size: 12px; color: var(--cp-orange); font-weight: 600; letter-spacing: 0; }
 
 /* Chat */
 .cp-chat { display: flex; flex-direction: column; height: 600px; border-top: 1px solid var(--cp-line); border-bottom: 1px solid var(--cp-line); }
@@ -150,7 +150,7 @@ select.cp-input option { background: #111; }
   border-bottom: 1px solid var(--cp-line); font-size: 12.5px;
 }
 .cp-chat-meta code { font-family: var(--font-mono); color: var(--cp-orange); margin-right: 8px; }
-.cp-status { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cp-muted); }
+.cp-status { font-size: 11px; letter-spacing: 0; color: var(--cp-muted); }
 .cp-msgs { flex: 1; overflow-y: auto; padding: 20px 0; display: flex; flex-direction: column; gap: 18px; }
 .cp-msg { max-width: 85%; }
 .cp-msg.me { align-self: flex-end; text-align: right; }
@@ -170,7 +170,7 @@ select.cp-input option { background: #111; }
 /* History table */
 .cp-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .cp-table th {
-  text-align: left; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+  text-align: left; font-size: 11px; letter-spacing: 0;
   color: var(--cp-dim); font-weight: 500; padding: 12px 16px 12px 0; border-bottom: 1px solid var(--cp-line2);
 }
 .cp-table td { padding: 16px 16px 16px 0; border-bottom: 1px solid var(--cp-line); vertical-align: top; }
@@ -185,11 +185,11 @@ select.cp-input option { background: #111; }
 
 
 /* Aviso de não lidas */
-.cp-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cp-orange); margin-left: 10px; vertical-align: middle; box-shadow: 0 0 0 4px rgba(255,107,0,.18); }
+.cp-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cp-orange); margin-left: 10px; vertical-align: middle; box-shadow: 0 0 0 4px rgba(232,115,42,.16); }
 
 /* Etapas do chamado */
 .cp-steps { list-style: none; margin: 0; padding: 14px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; border-bottom: 1px solid var(--cp-line); }
-.cp-steps li { border-top: 2px solid var(--cp-line2); padding-top: 8px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--cp-dim); }
+.cp-steps li { border-top: 2px solid var(--cp-line2); padding-top: 8px; font-size: 11px; letter-spacing: 0; color: var(--cp-dim); }
 .cp-steps li.done { border-top-color: rgba(255,107,0,.45); color: var(--cp-muted); }
 .cp-steps li.current { border-top-color: var(--cp-orange); color: var(--cp-orange); font-weight: 600; }
 
@@ -200,14 +200,14 @@ select.cp-input option { background: #111; }
 .cp-home-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; flex-wrap: wrap; margin-bottom: 28px; }
 .cp-code { font-family: var(--font-mono); color: var(--cp-orange); font-weight: 500; margin-right: 12px; font-size: 12.5px; }
 .cp-pending { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 14px 0 14px 16px; border-left: 2px solid var(--cp-orange); margin-bottom: 56px; font-size: 13.5px; color: #d4d4d4; }
-.cp-closed-note { padding: 14px 0; border-top: 1px solid var(--cp-line); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cp-dim); text-align: center; }
+.cp-closed-note { padding: 14px 0; border-top: 1px solid var(--cp-line); font-size: 11px; letter-spacing: 0; color: var(--cp-dim); text-align: center; }
 
 /* Tela de atendimento finalizado */
 .cp-done { max-width: 680px; margin: 24px auto 0; }
 .cp-summary { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 0 40px; border-top: 1px solid var(--cp-line); border-bottom: 1px solid var(--cp-line); }
 .cp-summary > div { padding: 18px 16px 18px 0; }
 .cp-summary > div.wide { grid-column: 1 / -1; border-top: 1px solid var(--cp-line); }
-.cp-summary dt { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--cp-dim); margin-bottom: 6px; }
+.cp-summary dt { font-size: 11px; letter-spacing: 0; color: var(--cp-dim); margin-bottom: 6px; }
 .cp-summary dd { margin: 0; font-size: 15px; font-weight: 600; }
 .cp-summary dd.accent { color: var(--cp-orange); }
 
@@ -226,7 +226,7 @@ select.cp-input option { background: #111; }
   word-break: break-all; line-height: 1.45;
 }
 .cp-pix-meta { display: grid; grid-template-columns: 1.3fr 1fr; gap: 16px; margin: 0; padding-top: 12px; border-top: 1px solid var(--cp-line); }
-.cp-pix-meta dt { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--cp-dim); margin-bottom: 4px; }
+.cp-pix-meta dt { font-size: 11px; letter-spacing: 0; color: var(--cp-dim); margin-bottom: 4px; }
 .cp-pix-meta dd { margin: 0; font-size: 13.5px; font-weight: 600; word-break: break-all; display: flex; align-items: center; }
 
 /* Como funciona (3 passos lineares sem cards) */
@@ -238,7 +238,7 @@ select.cp-input option { background: #111; }
 .cp-how-step { position: relative; padding-right: 12px; }
 .cp-how-num {
   font-family: var(--font-mono); font-size: 11px; font-weight: 700;
-  color: var(--cp-orange); letter-spacing: .1em; display: block; margin-bottom: 6px;
+  color: var(--cp-orange); letter-spacing: 0; display: block; margin-bottom: 6px;
 }
 .cp-how-step strong { display: block; font-size: 13.5px; color: var(--cp-text); margin-bottom: 4px; }
 .cp-how-step p { margin: 0; font-size: 12px; color: var(--cp-muted); line-height: 1.5; }
@@ -266,7 +266,7 @@ select.cp-input option { background: #111; }
   padding: 18px 0; border-bottom: 1px solid var(--cp-line);
   animation: cpPulse 1.5s ease-in-out infinite;
 }
-.cp-sk-bar { height: 12px; background: #1e1e1e; border-radius: 1px; }
+.cp-sk-bar { height: 12px; background: var(--bg-raised); border-radius: var(--radius-xs); }
 .cp-sk-bar.sub { height: 9px; background: #151515; margin-top: 8px; }
 
 /* Rodapé profissional */
@@ -280,7 +280,7 @@ select.cp-input option { background: #111; }
   display: grid; grid-template-columns: 1.4fr 1fr 1fr 1.3fr; gap: 32px;
 }
 .cp-footer-col dt {
-  font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+  font-size: 10.5px; letter-spacing: 0;
   color: var(--cp-orange); font-weight: 600; margin-bottom: 8px;
 }
 .cp-footer-col dd { margin: 0; line-height: 1.6; color: var(--cp-muted); }
@@ -346,7 +346,7 @@ select.cp-input option { background: #111; }
   }
   .cp-table td::before {
     content: attr(data-label);
-    font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase;
+    font-size: 10.5px; letter-spacing: 0;
     color: var(--cp-dim); flex-shrink: 0;
   }
   .cp-table td.svc-cell { flex-direction: column; align-items: flex-start; gap: 2px; }
@@ -359,3 +359,14 @@ select.cp-input option { background: #111; }
 }
 
 
+
+/* Refinamento premium do portal */
+.cp-btn { border-radius: var(--radius-sm); font-weight: 600; background: linear-gradient(180deg, var(--orange-bright), var(--orange)); border: 1px solid #c95e1c; box-shadow: inset 0 1px 0 rgba(255,255,255,.22); }
+.cp-btn-ghost { border-radius: var(--radius-sm); }
+.cp-input { background: var(--bg-inner); border: 1px solid var(--border-light); border-radius: var(--radius-sm); padding: 10px 12px; }
+.cp-input:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(232,115,42,.14); }
+.cp-label, .cp-stat label, .cp-status, .cp-summary dt, .cp-pix-meta dt { font-size: 12.5px; font-weight: 500; }
+.cp-eyebrow { font-size: 13px; color: var(--cp-muted); font-weight: 500; }
+.cp-h1 { font-weight: 600; letter-spacing: -.035em; }
+.cp-live { border-radius: 0; }
+.cp-live-timer, .cp-pay-amount { font-family: var(--font-main); font-variant-numeric: tabular-nums; font-weight: 600; letter-spacing: -.02em; }

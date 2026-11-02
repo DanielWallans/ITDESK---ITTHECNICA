@@ -96,8 +96,7 @@ export default function DashboardView({
             fontSize: '10.5px',
             fontWeight: 800,
             color: 'var(--orange)',
-            textTransform: 'uppercase',
-            letterSpacing: '0.14em'
+            letterSpacing: '0'
           }}>
             OPERAÇÃO TÉCNICA • IT DESK
           </span>
@@ -131,7 +130,7 @@ export default function DashboardView({
           style={{
             borderTop: '2px solid var(--orange)',
             borderBottom: '1px solid var(--border-light)',
-            backgroundColor: 'rgba(255, 107, 0, 0.05)',
+            backgroundColor: 'rgba(232, 115, 42, 0.05)',
             padding: '18px 20px',
             display: 'flex',
             alignItems: 'center',
@@ -143,7 +142,7 @@ export default function DashboardView({
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '20px', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-              <span style={{ fontSize: '10px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+              <span style={{ fontSize: '10px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
                 {activeSession.status === 'IN_PROGRESS' ? '● SESSÃO ANYDESK EM EXECUÇÃO' : '● SESSÃO PAUSADA'}
               </span>
               <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-white)' }}>
@@ -151,10 +150,10 @@ export default function DashboardView({
               </span>
             </div>
 
-            <div style={{ height: '28px', width: '1px', backgroundColor: '#262626' }} />
+            <div style={{ height: '28px', width: '1px', backgroundColor: 'var(--border-strong)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-secondary)', letterSpacing: '0' }}>
                 Tempo Decorrido
               </span>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '20px', fontWeight: 800, color: 'var(--orange)' }}>
@@ -162,10 +161,10 @@ export default function DashboardView({
               </span>
             </div>
 
-            <div style={{ height: '28px', width: '1px', backgroundColor: '#262626' }} />
+            <div style={{ height: '28px', width: '1px', backgroundColor: 'var(--border-strong)' }} />
 
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              <span style={{ fontSize: '10px', color: 'var(--text-secondary)', letterSpacing: '0' }}>
                 AnyDesk ID
               </span>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -265,7 +264,7 @@ export default function DashboardView({
           gap: '12px'
         }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-            <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
               Conexões AnyDesk & Fila Imediata
             </h2>
             <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)' }}>
@@ -344,7 +343,7 @@ export default function DashboardView({
           paddingBottom: '12px'
         }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px' }}>
-            <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
               Histórico de Chamados
             </h2>
             <span style={{ fontSize: '12px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)' }}>
@@ -385,7 +384,7 @@ export default function DashboardView({
                 placeholder="Filtrar chamado ou cliente..."
                 value={recentSearch}
                 onChange={(e) => setRecentSearch(e.target.value)}
-                style={{ background: 'none', border: 'none', padding: 0, outline: 'none', color: '#fff', fontSize: '12.5px', width: '100%' }}
+                style={{ background: 'none', border: 'none', padding: 0, outline: 'none', color: 'var(--text-white)', fontSize: '12.5px', width: '100%' }}
               />
             </div>
           </div>

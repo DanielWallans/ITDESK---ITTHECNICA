@@ -63,7 +63,7 @@ export default function CustomersView({ onOpenNewTicket }) {
       {/* Header Editorial */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
             BASE DE CLIENTES • SUPABASE
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
@@ -195,7 +195,7 @@ export default function CustomersView({ onOpenNewTicket }) {
               padding: '16px 24px',
               borderBottom: '1px solid var(--border-light)'
             }}>
-              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+              <span style={{ fontSize: '14px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
                 Cadastrar Novo Cliente
               </span>
               <button onClick={() => setIsModalOpen(false)} className="f-btn-icon" style={{ width: '28px', height: '28px' }}>
@@ -205,7 +205,7 @@ export default function CustomersView({ onOpenNewTicket }) {
 
             <form onSubmit={handleCreateCustomer} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                   Nome Completo do Cliente *
                 </label>
                 <input
@@ -219,7 +219,7 @@ export default function CustomersView({ onOpenNewTicket }) {
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                   E-mail *
                 </label>
                 <input
@@ -234,7 +234,7 @@ export default function CustomersView({ onOpenNewTicket }) {
 
               <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     Empresa (Opcional)
                   </label>
                   <input
@@ -246,7 +246,7 @@ export default function CustomersView({ onOpenNewTicket }) {
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     CPF / CNPJ (Opcional)
                   </label>
                   <input
@@ -261,7 +261,7 @@ export default function CustomersView({ onOpenNewTicket }) {
 
               <div className="adm-form-row">
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     Telefone / WhatsApp
                   </label>
                   <input
@@ -273,7 +273,7 @@ export default function CustomersView({ onOpenNewTicket }) {
                   />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '5px', flex: 1 }}>
-                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  <label style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
                     AnyDesk ID (Opcional)
                   </label>
                   <input

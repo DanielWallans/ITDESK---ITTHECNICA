@@ -99,17 +99,17 @@ export default function SessionManagerModal({
         <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {/* Card Central com Cronômetro Oficial HUD */}
           <div style={{
-            background: 'linear-gradient(135deg, rgba(255, 94, 0, 0.12) 0%, rgba(18, 20, 26, 0.95) 100%)',
-            border: '1px solid rgba(255, 94, 0, 0.35)',
+            background: 'linear-gradient(135deg, rgba(232, 115, 42, 0.12) 0%, rgba(18, 20, 26, 0.95) 100%)',
+            border: '1px solid rgba(232, 115, 42, 0.35)',
             borderRadius: 'var(--radius-md)',
             padding: '24px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: '12px',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.6)'
+            boxShadow: 'var(--elev-float)'
           }}>
-            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)', letterSpacing: '0' }}>
               CRONÔMETRO OFICIAL PERSISTIDO NO SERVIDOR
             </span>
 
@@ -117,9 +117,9 @@ export default function SessionManagerModal({
               fontFamily: 'var(--font-mono)',
               fontSize: '44px',
               fontWeight: 800,
-              color: '#ffffff',
+              color: 'var(--text-white)',
               letterSpacing: '-0.02em',
-              textShadow: '0 0 20px rgba(255, 94, 0, 0.4)'
+              textShadow: '0 0 20px rgba(232, 115, 42, 0.4)'
             }}>
               {formatTimer(elapsed)}
             </div>
@@ -177,11 +177,11 @@ export default function SessionManagerModal({
               flexDirection: 'column',
               gap: '8px'
             }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 700 }}>
                 Endereço AnyDesk do Cliente
               </span>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '18px', fontWeight: 800, color: '#ffffff' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '18px', fontWeight: 800, color: 'var(--text-white)' }}>
                   {session.remoteAccessId || ticket?.remoteAccessId || '849 203 192'}
                 </span>
                 <button 
@@ -206,7 +206,7 @@ export default function SessionManagerModal({
               flexDirection: 'column',
               gap: '4px'
             }}>
-              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', textTransform: 'uppercase', fontWeight: 700 }}>
+              <span style={{ fontSize: '11px', color: 'var(--text-tertiary)', fontWeight: 700 }}>
                 Chamado Vinculado
               </span>
               <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text-white)' }}>
@@ -221,7 +221,7 @@ export default function SessionManagerModal({
           {/* Modal / Bloco de Confirmação de Término */}
           {isEnding && (
             <div style={{
-              backgroundColor: 'rgba(255, 94, 0, 0.08)',
+              backgroundColor: 'rgba(232, 115, 42, 0.08)',
               border: '1px solid var(--orange)',
               borderRadius: 'var(--radius-sm)',
               padding: '16px',

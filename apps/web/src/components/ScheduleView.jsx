@@ -9,7 +9,7 @@ export default function ScheduleView({ tickets = [], onOpenNewTicket, onStartSes
       {/* Header Editorial */}
       <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', textTransform: 'uppercase', letterSpacing: '0.14em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0' }}>
             OPERAÇÃO TÉCNICA • IT DESK
           </span>
           <h1 style={{ fontSize: '26px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '-0.03em' }}>
@@ -55,7 +55,7 @@ export default function ScheduleView({ tickets = [], onOpenNewTicket, onStartSes
       {/* Linha do Tempo Plana */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
-          <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+          <h2 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--text-white)', letterSpacing: '0' }}>
             Linha do Tempo de Atendimentos
           </h2>
           <span style={{ fontSize: '11.5px', color: 'var(--text-tertiary)', fontFamily: 'var(--font-mono)' }}>

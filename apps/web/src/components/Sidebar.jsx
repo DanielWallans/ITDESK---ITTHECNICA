@@ -57,7 +57,7 @@ export default function Sidebar({
     <aside className="adm-sidebar" style={{
       width: '248px',
       height: '100vh',
-      backgroundColor: '#000000',
+      backgroundColor: 'var(--bg-app)',
       borderRight: '1px solid var(--border-light)',
       display: 'flex',
       flexDirection: 'column',
@@ -93,8 +93,7 @@ export default function Sidebar({
           fontSize: '9.5px',
           fontWeight: 700,
           color: 'var(--text-tertiary)',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase'
+          letterSpacing: '0'
         }}>
           PAINEL ADMINISTRATIVO
         </span>
@@ -123,7 +122,7 @@ export default function Sidebar({
           transition: 'border-color 0.15s ease'
         }}
         onMouseEnter={(e) => e.currentTarget.style.borderBottomColor = 'var(--orange)'}
-        onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = '#262626'}
+        onMouseLeave={(e) => e.currentTarget.style.borderBottomColor = 'var(--border-strong)'}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Search size={13} color="var(--text-tertiary)" />
@@ -145,8 +144,7 @@ export default function Sidebar({
           fontSize: '10px',
           fontWeight: 700,
           color: 'var(--text-tertiary)',
-          textTransform: 'uppercase',
-          letterSpacing: '0.12em',
+          letterSpacing: '0',
           padding: '4px 0 8px'
         }}>
           OPERAÇÃO
@@ -164,7 +162,7 @@ export default function Sidebar({
                 justifyContent: 'space-between',
                 padding: '10px 10px',
                 borderRadius: 0,
-                backgroundColor: isActive ? 'rgba(255, 107, 0, 0.05)' : 'transparent',
+                backgroundColor: isActive ? 'rgba(232, 115, 42, 0.05)' : 'transparent',
                 color: isActive ? 'var(--text-white)' : 'var(--text-secondary)',
                 fontWeight: isActive ? 700 : 500,
                 fontSize: '13px',
@@ -204,7 +202,7 @@ export default function Sidebar({
         gap: '8px'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
             Portal do Cliente
           </span>
           <span style={{ fontSize: '10.5px', fontFamily: 'var(--font-mono)', color: 'var(--orange)' }}>
@@ -241,7 +239,7 @@ export default function Sidebar({
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-secondary)', letterSpacing: '0' }}>
             Gateway AnyDesk
           </span>
           <span className={`status-dot ${activeSession ? 'status-dot-active' : 'status-dot-neutral'}`} />
@@ -307,7 +305,7 @@ export default function Sidebar({
             className={`adm-mobile-nav-item ${isActive ? 'active' : ''}`}
           >
             <div style={{ position: 'relative', display: 'inline-flex' }}>
-              <Icon size={18} color={isActive ? '#ff6b00' : '#71717a'} />
+              <Icon size={18} color={isActive ? 'var(--orange)' : 'var(--text-tertiary)'} />
               {item.count !== undefined && item.count > 0 && (
                 <span className="adm-mobile-nav-badge">{item.count}</span>
               )}

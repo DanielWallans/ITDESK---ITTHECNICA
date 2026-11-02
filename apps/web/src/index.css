@@ -4,37 +4,48 @@
    divisórias finas (#1f1f1f) e zero cards/caixas com cara de IA.
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,800&family=JetBrains+Mono:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap');
 
 :root {
-  --bg-app: #000000;
-  --bg-sidebar: #000000;
-  --bg-card: transparent;
-  --bg-card-hover: rgba(255, 107, 0, 0.03);
-  --bg-inner: #070707;
+  /* Superfícies em camadas: cada nível tem um papel, nada de preto chapado */
+  --bg-app: #121417;
+  --bg-sidebar: #0f1114;
+  --bg-card: #171a1e;
+  --bg-card-hover: #1c2025;
+  --bg-inner: #1c2025;
+  --bg-raised: #20242a;
 
-  --border-light: #1f1f1f;
-  --border-active: #ff6b00;
+  --border-light: #262a30;
+  --border-strong: #343a42;
+  --border-active: #e8732a;
 
-  --text-white: #ffffff;
-  --text-primary: #e5e5e5;
-  --text-secondary: #8a8a8a;
-  --text-tertiary: #525252;
+  --text-white: #f2f0ec;
+  --text-primary: #dcd9d3;
+  --text-secondary: #9ea2a9;
+  --text-tertiary: #6b7078;
 
-  --orange: #ff6b00;
-  --orange-bright: #ff7b1a;
-  --orange-light: #ff9442;
-  --orange-soft: rgba(255, 107, 0, 0.08);
+  /* Laranja IT DESK, mais sóbrio: acento, não iluminação */
+  --orange: #e8732a;
+  --orange-bright: #f0843f;
+  --orange-light: #f3a46e;
+  --orange-soft: rgba(232, 115, 42, 0.10);
   --orange-glow: none;
+  --orange-ink: #1b0f06;
 
-  --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-main: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-main);
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
 
-  --radius-xs: 2px;
-  --radius-sm: 2px;
-  --radius-md: 2px;
-  --radius-lg: 0px;
-  --radius-xl: 2px;
+  /* Raios com hierarquia: controle < campo < painel < camada flutuante */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  /* Sombra só para o que flutua (modais, menus) */
+  --elev-float: 0 1px 0 rgba(255,255,255,0.04) inset, 0 18px 48px -12px rgba(0,0,0,0.55);
+  --ease: cubic-bezier(.2,.7,.2,1);
 }
 
 * {
@@ -73,10 +84,9 @@ html, body {
   color: #000000;
   font-weight: 800;
   font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   padding: 9px 16px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -101,7 +111,7 @@ html, body {
   font-weight: 600;
   font-size: 12px;
   padding: 8px 14px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -119,7 +129,7 @@ html, body {
   color: var(--text-secondary);
   width: 34px;
   height: 34px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -175,7 +185,7 @@ select.f-input option {
 textarea.f-input {
   border: 1px solid #262626;
   padding: 10px 12px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
 }
 textarea.f-input:focus {
   border-color: var(--orange);
@@ -209,8 +219,7 @@ textarea.f-input:focus {
   font-size: 10.5px;
   font-weight: 700;
   color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   border-bottom: 1px solid var(--border-light);
 }
 .f-table td {
@@ -266,8 +275,7 @@ textarea.f-input:focus {
 .adm-stat-label {
   font-size: 10.5px;
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0;
   color: var(--text-secondary);
 }
 .adm-stat-value {
@@ -317,7 +325,7 @@ textarea.f-input:focus {
   background: #050505;
   border: 1px solid #262626;
   border-top: 2px solid var(--orange);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   width: 100%;
   max-width: 820px;
   max-height: 90vh;
@@ -339,8 +347,7 @@ textarea.f-input:focus {
   font-size: 10px;
   font-weight: 800;
   color: var(--orange);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0;
   margin-bottom: 6px;
 }
 .adm-title {
@@ -354,10 +361,9 @@ textarea.f-input:focus {
   color: #000000;
   font-weight: 800;
   font-size: 11.5px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   padding: 9px 16px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -373,10 +379,9 @@ textarea.f-input:focus {
   border: 1px solid #262626;
   font-weight: 700;
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   padding: 8px 14px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -397,8 +402,7 @@ textarea.f-input:focus {
   font-size: 11.5px;
   font-weight: 800;
   color: var(--text-white);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
 }
 .adm-section-meta {
   font-family: var(--font-mono);
@@ -486,7 +490,7 @@ textarea.f-input:focus {
   }
   .adm-stat-label {
     font-size: 9.5px !important;
-    letter-spacing: 0.06em !important;
+    letter-spacing: 0 !important;
   }
   .adm-stat-value {
     font-size: 18px !important;
@@ -556,8 +560,7 @@ textarea.f-input:focus {
     font-size: 10px;
     font-weight: 800;
     color: var(--text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0;
     flex-shrink: 0;
   }
   .f-table td.m-full {
@@ -645,8 +648,7 @@ textarea.f-input:focus {
     padding: 8px 2px;
     font-size: 9.5px;
     font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    letter-spacing: 0;
     cursor: pointer;
   }
   .adm-mobile-nav-item.active {
@@ -664,6 +666,85 @@ textarea.f-input:focus {
     font-size: 9px;
     font-weight: 800;
     padding: 0 4px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
   }
 }
+
+/* ==========================================================================
+   Refinamento premium — aplicado sobre as classes existentes
+   ========================================================================== */
+html, body { font-feature-settings: 'ss01', 'cv11'; letter-spacing: -0.005em; line-height: 1.5; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 99px; }
+::selection { background: rgba(232,115,42,.28); color: var(--text-white); }
+:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; border-radius: var(--radius-xs); }
+
+/* Botão primário: preenchido, com realce interno de 1px (técnica comum no UIverse) */
+.f-btn-primary, .adm-btn-primary {
+  font-weight: 600; font-size: 13px; letter-spacing: -0.005em;
+  padding: 9px 16px; border-radius: var(--radius-sm);
+  color: var(--orange-ink);
+  background: linear-gradient(180deg, var(--orange-bright), var(--orange));
+  border: 1px solid #c95e1c;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.22);
+  transition: filter .15s var(--ease), transform .1s var(--ease);
+}
+.f-btn-primary:hover, .adm-btn-primary:hover { filter: brightness(1.06); background: linear-gradient(180deg, var(--orange-bright), var(--orange)); }
+.f-btn-primary:active, .adm-btn-primary:active { transform: translateY(1px); }
+
+.f-btn-secondary, .adm-btn-ghost {
+  font-weight: 500; font-size: 13px; letter-spacing: -0.005em;
+  border-radius: var(--radius-sm);
+  background: var(--bg-raised); border: 1px solid var(--border-strong); color: var(--text-primary);
+  transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease);
+}
+.f-btn-secondary:hover, .adm-btn-ghost:hover { background: #262b32; border-color: #444b55; color: var(--text-white); }
+.f-btn-icon { border-radius: var(--radius-sm); border-color: var(--border-light); }
+.f-btn-icon:hover { background: var(--bg-raised); color: var(--text-white); border-color: var(--border-strong); }
+
+/* Campos: caixa discreta em vez de sublinhado */
+.f-input {
+  background: var(--bg-inner); border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm); padding: 9px 12px;
+  transition: border-color .15s var(--ease), background .15s var(--ease);
+}
+.f-input:hover { border-color: var(--border-strong); }
+.f-input:focus { border-color: var(--orange); background: var(--bg-card); box-shadow: 0 0 0 3px rgba(232,115,42,.14); }
+select.f-input option { background: var(--bg-raised); }
+
+/* Abas como controle segmentado */
+.f-tab-pill { border-radius: var(--radius-sm); border-bottom: none; padding: 7px 12px; font-weight: 500; font-size: 13px; }
+.f-tab-pill:hover { background: var(--bg-raised); }
+.f-tab-pill.active { background: var(--bg-raised); color: var(--text-white); box-shadow: inset 0 0 0 1px var(--border-strong); font-weight: 600; }
+
+/* Tabela */
+.f-table th { font-size: 12px; font-weight: 500; color: var(--text-tertiary); }
+.f-table td { border-bottom-color: var(--border-light); font-variant-numeric: tabular-nums; }
+.f-table tr:hover td, .adm-row-item:hover { background-color: var(--bg-card-hover); }
+.adm-row-item, .adm-row { border-bottom-color: var(--border-light); }
+
+/* Indicadores: números proporcionais tabulares, não mono */
+.adm-stats-strip { border: 1px solid var(--border-light); border-radius: var(--radius-lg); background: var(--bg-card); overflow: hidden; }
+.adm-stat-label { font-size: 12.5px; font-weight: 500; color: var(--text-secondary); }
+.adm-stat-value { font-family: var(--font-main); font-weight: 600; font-size: 28px; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+
+/* Títulos */
+.adm-kicker { font-size: 13px; font-weight: 500; color: var(--text-tertiary); margin-bottom: 4px; }
+.adm-title { font-size: 28px; font-weight: 600; letter-spacing: -0.03em; line-height: 1.15; }
+.adm-section-title { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
+.adm-section-meta { font-family: var(--font-main); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+/* Seções e destaque */
+.f-card { border-top-color: var(--border-light); }
+.f-card-orange-hero { background: var(--bg-card); border: 1px solid var(--border-light); border-left: 3px solid var(--orange); border-radius: var(--radius-lg); }
+
+/* Camadas flutuantes: o único lugar com sombra */
+.f-modal-overlay { background: rgba(8,9,11,.72); backdrop-filter: blur(8px) saturate(120%); }
+.f-modal-box {
+  background: var(--bg-card); border: 1px solid var(--border-strong); border-top: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl); box-shadow: var(--elev-float);
+  animation: itd-pop .22s var(--ease);
+}
+@keyframes itd-pop { from { opacity: 0; transform: translateY(6px) scale(.985); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+@media (max-width: 860px) { .f-modal-box { border-radius: var(--radius-lg); } .adm-stat-value { font-weight: 600; } }

@@ -61,7 +61,7 @@ export default function CommandPaletteModal({
             style={{
               background: 'none',
               border: 'none',
-              color: '#ffffff',
+              color: 'var(--text-white)',
               fontSize: '15px',
               outline: 'none',
               width: '100%',
@@ -81,7 +81,7 @@ export default function CommandPaletteModal({
 
         {/* Results List */}
         <div style={{ maxHeight: '380px', overflowY: 'auto', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', padding: '4px 8px' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-tertiary)', padding: '4px 8px' }}>
             Chamados & Clientes ({filteredTickets.length})
           </span>
 
@@ -107,7 +107,7 @@ export default function CommandPaletteModal({
                   backgroundColor: 'transparent',
                   transition: 'background-color 0.15s ease'
                 }}
-                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 94, 0, 0.08)'}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(232, 115, 42, 0.08)'}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -115,7 +115,7 @@ export default function CommandPaletteModal({
                     width: '28px',
                     height: '28px',
                     borderRadius: '6px',
-                    backgroundColor: 'rgba(255, 94, 0, 0.15)',
+                    backgroundColor: 'rgba(232, 115, 42, 0.15)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center'
@@ -146,7 +146,7 @@ export default function CommandPaletteModal({
           )}
 
           {/* Quick Nav Shortcuts */}
-          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', padding: '12px 8px 4px' }}>
+          <span style={{ fontSize: '10.5px', fontWeight: 700, color: 'var(--text-tertiary)', padding: '12px 8px 4px' }}>
             Atalhos do Sistema
           </span>
 

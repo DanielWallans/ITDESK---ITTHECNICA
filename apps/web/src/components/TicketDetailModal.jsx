@@ -127,7 +127,7 @@ export default function TicketDetailModal({
         {/* Seletor Rápido Mobile: Alternar entre Chat ao Vivo e Dados/AnyDesk/Finalização */}
         <div className="adm-mobile-only" style={{
           borderBottom: '1px solid var(--border-light)',
-          backgroundColor: '#000000',
+          backgroundColor: 'var(--bg-app)',
           display: 'grid',
           gridTemplateColumns: '1fr 1fr'
         }}>
@@ -165,7 +165,7 @@ export default function TicketDetailModal({
           }}>
             {/* Status */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-tertiary)', letterSpacing: '0' }}>
                 Status do Chamado
               </span>
               <select
@@ -237,7 +237,7 @@ export default function TicketDetailModal({
               flexDirection: 'column',
               gap: '8px'
             }}>
-              <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)', textTransform: 'uppercase' }}>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)' }}>
                 O que foi feito (Visível no Perfil do Cliente)
               </span>
               <textarea
@@ -263,15 +263,15 @@ export default function TicketDetailModal({
             {/* Avaliação enviada pelo Cliente (se já avaliou) */}
             {(ticket.techRating || ticket.systemRating) && (
               <div style={{
-                backgroundColor: 'rgba(255, 94, 0, 0.08)',
-                border: '1px solid rgba(255, 94, 0, 0.35)',
+                backgroundColor: 'rgba(232, 115, 42, 0.08)',
+                border: '1px solid rgba(232, 115, 42, 0.35)',
                 borderRadius: 'var(--radius-sm)',
                 padding: '12px',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '6px'
               }}>
-                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)', textTransform: 'uppercase' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--orange)' }}>
                   Avaliação do Cliente
                 </span>
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--text-white)' }}>
@@ -293,7 +293,7 @@ export default function TicketDetailModal({
             {/* Dados do Solicitante */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '12.5px' }}>
               <div>
-                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Cliente:</span>
+                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', letterSpacing: '0' }}>Cliente:</span>
                 <p style={{ fontWeight: 600, color: 'var(--text-white)', marginTop: '2px' }}>{ticket.customerName}</p>
                 <p style={{ fontSize: '11.5px', color: 'var(--text-secondary)' }}>{ticket.customerEmail}</p>
                 {ticket.customerPhone && (
@@ -325,7 +325,7 @@ export default function TicketDetailModal({
               </div>
 
               <div>
-                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Serviço & Valor:</span>
+                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', letterSpacing: '0' }}>Serviço & Valor:</span>
                 <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>
                   {ticket.serviceName} • R$ {Number(ticket.estimatedPrice || 0).toFixed(2).replace('.', ',')}
                 </p>
@@ -334,7 +334,7 @@ export default function TicketDetailModal({
               {/* Respostas do Checklist do Cliente */}
               {Array.isArray(ticket.checklistData) && ticket.checklistData.length > 0 && (
                 <div>
-                  <span style={{ fontSize: '10.5px', color: 'var(--orange)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <span style={{ fontSize: '10.5px', color: 'var(--orange)', fontWeight: 700, letterSpacing: '0', display: 'flex', alignItems: 'center', gap: '4px' }}>
                     <CheckSquare size={11} /> Checklist Respondido:
                   </span>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '6px', background: 'var(--bg-card)', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-light)' }}>
@@ -349,7 +349,7 @@ export default function TicketDetailModal({
               )}
 
               <div>
-                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Descrição:</span>
+                <span style={{ fontSize: '10.5px', color: 'var(--text-tertiary)', letterSpacing: '0' }}>Descrição:</span>
                 <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px', lineHeight: 1.5, background: 'var(--bg-card)', padding: '10px', borderRadius: '6px', whiteSpace: 'pre-wrap' }}>
                   {ticket.description}
                 </p>
@@ -413,12 +413,12 @@ export default function TicketDetailModal({
                       maxWidth: '85%',
                       alignSelf: m.authorRole === 'CUSTOMER' ? 'flex-start' : 'flex-end',
                       backgroundColor: m.internal 
-                        ? 'rgba(255, 94, 0, 0.08)' 
-                        : (m.authorRole === 'CUSTOMER' ? 'var(--bg-inner)' : 'rgba(255, 94, 0, 0.14)'),
+                        ? 'rgba(232, 115, 42, 0.08)' 
+                        : (m.authorRole === 'CUSTOMER' ? 'var(--bg-inner)' : 'rgba(232, 115, 42, 0.14)'),
                       border: '1px solid',
                       borderColor: m.internal
-                        ? 'rgba(255, 94, 0, 0.3)'
-                        : (m.authorRole === 'CUSTOMER' ? 'var(--border-light)' : 'rgba(255, 94, 0, 0.35)'),
+                        ? 'rgba(232, 115, 42, 0.3)'
+                        : (m.authorRole === 'CUSTOMER' ? 'var(--border-light)' : 'rgba(232, 115, 42, 0.35)'),
                       borderRadius: 'var(--radius-md)',
                       padding: '12px 14px'
                     }}
@@ -454,7 +454,7 @@ export default function TicketDetailModal({
             >
               {/* Respostas Rápidas 1-Toque (Modo Celular / Fora de Casa) */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', paddingBottom: '4px' }}>
-                <span style={{ fontSize: '10px', fontWeight: 800, color: '#ff6b00', textTransform: 'uppercase', letterSpacing: '0.08em', marginRight: '4px' }}>
+                <span style={{ fontSize: '10px', fontWeight: 800, color: 'var(--orange)', letterSpacing: '0', marginRight: '4px' }}>
                   1-Toque (Celular):
                 </span>
                 {QUICK_REPLIES.map((qr, idx) => (
@@ -464,9 +464,9 @@ export default function TicketDetailModal({
                     onClick={() => handleQuickReply(qr.text)}
                     style={{
                       padding: '4px 9px',
-                      backgroundColor: '#000000',
+                      backgroundColor: 'var(--bg-app)',
                       border: '1px solid #262626',
-                      borderRadius: '2px',
+                      borderRadius: 'var(--radius-sm)',
                       color: '#d4d4d8',
                       fontSize: '11px',
                       fontWeight: 600,
