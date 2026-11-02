@@ -649,7 +649,7 @@ export default function CustomerPortalView() {
                 </div>
                 <div>
                   <label className="cp-label">Senha</label>
-                  <input className="cp-input" type="password" required placeholder="Mínimo 4 caracteres"
+                  <input className="cp-input" type="password" required placeholder="Mínimo 8 caracteres" minLength={8}
                     value={authForm.password}
                     onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })} />
                 </div>

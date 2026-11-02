@@ -183,7 +183,8 @@ const CUSTOMER_ROUTES = [
   ['GET', /^\/api\/v1\/remote-sessions\/active$/]
 ];
 const PUBLIC_ROUTES = [
-  ['POST', /^\/api\/v1\/auth\/(login|register|admin-setup)$/]
+  ['POST', /^\/api\/v1\/auth\/(login|register|admin-setup)$/],
+  ['GET', /^\/api\/v1\/services$/]
 ];
 const matchesRoute = (list, method, pathname) => list.some(([m, re]) => m === method && re.test(pathname));
 
